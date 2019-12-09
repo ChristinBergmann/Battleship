@@ -15,8 +15,12 @@ public class Player {
     private long id;
     private String userName;
     private String password;
+
+
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
     Set<GamePlayer> gamePlayers = new HashSet<>();
+    
+    
 
     public void addGamePlayer(GamePlayer gamePlayer) {
         gamePlayer.setPlayer(this);

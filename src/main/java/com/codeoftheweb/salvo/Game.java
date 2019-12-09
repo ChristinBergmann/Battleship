@@ -14,8 +14,10 @@ public class Game {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
     private Date creationDate = new Date();
+
     @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
     Set <GamePlayer> gamePlayers = new HashSet<GamePlayer>();
+
 
     public void addGamePlayer(GamePlayer gamePlayer) {
         gamePlayer.setGame(this);

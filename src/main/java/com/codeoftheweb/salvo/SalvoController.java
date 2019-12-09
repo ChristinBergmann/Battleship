@@ -1,19 +1,27 @@
 package com.codeoftheweb.salvo;
-;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
 public class SalvoController {
 
+    @Autowired
+    private PlayerRepository repository;
+
+    @Autowired
+    private GameRepository gameRepository;
+
+    @Autowired
+    private GamePlayerRepository gamePlayerRepository;
+
+
     @RequestMapping("/games")
-    public String games(@RequestParam("name") String name, Model model) {
-        model.addAttribute("name", name);
-        return "greeting";
+    public List<Game> getAll() {
+        return gameRepository.findAll();
     }
 }
-
-/////not finished!!!!
