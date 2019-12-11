@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
 
-import static javax.swing.text.html.parser.DTDConstants.ID;
+
 
 @SpringBootApplication
 public class SalvoApplication {
@@ -47,6 +47,7 @@ public class SalvoApplication {
 			game3.plusSeconds(7200);
 
 			gameRepository.save(game1);
+			System.out.println(game1);
 			gameRepository.save(game2);
 			gameRepository.save(game3);
 			gameRepository.save(game4);

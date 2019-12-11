@@ -29,6 +29,7 @@ public class GamePlayer {
 
 
 
+
     public GamePlayer() { }
 
     public GamePlayer(Date creationDate) {
