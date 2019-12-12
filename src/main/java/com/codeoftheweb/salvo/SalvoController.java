@@ -18,35 +18,46 @@ public class SalvoController {
 
     @Autowired
     private GamePlayerRepository gamePlayerRepository;
+    private Object Date;
 
 
     @RequestMapping("/games")
-    public Set<Long> getAll() {
-        /*
-        Set<Long> games = new HashSet<>();
-        Map<String, Object> gameMap = new HashMap<>();
-        System.out.println(gameMap);
+    public List<Object> getAll() {
+
+        //bei Lists use .add and by maps use.put!!!
+        List<Object> games = new ArrayList<>();
+        System.out.println(games);
+
         gameRepository.findAll().forEach(oneGame -> {
-            Map<String, Object> test = new HashMap<>();
-            oneGame.getGamePlayers().forEach(gp -> gp.getPlayer());
-            games.add(oneGame.getId());
+            Map<String, Object> gameMap = new HashMap<>();
+            gameMap.put("Game_created", oneGame.getCreationDate());
+            gameMap.put("Game_Id", oneGame.getId());
+            gameMap.put("GamePlayers", gamePlayerInfo(oneGame));
+            games.add(gameMap);
         });
-        */
-        Set <Long> games = new HashSet<>();
-        Map<String, Object> gameMap = new HashMap<>();
-        System.out.println(gameMap);
         return games;
     }
 
-   /*
-    @RequestMapping("/owners")
-    public List<Object> getOwners( {
-    ...
+        List<Object> gamePlayerInfo(Game game){
+            List<Object> gamePlayer  = new ArrayList();
+
+            game.getGamePlayers().forEach(gp -> {
+                Map<String, Object> bla = new HashMap<>();
+                bla.put("GamePlayer_Id", gp.getId());
+                bla.put("Player", playerInfo(gp));
+                gamePlayer.add(bla);
+            });
+            return (gamePlayer);
     }
 
-    @RequestMapping("/pets")
-    public List<Object> getPets() {
-    ...
+        List<Object> playerInfo(GamePlayer gameplayer){
+            List<Object> player  = new ArrayList();
+
+            Map<String, Object> blupp = new HashMap<>();
+            blupp.put("Player_Id", gameplayer.getPlayer().getId());
+            blupp.put("Player_Username", gameplayer.getPlayer().getUserName());
+            player.add(blupp);
+
+        return (player);
     }
-    */
 }
