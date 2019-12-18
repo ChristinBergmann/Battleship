@@ -15,13 +15,28 @@ public class Game {
     private long id;
     private Date creationDate = new Date();
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "score_id")
+    private Score score;
+
     @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
     Set <GamePlayer> gamePlayers = new HashSet<>();
+
+    @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
+    Set <Score> scores = new HashSet<Score>();
+
+
 
 
     public void addGamePlayer(GamePlayer gamePlayer) {
         gamePlayer.setGame(this);
         gamePlayers.add(gamePlayer);
+    }
+
+    public void addScore(Score score) {
+        score.setGame(this);
+        scores.add(score);
+
     }
 
 
@@ -53,8 +68,5 @@ public class Game {
 
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
-    }
-    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
-        this.gamePlayers = gamePlayers;
     }
 }
