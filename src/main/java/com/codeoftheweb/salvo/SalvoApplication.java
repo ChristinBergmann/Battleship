@@ -1,32 +1,15 @@
 package com.codeoftheweb.salvo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.web.WebAttributes;
-import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Date;
-
-import static org.hibernate.criterion.Restrictions.and;
 
 
 @SpringBootApplication
@@ -64,7 +47,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			playerRepository.save(player4);
 
 
-			//saves a few games
+			//saves a few(4) games
 			Game game1 = new Game(new Date(2019-12-5));
 			Game game2 = new Game (new Date(2019-12-5));
 			Game game3 = new Game(new Date(2019-12-5));
@@ -72,9 +55,9 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 			game2.plusSeconds(3600);
 			game3.plusSeconds(7200);
+			//game4.plusSeconds(10800);
 
 			gameRepository.save(game1);
-			System.out.println(game1);
 			gameRepository.save(game2);
 			gameRepository.save(game3);
 			gameRepository.save(game4);
@@ -132,6 +115,99 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			player4.addGamePlayer(gamePlayer8);
 			gamePlayer8.setCreationDate(game4.getCreationDate());
 
+
+
+			//saves + creates ships for gp1 -game1
+			Ship ship1 = new Ship("CARRIER", Arrays.asList("H2", "H3", "H4", "H5", "H6"));
+			shipRepository.save(ship1);
+			gamePlayer1.addShip(ship1);
+
+			Ship ship2 = new Ship("BATTLESHIP", Arrays.asList("E4", "E5", "E6","E7"));
+			shipRepository.save(ship2);
+			gamePlayer1.addShip(ship2);
+
+			Ship ship3 = new Ship("DESTROYER", Arrays.asList("H1", "I1", "J1"));
+			shipRepository.save(ship3);
+			gamePlayer1.addShip(ship3);
+
+			Ship ship4 = new Ship("SUBMARINE", Arrays.asList("A1", "A2", "A3"));
+			shipRepository.save(ship4);
+			gamePlayer1.addShip(ship4);
+
+			Ship ship5 = new Ship("PATROLBOAT", Arrays.asList("A8", "B8"));
+			shipRepository.save(ship5);
+			gamePlayer1.addShip(ship5);
+
+			//saves + creates ships for gp2 -game1
+			Ship ship6 = new Ship("CARRIER", Arrays.asList("H1", "H2", "H3", "H4", "H5"));
+			shipRepository.save(ship6);
+			gamePlayer2.addShip(ship6);
+
+			Ship ship7 = new Ship("BATTLESHIP", Arrays.asList("E1", "E2", "E3","E4"));
+			shipRepository.save(ship7);
+			gamePlayer2.addShip(ship7);
+
+			Ship ship8 = new Ship("DESTROYER", Arrays.asList("H2", "I2", "J2"));
+			shipRepository.save(ship8);
+			gamePlayer2.addShip(ship8);
+
+			Ship ship9 = new Ship("SUBMARINE", Arrays.asList("A5", "A6", "A7"));
+			shipRepository.save(ship9);
+			gamePlayer2.addShip(ship9);
+
+			Ship ship10 = new Ship("PATROLBOAT", Arrays.asList("G3", "G4"));
+			shipRepository.save(ship10);
+			gamePlayer2.addShip(ship10);
+
+
+
+
+
+
+			//saves + creates ships for gp3 -game2
+			Ship ship11 = new Ship("CARRIER", Arrays.asList("H1", "H2", "H3", "H4", "H5"));
+			shipRepository.save(ship11);
+			gamePlayer3.addShip(ship11);
+
+			Ship ship12 = new Ship("BATTLESHIP", Arrays.asList("E1", "E2", "E3","E4"));
+			shipRepository.save(ship12);
+			gamePlayer3.addShip(ship12);
+
+			Ship ship13 = new Ship("DESTROYER", Arrays.asList("H2", "I2", "J2"));
+			shipRepository.save(ship13);
+			gamePlayer3.addShip(ship13);
+
+			Ship ship14 = new Ship("SUBMARINE", Arrays.asList("A5", "A6", "A7"));
+			shipRepository.save(ship14);
+			gamePlayer3.addShip(ship14);
+
+			Ship ship15 = new Ship("PATROLBOAT", Arrays.asList("G3", "G4"));
+			shipRepository.save(ship15);
+			gamePlayer3.addShip(ship15);
+
+			//saves + creates ships for gp4 -game2
+			Ship ship16 = new Ship("CARRIER", Arrays.asList("H2", "H3", "H4", "H5", "H6"));
+			shipRepository.save(ship16);
+			gamePlayer4.addShip(ship16);
+
+			Ship ship17 = new Ship("BATTLESHIP", Arrays.asList("E4", "E5", "E6","E7"));
+			shipRepository.save(ship17);
+			gamePlayer4.addShip(ship17);
+
+			Ship ship18 = new Ship("DESTROYER", Arrays.asList("H1", "I1", "J1"));
+			shipRepository.save(ship18);
+			gamePlayer4.addShip(ship18);
+
+			Ship ship19 = new Ship("SUBMARINE", Arrays.asList("A1", "A2", "A3"));
+			shipRepository.save(ship19);
+			gamePlayer4.addShip(ship19);
+
+			Ship ship20 = new Ship("PATROLBOAT", Arrays.asList("A8", "B8"));
+			shipRepository.save(ship20);
+			gamePlayer4.addShip(ship20);
+
+
+			//saves the game players
 			gamePlayerRepository.save(gamePlayer1);
 			gamePlayerRepository.save(gamePlayer2);
 			gamePlayerRepository.save(gamePlayer3);
@@ -141,23 +217,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gamePlayerRepository.save(gamePlayer7);
 			gamePlayerRepository.save(gamePlayer8);
 
-
-			//saves + creates ships
-			final String CARRIER = "carrier";
-			final String BATTLESHIP = "battleship";
-			final String SUBMARINE = "submarine";
-			final String DESTROYER = "destroyer";
-			final String PATROLBOAT = "patrolboat";
-
-			Ship ship1 = new Ship(DESTROYER, Arrays.asList("H2", "H3", "H4"));
-			gamePlayer1.addShip(ship1);
-			shipRepository.save(ship1);
-
-			Ship ship2 = new Ship(DESTROYER, Arrays.asList("H2", "H3", "H4"));
-			gamePlayer1.addShip(ship1);
-			shipRepository.save(ship1);
-
-
+			System.out.println(gamePlayer2.toString());
 		};
 	}
 

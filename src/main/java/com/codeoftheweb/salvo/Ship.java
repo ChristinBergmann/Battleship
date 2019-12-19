@@ -62,6 +62,7 @@ public class Ship {
 
 
     public void setGamePlayer(GamePlayer gamePlayer) {
+        System.out.println(gamePlayer);
         this.gamePlayer = gamePlayer;
     }
     public GamePlayer getGamePlayer() {
