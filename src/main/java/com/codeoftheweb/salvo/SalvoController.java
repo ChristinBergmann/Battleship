@@ -1,24 +1,33 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+
+@CrossOrigin(origins = "http://127.0.0.1:5500/")
 @RestController
 @RequestMapping("/api")
 public class SalvoController {
 
     @Autowired
-    private PlayerRepository repository;
+    private PlayerRepository playerRepository;
 
     @Autowired
     private GameRepository gameRepository;
 
     @Autowired
     private GamePlayerRepository gamePlayerRepository;
-    private Object Date;
+
+    @Autowired
+    private ShipRepository shipRepository;
 
 
     @RequestMapping("/games")
@@ -26,7 +35,6 @@ public class SalvoController {
 
         //bei Lists use .add and by maps use.put!!!
         List<Object> games = new ArrayList<>();
-        System.out.println(games);
 
         gameRepository.findAll().forEach(oneGame -> {
             Map<String, Object> gameMap = new HashMap<>();
@@ -38,26 +46,53 @@ public class SalvoController {
         return games;
     }
 
-        List<Object> gamePlayerInfo(Game game){
-            List<Object> gamePlayer  = new ArrayList();
+    List<Object> gamePlayerInfo(Game game) {
+        List<Object> gamePlayer = new ArrayList();
 
-            game.getGamePlayers().forEach(gp -> {
-                Map<String, Object> bla = new HashMap<>();
-                bla.put("GamePlayer_Id", gp.getId());
-                bla.put("Player", playerInfo(gp));
-                gamePlayer.add(bla);
-            });
-            return (gamePlayer);
+        game.getGamePlayers().forEach(gp -> {
+            Map<String, Object> gp_info = new HashMap<>();
+            gp_info.put("GamePlayer_Id", gp.getId());
+            gp_info.put("Player", playerInfo(gp));
+            gamePlayer.add(gp_info);
+        });
+        return (gamePlayer);
     }
 
-        List<Object> playerInfo(GamePlayer gameplayer){
-            List<Object> player  = new ArrayList();
+    Object playerInfo(GamePlayer gameplayer) {
 
-            Map<String, Object> blupp = new HashMap<>();
-            blupp.put("Player_Id", gameplayer.getPlayer().getId());
-            blupp.put("Player_Username", gameplayer.getPlayer().getUserName());
-            player.add(blupp);
+        Map<String, Object> pl_info = new HashMap<>();
+        pl_info.put("Player_Id", gameplayer.getPlayer().getId());
+        pl_info.put("Player_Username", gameplayer.getPlayer().getUserName());
 
-        return (player);
+        return pl_info;
+
+    }
+
+    List<Object> shipsInfo(GamePlayer gameplayer) {
+        List<Object> ships = new ArrayList<>();
+
+        gameplayer.getShips().forEach(ship -> {
+            Map<String, Object> ship_info = new HashMap<>();
+            ship_info.put("Type", ship.getType());
+            ship_info.put("Location", ship.getLocations());
+            ships.add(ship_info);
+            System.out.println(ships);
+        });
+        return (ships);
+    }
+
+    @RequestMapping("/game_view/{gamePlayerId}")
+    public Object findPlayerGame(@PathVariable Long gamePlayerId) {
+
+        GamePlayer gameplayer = gamePlayerRepository.findById(gamePlayerId).get();
+        Game game = gameplayer.getGame();
+
+        Map<String, Object> gameInfo = new HashMap<>();
+        gameInfo.put("Game_Id", game.getId());
+        gameInfo.put("Game_created", game.getCreationDate());
+        gameInfo.put("GamePlayers", gamePlayerInfo(game));
+        gameInfo.put("Ships", shipsInfo(gameplayer));
+        return gameInfo;
     }
 }
+

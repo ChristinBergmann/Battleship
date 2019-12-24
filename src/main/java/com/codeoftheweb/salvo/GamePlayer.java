@@ -24,20 +24,18 @@ public class GamePlayer {
     @JoinColumn(name = "game_id")
     private Game game;
 
-    @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
-    Set<GamePlayer> gamePlayers = new HashSet<>();
 
     @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
-    private Set<Ship> ships = new HashSet<Ship>();
+    Set<Ship> ships = new HashSet<>();
 
 
+
+    public GamePlayer() { }
 
     public void addShip(Ship ship) {
         ship.setGamePlayer(this);
         ships.add(ship);
     }
-
-    public GamePlayer() { }
 
     public GamePlayer(Date creationDate) {
         this.creationDate = creationDate;
@@ -79,12 +77,12 @@ public class GamePlayer {
     }
 
 
-    public Set<GamePlayer> getGamePlayers() {
+    /*public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
     }
     public void setGamePlayers(Set<GamePlayer> gamePlayers) {
         this.gamePlayers = gamePlayers;
-    }
+    }*/
 
 
     public void setShips(Set<Ship> ships) {

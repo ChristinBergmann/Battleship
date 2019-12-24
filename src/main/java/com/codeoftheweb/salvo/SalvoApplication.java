@@ -5,8 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.Arrays;
 import java.util.Date;
@@ -20,10 +19,10 @@ public class SalvoApplication extends SpringBootServletInitializer {
 		SpringApplication.run(SalvoApplication.class);
 	}
 
-	@Bean
+	/*@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-	}
+	}*/
 	@Bean
 	public CommandLineRunner initData(PlayerRepository playerRepository,
 									  GameRepository gameRepository,
@@ -36,10 +35,10 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 
 			// saves a few players
-			Player player1 = new Player("player1","player1@example.com", passwordEncoder().encode("player1"));
-			Player player2 = new Player("player2","player2@example.com", passwordEncoder().encode("player2"));
-			Player player3 = new Player("player3","player3@example.com",passwordEncoder().encode("player3"));
-			Player player4 = new Player("player4","player4@example.com",passwordEncoder().encode("player4"));
+			Player player1 = new Player("player1","player1@example.com", "player1");
+			Player player2 = new Player("player2","player2@example.com", "player2");
+			Player player3 = new Player("player3","player3@example.com","player3");
+			Player player4 = new Player("player4","player4@example.com","player4");
 
 			playerRepository.save(player1);
 			playerRepository.save(player2);
@@ -115,98 +114,6 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			player4.addGamePlayer(gamePlayer8);
 			gamePlayer8.setCreationDate(game4.getCreationDate());
 
-
-
-			//saves + creates ships for gp1 -game1
-			Ship ship1 = new Ship("CARRIER", Arrays.asList("H2", "H3", "H4", "H5", "H6"));
-			shipRepository.save(ship1);
-			gamePlayer1.addShip(ship1);
-
-			Ship ship2 = new Ship("BATTLESHIP", Arrays.asList("E4", "E5", "E6","E7"));
-			shipRepository.save(ship2);
-			gamePlayer1.addShip(ship2);
-
-			Ship ship3 = new Ship("DESTROYER", Arrays.asList("H1", "I1", "J1"));
-			shipRepository.save(ship3);
-			gamePlayer1.addShip(ship3);
-
-			Ship ship4 = new Ship("SUBMARINE", Arrays.asList("A1", "A2", "A3"));
-			shipRepository.save(ship4);
-			gamePlayer1.addShip(ship4);
-
-			Ship ship5 = new Ship("PATROLBOAT", Arrays.asList("A8", "B8"));
-			shipRepository.save(ship5);
-			gamePlayer1.addShip(ship5);
-
-			//saves + creates ships for gp2 -game1
-			Ship ship6 = new Ship("CARRIER", Arrays.asList("H1", "H2", "H3", "H4", "H5"));
-			shipRepository.save(ship6);
-			gamePlayer2.addShip(ship6);
-
-			Ship ship7 = new Ship("BATTLESHIP", Arrays.asList("E1", "E2", "E3","E4"));
-			shipRepository.save(ship7);
-			gamePlayer2.addShip(ship7);
-
-			Ship ship8 = new Ship("DESTROYER", Arrays.asList("H2", "I2", "J2"));
-			shipRepository.save(ship8);
-			gamePlayer2.addShip(ship8);
-
-			Ship ship9 = new Ship("SUBMARINE", Arrays.asList("A5", "A6", "A7"));
-			shipRepository.save(ship9);
-			gamePlayer2.addShip(ship9);
-
-			Ship ship10 = new Ship("PATROLBOAT", Arrays.asList("G3", "G4"));
-			shipRepository.save(ship10);
-			gamePlayer2.addShip(ship10);
-
-
-
-
-
-
-			//saves + creates ships for gp3 -game2
-			Ship ship11 = new Ship("CARRIER", Arrays.asList("H1", "H2", "H3", "H4", "H5"));
-			shipRepository.save(ship11);
-			gamePlayer3.addShip(ship11);
-
-			Ship ship12 = new Ship("BATTLESHIP", Arrays.asList("E1", "E2", "E3","E4"));
-			shipRepository.save(ship12);
-			gamePlayer3.addShip(ship12);
-
-			Ship ship13 = new Ship("DESTROYER", Arrays.asList("H2", "I2", "J2"));
-			shipRepository.save(ship13);
-			gamePlayer3.addShip(ship13);
-
-			Ship ship14 = new Ship("SUBMARINE", Arrays.asList("A5", "A6", "A7"));
-			shipRepository.save(ship14);
-			gamePlayer3.addShip(ship14);
-
-			Ship ship15 = new Ship("PATROLBOAT", Arrays.asList("G3", "G4"));
-			shipRepository.save(ship15);
-			gamePlayer3.addShip(ship15);
-
-			//saves + creates ships for gp4 -game2
-			Ship ship16 = new Ship("CARRIER", Arrays.asList("H2", "H3", "H4", "H5", "H6"));
-			shipRepository.save(ship16);
-			gamePlayer4.addShip(ship16);
-
-			Ship ship17 = new Ship("BATTLESHIP", Arrays.asList("E4", "E5", "E6","E7"));
-			shipRepository.save(ship17);
-			gamePlayer4.addShip(ship17);
-
-			Ship ship18 = new Ship("DESTROYER", Arrays.asList("H1", "I1", "J1"));
-			shipRepository.save(ship18);
-			gamePlayer4.addShip(ship18);
-
-			Ship ship19 = new Ship("SUBMARINE", Arrays.asList("A1", "A2", "A3"));
-			shipRepository.save(ship19);
-			gamePlayer4.addShip(ship19);
-
-			Ship ship20 = new Ship("PATROLBOAT", Arrays.asList("A8", "B8"));
-			shipRepository.save(ship20);
-			gamePlayer4.addShip(ship20);
-
-
 			//saves the game players
 			gamePlayerRepository.save(gamePlayer1);
 			gamePlayerRepository.save(gamePlayer2);
@@ -217,82 +124,72 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gamePlayerRepository.save(gamePlayer7);
 			gamePlayerRepository.save(gamePlayer8);
 
-			System.out.println(gamePlayer2.toString());
+
+
+			//////-------------creating + adding ships-----------------//////
+
+			//saves + creates ships for gp1 -game1
+			Ship ship1 = new Ship("CARRIER", Arrays.asList("H2", "H3", "H4", "H5", "H6"), gamePlayer1);
+			Ship ship2 = new Ship("BATTLESHIP", Arrays.asList("E4", "E5", "E6","E7"), gamePlayer1);
+			Ship ship3 = new Ship("DESTROYER", Arrays.asList("H1", "I1", "J1"), gamePlayer1);
+			Ship ship4 = new Ship("SUBMARINE", Arrays.asList("A1", "A2", "A3"), gamePlayer1);
+			Ship ship5 = new Ship("PATROLBOAT", Arrays.asList("A8", "B8"), gamePlayer1);
+			shipRepository.save(ship1);
+			shipRepository.save(ship2);
+			shipRepository.save(ship3);
+			shipRepository.save(ship4);
+			shipRepository.save(ship5);
+
+
+			//saves + creates ships for gp2 -game1
+			Ship ship6 = new Ship("CARRIER", Arrays.asList("H1", "H2", "H3", "H4", "H5"), gamePlayer2);
+			Ship ship7 = new Ship("BATTLESHIP", Arrays.asList("E1", "E2", "E3","E4"), gamePlayer2);
+			Ship ship8 = new Ship("DESTROYER", Arrays.asList("H2", "I2", "J2"), gamePlayer2);
+			Ship ship9 = new Ship("SUBMARINE", Arrays.asList("A5", "A6", "A7"), gamePlayer2);
+			Ship ship10 = new Ship("PATROLBOAT", Arrays.asList("G3", "G4"), gamePlayer2);
+			shipRepository.save(ship6);
+			shipRepository.save(ship7);
+			shipRepository.save(ship8);
+			shipRepository.save(ship9);
+			shipRepository.save(ship10);
+
+
+			//----------game 2------------//
+
+			//saves + creates ships for gp3 -game2
+			Ship ship11 = new Ship("CARRIER", Arrays.asList("H1", "H2", "H3", "H4", "H5"), gamePlayer3);
+			Ship ship12 = new Ship("BATTLESHIP", Arrays.asList("E1", "E2", "E3","E4"), gamePlayer3);
+			Ship ship13 = new Ship("DESTROYER", Arrays.asList("H2", "I2", "J2"), gamePlayer3);
+			Ship ship14 = new Ship("SUBMARINE", Arrays.asList("A5", "A6", "A7"), gamePlayer3);
+			Ship ship15 = new Ship("PATROLBOAT", Arrays.asList("G3", "G4"), gamePlayer3);
+			shipRepository.save(ship11);
+			shipRepository.save(ship12);
+			shipRepository.save(ship13);
+			shipRepository.save(ship14);
+			shipRepository.save(ship15);
+
+
+			//saves + creates ships for gp4 -game2
+			Ship ship16 = new Ship("CARRIER", Arrays.asList("H2", "H3", "H4", "H5", "H6"), gamePlayer4);
+			Ship ship17 = new Ship("BATTLESHIP", Arrays.asList("E4", "E5", "E6","E7"), gamePlayer4);
+			Ship ship18 = new Ship("DESTROYER", Arrays.asList("H1", "I1", "J1"), gamePlayer4);
+			Ship ship19 = new Ship("SUBMARINE", Arrays.asList("A1", "A2", "A3"), gamePlayer4);
+			Ship ship20 = new Ship("PATROLBOAT", Arrays.asList("A8", "B8"), gamePlayer4);
+			shipRepository.save(ship16);
+			shipRepository.save(ship17);
+			shipRepository.save(ship18);
+			shipRepository.save(ship19);
+			shipRepository.save(ship20);
+
+
+			/*System.out.println(gamePlayer1.getShips().toString());
+			System.out.println(gamePlayer3.getShips().toString());
+			System.out.println(gamePlayer2.getId());
+*/
 		};
 	}
-
 }
 
 
-// security login ----authentication
-/*@Configuration
-class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
-	@Autowired
-	PlayerRepository playerRepository;
-
-	@Override
-	public void init(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(inputName-> {
-			Player player = playerRepository.findByUserEmail(inputName);
-			if (player != null) {
-				return new User(player.getUserEmail(),player.getPassword(),
-						AuthorityUtils.createAuthorityList("USER"));
-			} else {
-				throw new UsernameNotFoundException("Unknown user: " + inputName);
-			}
-		});
-	}
-}*/
-
-//Authority ----login
-/*@Configuration
-@EnableWebSecurity
-class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-				//defines which page the user is allowed to see: add paths of url`s needed
-				.antMatchers("/api/login").hasAuthority("USER");
-
-
-		*//*@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http.authorizeRequests().antMatchers("/fonts/**").permitAll().anyRequest().authenticated()
-					.and().formLogin().loginPage("/login.jsp").permitAll();*//*
-
-
-		//how to login
-		http.formLogin()
-				.usernameParameter("userName")
-				.passwordParameter("password")
-				.loginPage("/api/login")
-				.permitAll();
-
-		http.logout().logoutUrl("/api/logout");
-
-
-		// turns off checking for CSRF tokens
-        http.csrf().disable();
-
-		// if user is not authenticated   --- it sends an authentication failure response
-        http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
-
-		// if login is successful  --- it clears the flags asking for authentication
-        http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
-
-        // if login fails  --- it sends an authentication failure response
-        http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
-
-		// if logout is successful ---it sends a success response
-        http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
-		}
-
-	private void clearAuthenticationAttributes(HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		if (session != null) {
-			session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-		}
-	}
-}*/
 
