@@ -86,6 +86,7 @@ public class SalvoController {
 
         GamePlayer gameplayer = gamePlayerRepository.findById(gamePlayerId).get();
         Game game = gameplayer.getGame();
+        
 
         Map<String, Object> gameInfo = new HashMap<>();
         gameInfo.put("Game_Id", game.getId());

@@ -9,13 +9,29 @@ body {
     display: flex;
     justify-content: center;
     margin-top: 5%;
+    margin-bottom: 5%;
+
 }
 
 .header h1 {
+
     margin: 0px;
-    color: rgba(4, 59, 155, 0.53);
+    color: rgba(21, 103, 197, 0.53);
 }
 
+#versus {
+
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.buttons {
+
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
 
 #board {
 

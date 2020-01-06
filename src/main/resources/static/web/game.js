@@ -149,5 +149,28 @@ async function getData() {
 getData()
     .then(dataPlayer => {
         console.log(dataPlayer);
+        let currentPlayer = {};
+        let opponentPlayer = {};
+
+        dataPlayer.GamePlayers.forEach(gamePlayer => {
+            console.log(gamePlayer.GamePlayer_Id)
+            if (gamePlayer.GamePlayer_Id == myParam) {
+                currentPlayer = gamePlayer;
+            } else
+                opponentPlayer = gamePlayer;
+        })
+
+        let versusDiv = document.getElementById("versus");
+
+        console.log(currentPlayer)
+        let h3 = document.createElement("h3")
+        h3.innerHTML = currentPlayer.Player.Player_Username + " vs. " + opponentPlayer.Player.Player_Username;
+
+        versusDiv.appendChild(h3);
+
+        dataPlayer.Ships.forEach(ship => {
+            console.log()
+        })
+
     })
-    .catch(error => console.log(error))
+    .catch(error => console.log(error));

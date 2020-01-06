@@ -17,12 +17,31 @@
         <div class="header">
             <h1>YOUR GAME</h1>
         </div>
+        <div class="versus" id="versus"></div>
+        <div class="buttons">
+            <button type="button" class="btn btn-outline-primary" id="logoutButton" onclick="logOut()">Log Out</button>
+            <button type="button" class="btn btn-outline-primary" onclick="saveallShips()">Save Ships</button>
+            <button type="button" class="btn btn-outline-primary" onclick="postSalvos()">Save Salvos</button>
+        </div>
     </div>
 
     <div class="container-fluid">
         <div class="container-sm">
-            <div id="gameInfo"></div>
+            <div id="gameInfo">
+            </div>
             <div id="board"></div>
+            <div id="ships">
+                <div id="CARRIER" draggable="true" ondragstart="drag(event) " class="4 horizontal"
+                    ondblclick="vertical(this)"></div>
+                <div id="BATTLESHIP" draggable="true" ondragstart="drag(event)" class="3 horizontal"
+                    ondblclick="vertical(this)"></div>
+                <div id="DESTROYER" draggable="true" ondragstart="drag(event)" class="5 horizontal"
+                    ondblclick="vertical(this)"></div>
+                <div id="SUBMARINE" draggable="true" ondragstart="drag(event)" class="3 horizontal"
+                    ondblclick="vertical(this)"></div>
+                <div id="PATROLBOAT" draggable="true" ondragstart="drag(event)" class="2 horizontal"
+                    ondblclick="vertical(this)"></div>
+            </div>
         </div>
     </div>
 
