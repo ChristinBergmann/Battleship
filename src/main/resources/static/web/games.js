@@ -7,8 +7,10 @@ async function getData() {
     //proceed once the first promise is resolved
     let dataGames = await response.json()
     //proceed only when the second promise is resolved
+    console.log(dataGames)
     return dataGames;
 }
+console.log("hi")
 //call getData function
 getData()
     .then(dataGames => {
@@ -30,11 +32,12 @@ getData()
 
 
                 let listEmail = document.createElement("li")
-                listEmail.innerHTML = "Player : " + gamePlayer.Player[0].Player_Username
+                console.log(gamePlayer)
+                listEmail.innerHTML = "Player : " + gamePlayer.Player.Player_Username
                 ul.appendChild(listEmail);
-                console.log(gamePlayer.Player[0].Player_Username);
+                console.log(gamePlayer.Player.Player_Username);
 
             })
         })
 
-    });
+    }).catch(error => console.log(error));

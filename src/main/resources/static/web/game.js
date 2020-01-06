@@ -1,4 +1,4 @@
-//----- FIRST BOARD ----//
+////--------------------- FIRST BOARD --------------////
 let boardContainer = document.getElementById("board");
 
 let divOutside = document.createElement("div");
@@ -133,3 +133,21 @@ for (let i = 1; i < 11; i++) {
 
     }
 }
+
+///-------- GET DATA OF PLAYER WITH ITS SHIPS ------------///
+
+const urlParams = new URLSearchParams(window.location.search);
+const myParam = urlParams.get('myParam');
+
+async function getData() {
+
+    let response = await fetch(`http://localhost:8080/api/game_view/${myParam}`);
+    console.log(response);
+    let dataPlayer = await response.json()
+    return dataPlayer;
+}
+getData()
+    .then(dataPlayer => {
+        console.log(dataPlayer);
+    })
+    .catch(error => console.log(error))
