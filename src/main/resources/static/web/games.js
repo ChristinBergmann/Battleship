@@ -1,20 +1,22 @@
+/////--------------- GET DATA OF GAMES WITH PLAYERS IN IT ------------/////
+
 async function getData() {
     //await the response of the fetch call
     let response = await fetch('http://localhost:8080/api/games');
     console.log(response);
     //proceed once the first promise is resolved
-    let data = await response.json()
+    let dataGames = await response.json()
     //proceed only when the second promise is resolved
-    return data;
+    return dataGames;
 }
 //call getData function
 getData()
-    .then(data => {
-        console.log(data);
+    .then(dataGames => {
+        console.log(dataGames);
 
         let gamesList = document.getElementById("games")
 
-        data.forEach(game => {
+        dataGames.forEach(game => {
             let ul = document.createElement("ul")
             ul.innerHTML = "Game No. " + game.Game_Id
             gamesList.appendChild(ul);
