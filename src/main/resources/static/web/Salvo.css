@@ -1,0 +1,126 @@
+body {
+    font-family: 'Roboto', 'sans-serif';
+    background-color: black;
+}
+
+.header {
+
+    position: relative;
+    display: flex;
+    justify-content: center;
+
+}
+
+.header h1 {
+
+    color: rgba(4, 59, 155, 0.53);
+}
+
+
+#board {
+
+    z-index: 10;
+    float: left;
+    position: relative;
+    margin: 1em auto 2em auto;
+    /*width: 500px;
+    height: 500px;*/
+    margin-top: 100px;
+    margin-left: 50px;
+    margin-right: 50px;
+
+}
+
+#board #numbersletters div {
+
+    z-index: 20;
+    position: absolute;
+    background-color: #fff;
+    box-sizing: border-box;
+    border: 1px solid rgb(1, 17, 3);
+    width: 35px;
+    height: 35px;
+    color: rgba(2, 12, 29, 0.53);
+    opacity: 80%;
+}
+
+#outrow {
+
+    position: absolute;
+    background-color: #000000;
+    /*padding-top: 0.1em;
+    font-size: 2em;*/
+    font-family: 'Roboto', 'sans-serif';
+}
+
+#board #boardgame div {
+
+    z-index: 30;
+    position: absolute;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid rgb(1, 17, 3);
+    width: 35px;
+    height: 35px;
+}
+
+/*#outcol {
+
+    background-color: #000000;
+    text-align: center center;
+    padding-top: 0.1em;
+    font-size: 2em;
+    font-family: 'Helvetica', 'Arial', 'Sans-Serif';
+
+}*/
+
+#board #numbersletters2 div {
+
+    z-index: 20;
+    position: absolute;
+    background-color: #fff;
+    box-sizing: border-box;
+    border: 1px solid rgb(1, 17, 3);
+    width: 35px;
+    height: 35px;
+    color: rgba(2, 12, 29, 0.53);
+    opacity: 80%;
+    margin-left: 700px;
+    font-family: 'Roboto',
+        'sans-serif';
+
+}
+
+#outrow2 {
+
+    position: absolute;
+    background-color: #000000;
+    text-align: center center;
+    padding-top: 0.1em;
+    font-size: 2em;
+    font-family: 'Roboto', 'sans-serif';
+}
+
+/*#outcol2 {
+
+    background-color: #000000;
+    text-align: center center;
+    padding-top: 0.1em;
+    font-size: 2em;
+    font-family: 'Helvetica', 'Arial', 'Sans-Serif';
+
+}*/
+
+#board #boardgame2 div {
+
+    z-index: 30;
+    position: absolute;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid rgb(1, 17, 3);
+    width: 35px;
+    height: 35px;
+    margin-top: -700px;
+}
