@@ -6,7 +6,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.util.Optional;
 
 @RepositoryRestResource
-interface GamePlayerRepository extends JpaRepository<GamePlayer, Long> {
+public interface GamePlayerRepository extends JpaRepository<GamePlayer, Long> {
     Optional<GamePlayer> findById(Long gamePlayerId);
 
 }

@@ -5,11 +5,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 @CrossOrigin(origins = "http://127.0.0.1:5500/")
@@ -19,9 +16,13 @@ public class SalvoController {
 
     @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
     GameRepository gameRepository;
+    @Autowired
     GamePlayerRepository gamePlayerRepository;
+    @Autowired
     ShipRepository shipRepository;
+    @Autowired
     ScoreRepository scoreRepository;
 
     @RequestMapping("/games")
@@ -77,8 +78,11 @@ public class SalvoController {
 
     @RequestMapping("/game_view/{gamePlayerId}")
     public Object findPlayerGame(@PathVariable Long gamePlayerId) {
+        System.out.println(gamePlayerId);
+        System.out.println("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
 
-        GamePlayer gameplayer = gamePlayerRepository.findById(gamePlayerId).get();
+        System.out.println(gamePlayerRepository.findGamePlayerById(gamePlayerId));
+        GamePlayer gameplayer = gamePlayerRepository.findGamePlayerById(gamePlayerId);
         Game game = gameplayer.getGame();
 
         Map<String, Object> gameInfo = new HashMap<>();
@@ -86,11 +90,8 @@ public class SalvoController {
         gameInfo.put("Game_created", game.getCreationDate());
         gameInfo.put("GamePlayers", gamePlayerInfo(game));
         gameInfo.put("Ships", shipsInfo(gameplayer));
-        //gameInfo.put("Salvo", )
-        //gameInfo.put ("Score", )
         return gameInfo;
     }
 }
-//write function for hits(Salvos) und scores..put into gamePlayerID FCT
 
 

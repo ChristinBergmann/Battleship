@@ -83,7 +83,6 @@ for (let x = 0; x < 11; x++) {
 
     let leftPosition2 = x * 35;
 
-    // Positioning css dont forget
     lettersRow2.style.top = 0 + 'px';
     lettersRow2.style.left = leftPosition2 + 'px';
 
@@ -103,7 +102,6 @@ for (let y = 0; y < 10; y++) {
 
     numbersCol2.style.top = topPosition2 + 35 + 'px';
 }
-
 
 let divInside2 = document.createElement("div");
 boardContainer.appendChild(divInside2);
@@ -162,15 +160,19 @@ getData()
 
         let versusDiv = document.getElementById("versus");
 
-        console.log(currentPlayer)
         let h3 = document.createElement("h3")
         h3.innerHTML = currentPlayer.Player.Player_Username + " vs. " + opponentPlayer.Player.Player_Username;
 
-        versusDiv.appendChild(h3);
+        versusDiv.appendChild(h3)
 
+        let locationArray = [];
+        console.log("he")
         dataPlayer.Ships.forEach(ship => {
-            console.log()
-        })
+            console.log(ship)
+            locationArray.push(ship.Location);
 
+
+        })
+        console.log(locationArray)
     })
     .catch(error => console.log(error));

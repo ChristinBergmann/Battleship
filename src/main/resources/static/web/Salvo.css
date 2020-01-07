@@ -16,7 +16,28 @@ body {
 .header h1 {
 
     margin: 0px;
-    color: rgba(21, 103, 197, 0.53);
+    position: relative;
+    font-family: sans-serif;
+    text-transform: uppercase;
+    font-size: 2.5em;
+    letter-spacing: 4px;
+    overflow: hidden;
+    background: linear-gradient(90deg, #000, #fff, #000);
+    background-repeat: no-repeat;
+    background-size: 80%;
+    animation: animate 4s linear infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: rgba(21, 103, 197, 0.53);
+}
+
+@keyframes animate {
+    0% {
+        background-position: -500%;
+    }
+
+    100% {
+        background-position: 500%;
+    }
 }
 
 /***************_________________________________ OVERVIEW SITE OF GAMES ______________________________******************/
@@ -25,14 +46,15 @@ body {
 
     position: relative;
     display: flex;
-
+    justify-content: space-around;
+    margin: 35px 5px 35px 5px;
 }
 
 .games-div {
 
     display: flex;
-    justify-content: center;
-
+    flex-direction: column;
+    text-align: center;
 }
 
 
@@ -40,7 +62,8 @@ body {
 
 
 
-/***************_________________________________ GAME SITE OF GAMEPLAYER______________________________******************/
+
+/***************_________________________________ GAME SITE OF GAMEPLAYER ______________________________******************/
 #versus {
 
     position: relative;
