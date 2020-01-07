@@ -19,16 +19,10 @@ public class SalvoController {
 
     @Autowired
     private PlayerRepository playerRepository;
-
-    @Autowired
-    private GameRepository gameRepository;
-
-    @Autowired
-    private GamePlayerRepository gamePlayerRepository;
-
-    @Autowired
-    private ShipRepository shipRepository;
-
+    GameRepository gameRepository;
+    GamePlayerRepository gamePlayerRepository;
+    ShipRepository shipRepository;
+    ScoreRepository scoreRepository;
 
     @RequestMapping("/games")
     public List<Object> getAll() {
@@ -86,14 +80,17 @@ public class SalvoController {
 
         GamePlayer gameplayer = gamePlayerRepository.findById(gamePlayerId).get();
         Game game = gameplayer.getGame();
-        
 
         Map<String, Object> gameInfo = new HashMap<>();
         gameInfo.put("Game_Id", game.getId());
         gameInfo.put("Game_created", game.getCreationDate());
         gameInfo.put("GamePlayers", gamePlayerInfo(game));
         gameInfo.put("Ships", shipsInfo(gameplayer));
+        //gameInfo.put("Salvo", )
+        //gameInfo.put ("Score", )
         return gameInfo;
     }
 }
+//write function for hits(Salvos) und scores..put into gamePlayerID FCT
+
 

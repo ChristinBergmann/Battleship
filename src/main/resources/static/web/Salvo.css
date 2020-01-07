@@ -19,6 +19,28 @@ body {
     color: rgba(21, 103, 197, 0.53);
 }
 
+/***************_________________________________ OVERVIEW SITE OF GAMES ______________________________******************/
+
+#games {
+
+    position: relative;
+    display: flex;
+
+}
+
+.games-div {
+
+    display: flex;
+    justify-content: center;
+
+}
+
+
+
+
+
+
+/***************_________________________________ GAME SITE OF GAMEPLAYER______________________________******************/
 #versus {
 
     position: relative;
@@ -31,6 +53,13 @@ body {
     position: relative;
     display: flex;
     justify-content: center;
+    padding: 10px 0px 10px 0px;
+}
+
+button {
+
+    justify-content: space-around;
+    margin: 5px 5px 5px 5px;
 }
 
 #board {

@@ -10,7 +10,7 @@ async function getData() {
     console.log(dataGames)
     return dataGames;
 }
-console.log("hi")
+
 //call getData function
 getData()
     .then(dataGames => {
@@ -19,24 +19,28 @@ getData()
         let gamesList = document.getElementById("games")
 
         dataGames.forEach(game => {
+            let div = document.createElement("div")
+            div.setAttribute("class", " game-div alert alert-primary", "role", "alert")
             let ul = document.createElement("ul")
             ul.innerHTML = "Game No. " + game.Game_Id
-            gamesList.appendChild(ul);
+
+            let gameLink = document.createElement("a")
+            gameLink.setAttribute("class", "alert-link")
+            gameLink.setAttribute("data-gameId", game.Game_Id)
+            gameLink.setAttribute("href", "http://localhost:8080/web/game.html${myParam}") //fix right url
+            gameLink.innerHTML = "JOIN"
+
+            gamesList.appendChild(div);
+            div.appendChild(ul);
+            div.appendChild(gameLink);
 
             game.GamePlayers.forEach(gamePlayer => {
-                console.log(gamePlayer)
-
-                let listPlayer = document.createElement("li")
-                listPlayer.innerHTML = "GP Id   : " + gamePlayer.GamePlayer_Id
-                ul.appendChild(listPlayer);
-
 
                 let listEmail = document.createElement("li")
-                console.log(gamePlayer)
                 listEmail.innerHTML = "Player : " + gamePlayer.Player.Player_Username
                 ul.appendChild(listEmail);
-                console.log(gamePlayer.Player.Player_Username);
 
+                console.log(gamePlayer);
             })
         })
 
