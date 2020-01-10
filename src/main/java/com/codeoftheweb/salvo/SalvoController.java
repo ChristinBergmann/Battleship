@@ -16,14 +16,18 @@ public class SalvoController {
 
     @Autowired
     private PlayerRepository playerRepository;
+
     @Autowired
-    GameRepository gameRepository;
+    private GameRepository gameRepository;
+
     @Autowired
-    GamePlayerRepository gamePlayerRepository;
+    private GamePlayerRepository gamePlayerRepository;
+
     @Autowired
-    ShipRepository shipRepository;
+    private ShipRepository shipRepository;
+
     @Autowired
-    ScoreRepository scoreRepository;
+    private ScoreRepository scoreRepository;
 
     @RequestMapping("/games")
     public List<Object> getAll() {
@@ -79,10 +83,8 @@ public class SalvoController {
     @RequestMapping("/game_view/{gamePlayerId}")
     public Object findPlayerGame(@PathVariable Long gamePlayerId) {
         System.out.println(gamePlayerId);
-        System.out.println("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
 
-        System.out.println(gamePlayerRepository.findGamePlayerById(gamePlayerId));
-        GamePlayer gameplayer = gamePlayerRepository.findGamePlayerById(gamePlayerId);
+        GamePlayer gameplayer = gamePlayerRepository.findById(gamePlayerId).get();
         Game game = gameplayer.getGame();
 
         Map<String, Object> gameInfo = new HashMap<>();
