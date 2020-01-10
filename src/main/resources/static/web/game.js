@@ -144,7 +144,10 @@ async function getData() {
     let dataPlayer = await response.json()
     return dataPlayer;
 }
+
 getData()
+
+
     .then(dataPlayer => {
         console.log(dataPlayer);
         let currentPlayer = {};
@@ -166,13 +169,36 @@ getData()
         versusDiv.appendChild(h3)
 
         let locationArray = [];
-        console.log("he")
+
         dataPlayer.Ships.forEach(ship => {
-            console.log(ship)
             locationArray.push(ship.Location);
-
-
         })
-        console.log(locationArray)
+
+        /////----------------- Displays Ships of the GP in the Board-----------------////// 
+        locationArray.forEach(x => {
+            if (x.length == 2) {
+                x.forEach(y => {
+                    document.getElementById(y).style.backgroundSize = "33px 33px";
+                    document.getElementById(y).style.backgroundImage = "url('Images/ship-wheel BLUE.png')";
+                })
+            } else if (x.length == 3) {
+                x.forEach(y => {
+                    document.getElementById(y).style.backgroundSize = "33px 33px";
+                    document.getElementById(y).style.backgroundImage = "url('Images/ship-wheel GREEN.png')";
+                })
+            }
+            if (x.length == 4) {
+                x.forEach(y => {
+                    document.getElementById(y).style.backgroundSize = "33px 33px";
+                    document.getElementById(y).style.backgroundImage = "url('Images/ship-wheel YELLOW.png')";
+                })
+            }
+            if (x.length == 5) {
+                x.forEach(y => {
+                    document.getElementById(y).style.backgroundSize = "33px 33px";
+                    document.getElementById(y).style.backgroundImage = "url('Images/ship-wheel PURPLE.png')";
+                })
+            }
+        })
     })
     .catch(error => console.log(error));
