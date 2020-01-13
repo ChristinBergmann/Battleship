@@ -54,7 +54,7 @@ public class SalvoController {
             gp_info.put("Player", playerInfo(gp));
             gamePlayer.add(gp_info);
         });
-        return (gamePlayer);
+        return gamePlayer;
     }
 
     Object playerInfo(GamePlayer gameplayer) {
@@ -77,7 +77,7 @@ public class SalvoController {
             ships.add(ship_info);
             System.out.println(ships);
         });
-        return (ships);
+        return ships;
     }
 
     @RequestMapping("/game_view/{gamePlayerId}")
@@ -94,6 +94,8 @@ public class SalvoController {
         gameInfo.put("Ships", shipsInfo(gameplayer));
         return gameInfo;
     }
+
+
 }
 
 

@@ -30,8 +30,7 @@ public class Score {
     private Date finishDate;
 
 
-    public Score() {
-    }
+    public Score() { }
 
     public Score(Date finishDate, Double score) {
         this.finishDate = finishDate;
