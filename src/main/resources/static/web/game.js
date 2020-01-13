@@ -1,8 +1,9 @@
 ////--------------------- FIRST BOARD --------------////
-let boardContainer = document.getElementById("board");
+let boardContainer = document.getElementById("boards");
 
 let divOutside = document.createElement("div");
 boardContainer.appendChild(divOutside);
+
 divOutside.id = 'numbersletters';
 
 let letters = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
@@ -17,7 +18,6 @@ for (let x = 0; x < 11; x++) {
 
     let leftPosition = x * 35;
 
-    // Position absolute in css
     lettersRow.style.top = 0 + 'px';
     lettersRow.style.left = leftPosition + 'px';
 
@@ -118,10 +118,8 @@ for (let i = 1; i < 11; i++) {
         fieldsArray2.push(field2)
 
 
-        field2.id = (document.getElementsByClassName("outrow2")[i]).id + (document.getElementsByClassName("outcol2")[j]).id
+        field2.id = 'f2' + (document.getElementsByClassName("outrow2")[i]).id + (document.getElementsByClassName("outcol2")[j]).id
         field2.className = "field2";
-
-        //field2.addEventListener("click", mySalvos)
 
         let topPosition2 = j * 35;
         let leftPosition2 = (i - 1) * 35;
@@ -147,9 +145,9 @@ async function getData() {
 
 getData()
 
-
     .then(dataPlayer => {
         console.log(dataPlayer);
+        /////-------  Checking which GP is loggedIn  -----////
         let currentPlayer = {};
         let opponentPlayer = {};
 
@@ -168,13 +166,14 @@ getData()
 
         versusDiv.appendChild(h3)
 
+
+        /////----------------- Displays Ships of the GP in the Ships Board-----------------////// 
         let locationArray = [];
 
         dataPlayer.Ships_mine.forEach(ship => {
             locationArray.push(ship.Location);
         })
 
-        /////----------------- Displays Ships of the GP in the Board-----------------////// 
         locationArray.forEach(x => {
             if (x.length == 2) {
                 x.forEach(y => {
@@ -200,5 +199,20 @@ getData()
                 })
             }
         })
+
+        /////----------------- Displays Shots of the GP in the Shots Board-----------------////// 
+        let shotsArray = [];
+
+        dataPlayer.Shots_mine.forEach(shot => {
+            shotsArray.push(shot.Shot_fired);
+        })
+
+        shotsArray.forEach(y => {
+            y.forEach(s => {
+                document.getElementById("f2" + s).style.backgroundSize = "33px 33px";
+                document.getElementById("f2" + s).style.backgroundImage = "url('Images/bomb.png')";
+            })
+        })
+
     })
     .catch(error => console.log(error));
