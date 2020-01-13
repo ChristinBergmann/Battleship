@@ -43,4 +43,12 @@ getData()
 
         })
 
+
     }).catch(error => console.log(error));
+
+
+/* finish this fct to log out and redirect to manager html
+
+// function logOut(page) {
+//     window.location.href = page;
+// }
