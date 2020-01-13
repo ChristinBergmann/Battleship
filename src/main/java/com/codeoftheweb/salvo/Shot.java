@@ -69,6 +69,5 @@ public class Shot {
         this.gamePlayer = gamePlayer;
     }
 
-    public void add(Shot shot) {
-    }
+
 }

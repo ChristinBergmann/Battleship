@@ -170,7 +170,7 @@ getData()
 
         let locationArray = [];
 
-        dataPlayer.Ships.forEach(ship => {
+        dataPlayer.Ships_mine.forEach(ship => {
             locationArray.push(ship.Location);
         })
 

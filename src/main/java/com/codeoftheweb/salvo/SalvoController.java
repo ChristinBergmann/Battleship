@@ -15,19 +15,19 @@ import java.util.*;
 public class SalvoController {
 
     @Autowired
-    private PlayerRepository playerRepository;
+    private PlayerRepository playerRepo;
 
     @Autowired
-    private GameRepository gameRepository;
+    private GameRepository gameRepo;
 
     @Autowired
-    private GamePlayerRepository gamePlayerRepository;
+    private GamePlayerRepository gamePlayerRepo;
 
     @Autowired
-    private ShipRepository shipRepository;
+    private ShipRepository shipRepo;
 
     @Autowired
-    private ScoreRepository scoreRepository;
+    private ScoreRepository scoreRepo;
 
     @RequestMapping("/games")
     public List<Object> getAll() {
@@ -35,7 +35,7 @@ public class SalvoController {
         //bei Lists use .add and by maps use.put!!!
         List<Object> games = new ArrayList<>();
 
-        gameRepository.findAll().forEach(oneGame -> {
+        gameRepo.findAll().forEach(oneGame -> {
             Map<String, Object> gameMap = new HashMap<>();
             gameMap.put("Game_created", oneGame.getCreationDate());
             gameMap.put("Game_Id", oneGame.getId());
@@ -64,7 +64,6 @@ public class SalvoController {
         pl_info.put("Player_Username", gameplayer.getPlayer().getUserName());
 
         return pl_info;
-
     }
 
     List<Object> shipsInfo(GamePlayer gameplayer) {
@@ -80,21 +79,34 @@ public class SalvoController {
         return ships;
     }
 
+    List<Object> shotsInfo(GamePlayer gameplayer) {
+        List<Object> shots = new ArrayList<>();
+
+        gameplayer.getShots().forEach(x -> {
+            Map<String, Object> shot_info = new HashMap<>();
+            shot_info.put("Shot_fired", x.getLocations());
+            shot_info.put("Turn", x.getTurn());
+            shots.add(shot_info);
+            System.out.println(shots);
+        });
+        return shots;
+    }
+
     @RequestMapping("/game_view/{gamePlayerId}")
     public Object findPlayerGame(@PathVariable Long gamePlayerId) {
         System.out.println(gamePlayerId);
 
-        GamePlayer gameplayer = gamePlayerRepository.findById(gamePlayerId).get();
+        GamePlayer gameplayer = gamePlayerRepo.findById(gamePlayerId).get();
         Game game = gameplayer.getGame();
 
         Map<String, Object> gameInfo = new HashMap<>();
         gameInfo.put("Game_Id", game.getId());
         gameInfo.put("Game_created", game.getCreationDate());
         gameInfo.put("GamePlayers", gamePlayerInfo(game));
-        gameInfo.put("Ships", shipsInfo(gameplayer));
+        gameInfo.put("Ships_mine", shipsInfo(gameplayer));
+        gameInfo.put("Shots_mine", shotsInfo(gameplayer));
         return gameInfo;
     }
-
 
 }
 

@@ -47,6 +47,8 @@ public class GamePlayer {
     }
 
 
+
+
     public GamePlayer(Date creationDate) {
         this.creationDate = creationDate;
 
