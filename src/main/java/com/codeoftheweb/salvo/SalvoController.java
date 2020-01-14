@@ -92,6 +92,21 @@ public class SalvoController {
         return shots;
     }
 
+   /* List<Object> hitsInfo(GamePlayer gameplayer) {
+        List<Object> hits = new ArrayList<>();
+
+        gameplayer.getGame().getGamePlayers().forEach(x -> {
+            if (x != gameplayer) {
+
+                Map<String, Object> hit_info = new HashMap<>();
+                hit_info.put("Hit_opponent", shotsInfo(x));
+                hits.add(hit_info);
+            }
+        });
+        return hits;
+    }*/
+
+
     @RequestMapping("/game_view/{gamePlayerId}")
     public Object findPlayerGame(@PathVariable Long gamePlayerId) {
         System.out.println(gamePlayerId);
@@ -105,9 +120,16 @@ public class SalvoController {
         gameInfo.put("GamePlayers", gamePlayerInfo(game));
         gameInfo.put("Ships_mine", shipsInfo(gameplayer));
         gameInfo.put("Shots_mine", shotsInfo(gameplayer));
+
+        game.getGamePlayers().stream().forEach(x -> {
+        if (x != gameplayer) {
+
+            gameInfo.put("Hits_mine", shotsInfo(x));
+
+        }
+        });
         return gameInfo;
     }
-
 }
 
 

@@ -68,6 +68,4 @@ public class Shot {
     public void setGamePlayer(GamePlayer gamePlayer) {
         this.gamePlayer = gamePlayer;
     }
-
-
 }

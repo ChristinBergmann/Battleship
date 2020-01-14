@@ -130,7 +130,7 @@ for (let i = 1; i < 11; i++) {
     }
 }
 
-///-------- GET DATA OF PLAYER WITH ITS SHIPS ------------///
+///------------------------------ GET DATA OF PLAYER WITH ITS SHIPS ----------------------------///
 
 const urlParams = new URLSearchParams(window.location.search);
 const myParam = urlParams.get('myParam');
@@ -183,7 +183,7 @@ getData()
             } else if (x.length == 3) {
                 x.forEach(y => {
                     document.getElementById(y).style.backgroundSize = "33px 33px";
-                    document.getElementById(y).style.backgroundImage = "url('Images/ship-wheel GREEN.png')";
+                    document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
                 })
             }
             if (x.length == 4) {
@@ -214,5 +214,19 @@ getData()
             })
         })
 
+        /////----------------- Displays Shots of the GP in the Shots Board-----------------////// 
+        let hitsArray = [];
+        console.log(dataPlayer.Hits_mine)
+
+        dataPlayer.Hits_mine.forEach(hit => {
+            hitsArray.push(hit.Shot_fired);
+        })
+
+        hitsArray.forEach(y => {
+            y.forEach(s => {
+                document.getElementById(s).style.backgroundSize = "33px 33px";
+                document.getElementById(s).style.backgroundImage = "url('Images/.png')";
+            })
+        })
     })
     .catch(error => console.log(error));

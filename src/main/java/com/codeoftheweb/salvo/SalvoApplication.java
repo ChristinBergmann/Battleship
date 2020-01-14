@@ -126,7 +126,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			//////-------------creating + adding ships-----------------//////
 
 			//saves + creates ships for gp1 -game1
-			Ship ship1 = new Ship("CARRIER", Arrays.asList("H2", "H3", "H4", "H5", "H6"), gamePlayer1);
+			Ship ship1 = new Ship("CARRIER", Arrays.asList("H3", "H4", "H5", "H6", "H7"), gamePlayer1);
 			Ship ship2 = new Ship("BATTLESHIP", Arrays.asList("E4", "E5", "E6", "E7"), gamePlayer1);
 			Ship ship3 = new Ship("DESTROYER", Arrays.asList("H1", "I1", "J1"), gamePlayer1);
 			Ship ship4 = new Ship("SUBMARINE", Arrays.asList("A1", "A2", "A3"), gamePlayer1);
@@ -141,7 +141,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			//saves + creates ships for gp2 -game1
 			Ship ship6 = new Ship("CARRIER", Arrays.asList("H1", "H2", "H3", "H4", "H5"), gamePlayer2);
 			Ship ship7 = new Ship("BATTLESHIP", Arrays.asList("E1", "E2", "E3", "E4"), gamePlayer2);
-			Ship ship8 = new Ship("DESTROYER", Arrays.asList("H2", "I2", "J2"), gamePlayer2);
+			Ship ship8 = new Ship("DESTROYER", Arrays.asList("E8", "F8", "G8"), gamePlayer2);
 			Ship ship9 = new Ship("SUBMARINE", Arrays.asList("A5", "A6", "A7"), gamePlayer2);
 			Ship ship10 = new Ship("PATROLBOAT", Arrays.asList("G3", "G4"), gamePlayer2);
 			shipRepo.save(ship6);
