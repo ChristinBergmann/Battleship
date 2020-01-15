@@ -23,9 +23,6 @@ public class Score {
     @JoinColumn(name = "game_id")
     private Game game;
 
-
-    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
-    Set<Score> scores = new HashSet<Score>();
     private Double score;
     private Date finishDate;
 

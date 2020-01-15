@@ -206,21 +206,26 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			shotRepo.save(shot5a);
 
 			//////-------------creating + adding scores rounds-----------------//////
-
+			//1.0-win//05.-tie//0.0-lost//
 			Score score1 = new Score(new Date(),1.0);
 			player1.addScore(score1);
 			game1.addScore((score1));
 			scoreRepo.save(score1);
 
-			Score score2 = new Score(new Date(),0.5);
+			Score score2 = new Score(new Date(),0.0);
 			player2.addScore(score2);
 			game1.addScore((score2));
 			scoreRepo.save(score2);
 
-			Score score3 = new Score(new Date(),0.0);
-			player1.addScore(score3);
-			game1.addScore((score3));
+			Score score3 = new Score(new Date(),0.5);
+			player3.addScore(score3);
+			game2.addScore((score3));
 			scoreRepo.save(score3);
+
+			Score score4 = new Score(new Date(),0.5);
+			player4.addScore(score4);
+			game2.addScore((score4));
+			scoreRepo.save(score4);
 
 		};
 	}

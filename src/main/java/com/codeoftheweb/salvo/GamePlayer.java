@@ -46,9 +46,6 @@ public class GamePlayer {
         shots.add(shot);
     }
 
-
-
-
     public GamePlayer(Date creationDate) {
         this.creationDate = creationDate;
 

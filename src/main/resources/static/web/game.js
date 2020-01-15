@@ -200,7 +200,7 @@ getData()
             }
         })
 
-        /////----------------- Displays Shots of the GP in the Shots Board-----------------////// 
+        /////----------------- Displays SHOTS of the GP in the Shots Board -----------------////// 
         let shotsArray = [];
 
         dataPlayer.Shots_mine.forEach(shot => {
@@ -214,7 +214,7 @@ getData()
             })
         })
 
-        /////----------------- Displays Shots of the GP in the Shots Board-----------------////// 
+        /////--------------- Displays HITS by OpponentGP in the Shots Board ---------------////// 
         let hitsArray = [];
         console.log(dataPlayer.Hits_mine)
 
@@ -225,8 +225,11 @@ getData()
         hitsArray.forEach(y => {
             y.forEach(s => {
                 document.getElementById(s).style.backgroundSize = "33px 33px";
-                document.getElementById(s).style.backgroundImage = "url('Images/.png')";
+                document.getElementById(s).style.backgroundImage = "url('Images/explosion.png')";
             })
         })
+        /////--------------- Displays SCORES of both GPs in the between Boards ---------------////// 
+
+
     })
     .catch(error => console.log(error));

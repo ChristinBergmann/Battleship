@@ -39,22 +39,23 @@ public class SalvoController {
             Map<String, Object> gameMap = new HashMap<>();
             gameMap.put("Game_created", oneGame.getCreationDate());
             gameMap.put("Game_Id", oneGame.getId());
-            gameMap.put("GamePlayers", gamePlayerInfo(oneGame));
+            gameMap.put("GamePlayers", gamePlayersInfo(oneGame));
+
             games.add(gameMap);
         });
         return games;
     }
 
-    List<Object> gamePlayerInfo(Game game) {
-        List<Object> gamePlayer = new ArrayList();
+    List<Object> gamePlayersInfo(Game game) {
+        List<Object> gamePlayers = new ArrayList();
 
         game.getGamePlayers().forEach(gp -> {
             Map<String, Object> gp_info = new HashMap<>();
             gp_info.put("GamePlayer_Id", gp.getId());
             gp_info.put("Player", playerInfo(gp));
-            gamePlayer.add(gp_info);
+            gamePlayers.add(gp_info);
         });
-        return gamePlayer;
+        return gamePlayers;
     }
 
     Object playerInfo(GamePlayer gameplayer) {
@@ -62,6 +63,7 @@ public class SalvoController {
         Map<String, Object> pl_info = new HashMap<>();
         pl_info.put("Player_Id", gameplayer.getPlayer().getId());
         pl_info.put("Player_Username", gameplayer.getPlayer().getUserName());
+        pl_info.put("Score", scoreInfo(gameplayer));
 
         return pl_info;
     }
@@ -92,19 +94,18 @@ public class SalvoController {
         return shots;
     }
 
-   /* List<Object> hitsInfo(GamePlayer gameplayer) {
-        List<Object> hits = new ArrayList<>();
+    List<Object> scoreInfo(GamePlayer gameplayer) {
+        List<Object> scoreList = new ArrayList<>();
 
-        gameplayer.getGame().getGamePlayers().forEach(x -> {
-            if (x != gameplayer) {
-
-                Map<String, Object> hit_info = new HashMap<>();
-                hit_info.put("Hit_opponent", shotsInfo(x));
-                hits.add(hit_info);
-            }
+        gameplayer.getGame().getScores().forEach(score -> {
+            Map<String, Object> score_info = new HashMap<>();
+            score_info.put(score.getPlayer().getUserName(), score.getScore());
+            scoreList.add(score_info);
         });
-        return hits;
-    }*/
+        return scoreList;
+    }
+
+
 
 
     @RequestMapping("/game_view/{gamePlayerId}")
@@ -117,9 +118,10 @@ public class SalvoController {
         Map<String, Object> gameInfo = new HashMap<>();
         gameInfo.put("Game_Id", game.getId());
         gameInfo.put("Game_created", game.getCreationDate());
-        gameInfo.put("GamePlayers", gamePlayerInfo(game));
+        gameInfo.put("GamePlayers", gamePlayersInfo(game));
         gameInfo.put("Ships_mine", shipsInfo(gameplayer));
         gameInfo.put("Shots_mine", shotsInfo(gameplayer));
+        gameInfo.put("Scores", scoreInfo(gameplayer));
 
         game.getGamePlayers().stream().forEach(x -> {
         if (x != gameplayer) {
