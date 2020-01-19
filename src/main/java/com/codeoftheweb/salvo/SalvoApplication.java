@@ -61,7 +61,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gameRepo.save(game4);
 
 
-			//Game(round) 1
+			//Game 1
 			GamePlayer gamePlayer1 = new GamePlayer();
 			GamePlayer gamePlayer2 = new GamePlayer();
 
@@ -74,7 +74,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gamePlayer2.setCreationDate(game1.getCreationDate());
 
 
-			//Game(round) 2
+			//Game 2
 			GamePlayer gamePlayer3 = new GamePlayer();
 			GamePlayer gamePlayer4 = new GamePlayer();
 
@@ -87,7 +87,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gamePlayer4.setCreationDate(game2.getCreationDate());
 
 
-			//Game(round) 3
+			//Game 3
 			GamePlayer gamePlayer5 = new GamePlayer();
 			GamePlayer gamePlayer6 = new GamePlayer();
 
@@ -100,7 +100,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gamePlayer6.setCreationDate(game3.getCreationDate());
 
 
-			//Game(round) 4
+			//Game 4
 			GamePlayer gamePlayer7 = new GamePlayer();
 			GamePlayer gamePlayer8 = new GamePlayer();
 

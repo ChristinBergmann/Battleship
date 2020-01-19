@@ -30,7 +30,7 @@ public class SalvoController {
     private ScoreRepository scoreRepo;
 
     @RequestMapping("/games")
-    public List<Object> getAll() {
+    public List<Object> getAllGames() {
 
         //bei Lists use .add and by maps use.put!!!
         List<Object> games = new ArrayList<>();
@@ -40,11 +40,11 @@ public class SalvoController {
             gameMap.put("Game_created", oneGame.getCreationDate());
             gameMap.put("Game_Id", oneGame.getId());
             gameMap.put("GamePlayers", gamePlayersInfo(oneGame));
-
             games.add(gameMap);
         });
         return games;
     }
+
 
     List<Object> gamePlayersInfo(Game game) {
         List<Object> gamePlayers = new ArrayList();
@@ -64,7 +64,6 @@ public class SalvoController {
         pl_info.put("Player_Id", gameplayer.getPlayer().getId());
         pl_info.put("Player_Username", gameplayer.getPlayer().getUserName());
         pl_info.put("Score", scoreInfo(gameplayer));
-
         return pl_info;
     }
 
@@ -76,7 +75,6 @@ public class SalvoController {
             ship_info.put("Type", ship.getType());
             ship_info.put("Location", ship.getLocations());
             ships.add(ship_info);
-            System.out.println(ships);
         });
         return ships;
     }
@@ -89,24 +87,39 @@ public class SalvoController {
             shot_info.put("Shot_fired", x.getLocations());
             shot_info.put("Turn", x.getTurn());
             shots.add(shot_info);
-            System.out.println(shots);
         });
         return shots;
     }
 
-    List<Object> scoreInfo(GamePlayer gameplayer) {
+    Object scoreInfo(GamePlayer gameplayer) {
+        Map<String, Object> score_info = new HashMap<>();
+        gameplayer.getGame().getScores().forEach(score -> {
+
+            if (score.getPlayer().getUserName().equals(gameplayer.getPlayer().getUserName())) {
+                score_info.put("Score_current", score.getScore());
+            } else {
+                score_info.put("Score_opponent", score.getScore());
+            }
+        });
+        return score_info;
+
+    }
+// just in here to remember //
+   /* List<Object> scoreInfo(GamePlayer gameplayer) {
         List<Object> scoreList = new ArrayList<>();
 
         gameplayer.getGame().getScores().forEach(score -> {
             Map<String, Object> score_info = new HashMap<>();
-            score_info.put(score.getPlayer().getUserName(), score.getScore());
+            if(score.getPlayer().getUserName().equals(gameplayer.getPlayer().getUserName())){
+                score_info.put("Score_current", score.getScore());
+            }else{
+                score_info.put("Score_opponent", score.getScore());
+            }
             scoreList.add(score_info);
+            System.out.println(scoreList);
         });
         return scoreList;
-    }
-
-
-
+    }*/
 
     @RequestMapping("/game_view/{gamePlayerId}")
     public Object findPlayerGame(@PathVariable Long gamePlayerId) {
@@ -124,13 +137,40 @@ public class SalvoController {
         gameInfo.put("Scores", scoreInfo(gameplayer));
 
         game.getGamePlayers().stream().forEach(x -> {
-        if (x != gameplayer) {
-
-            gameInfo.put("Hits_mine", shotsInfo(x));
-
-        }
+            if (x != gameplayer) {
+                gameInfo.put("Hits_mine", shotsInfo(x));
+            }
         });
         return gameInfo;
+    }
+
+    @RequestMapping("/leaderboard")
+    public List<Object> getAllScores(Player player) {
+        List<Object> rankings = new ArrayList<>();
+
+        playerRepo.findAll().forEach(pl -> {
+            Map<String, Object> pl_list = new HashMap<>();
+            pl_list.put("Player", pl.getUserName());
+            pl_list.put("Scores", sc_Info(player));
+            rankings.add(pl_list);
+        });
+        return rankings;
+    }
+
+    Object sc_Info(Player player) {
+
+        Map<String, Object> score_info = new HashMap<>();
+        player.getGamePlayers().stream().forEach(gp -> {
+
+//            if (score = 1) {
+                score_info.put("Win", gp.getPlayer().getScores());
+           /* } else if (score.value = 0.5)
+                score_info.put("Tied", gp.getPlayer().getScores());
+            else {
+                score_info.put("Loss", gp.getPlayer().getScores());
+            }*/
+        });
+        return score_info;
     }
 }
 

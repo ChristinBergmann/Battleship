@@ -45,3 +45,19 @@ getData()
 
 
     }).catch(error => console.log(error));
+
+/////------------------------------- GET DATA OF Scores --------------------/////
+async function getDataRanking() {
+
+    let response = await fetch('http://localhost:8080/api/leaderboard');
+    console.log(response);
+    let dataRanking = await response.json()
+    console.log(dataRanking)
+    return dataRanking;
+}
+getDataRanking()
+    .then(dataRanking => {
+        console.log(dataRanking)
+
+    })
+    .catch(error => console.log(error));

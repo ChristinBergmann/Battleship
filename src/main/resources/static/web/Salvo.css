@@ -90,6 +90,12 @@ button {
     margin-top: 30px;
 }
 
+.score {
+
+    padding: 10px 0px 10px 0px;
+
+}
+
 /*--------- Boards Display --------*/
 #boards {
 

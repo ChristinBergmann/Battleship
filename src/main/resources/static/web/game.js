@@ -159,12 +159,19 @@ getData()
                 opponentPlayer = gamePlayer;
         })
 
-        let versusDiv = document.getElementById("versus");
+        let versusDiv = document.getElementById("versus")
 
         let h3 = document.createElement("h3")
         h3.innerHTML = currentPlayer.Player.Player_Username + " vs. " + opponentPlayer.Player.Player_Username;
 
         versusDiv.appendChild(h3)
+
+        /////--------------- Displays SCORES of both GPs in the between Boards ---------------////// 
+
+        let scoreVersus = document.getElementById("score")
+        let scoreH3 = document.createElement("h3")
+        scoreH3.innerHTML = dataPlayer.Scores.Score_current + " : " + dataPlayer.Scores.Score_opponent;
+        scoreVersus.appendChild(scoreH3)
 
 
         /////----------------- Displays Ships of the GP in the Ships Board-----------------////// 
@@ -178,7 +185,7 @@ getData()
             if (x.length == 2) {
                 x.forEach(y => {
                     document.getElementById(y).style.backgroundSize = "33px 33px";
-                    document.getElementById(y).style.backgroundImage = "url('Images/ship-wheel BLUE.png')";
+                    document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
                 })
             } else if (x.length == 3) {
                 x.forEach(y => {
@@ -189,13 +196,13 @@ getData()
             if (x.length == 4) {
                 x.forEach(y => {
                     document.getElementById(y).style.backgroundSize = "33px 33px";
-                    document.getElementById(y).style.backgroundImage = "url('Images/ship-wheel YELLOW.png')";
+                    document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
                 })
             }
             if (x.length == 5) {
                 x.forEach(y => {
                     document.getElementById(y).style.backgroundSize = "33px 33px";
-                    document.getElementById(y).style.backgroundImage = "url('Images/ship-wheel PURPLE.png')";
+                    document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
                 })
             }
         })
@@ -228,7 +235,6 @@ getData()
                 document.getElementById(s).style.backgroundImage = "url('Images/explosion.png')";
             })
         })
-        /////--------------- Displays SCORES of both GPs in the between Boards ---------------////// 
 
 
     })
