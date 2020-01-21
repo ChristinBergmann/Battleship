@@ -1,3 +1,32 @@
+function getUserPassw() {
+
+    let username;
+    let password;
+    let feedback;
+
+    username = document.getElementById("user").value;
+    password = document.getElementById("passw").value;
+
+    console.log(username)
+    console.log(password)
+    if (username && password) {
+        feedback = "Well done!"
+    } else {
+        feedback = "Enter all fields!"
+    }
+    console.log(feedback)
+    // postUserPassw(username, password)
+
+}
+
+// function postUserPassw() {
+
+// }
+
+
+
+
+
 // $(function () {
 
 //     // display text in the output area

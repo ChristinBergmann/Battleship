@@ -25,16 +25,17 @@
             <div class="input-group flex-nowrap">
 
                 <span class="input-group-text" id="addon-wrapping">&#64;</span>
-                <input type="username" class="form-control" placeholder="Username" aria-label="username"
+                <input type="username" id="user" class="form-control" placeholder="Username" aria-label="username"
                     aria-describedby="addon-wrapping">
                 <span class="input-group-text" id="addon-wrapping" href="">&#8473;</span>
-                <input type="password" class="form-control" placeholder="Password" aria-label="Password"
+                <input type="password" id="passw" class="form-control" placeholder="Password" aria-label="Password"
                     aria-describedby="addon-wrapping">
 
             </div>
 
             <div class="buttons">
-                <button type="button" class="btn btn-outline-primary" id="loginButton" onclick="logIn()">LogIn</button>
+                <button type="button" class="btn btn-outline-primary" id="loginButton"
+                    onclick="getUserPassw();">LogIn</button>
             </div>
             <div class="buttons">
                 <p>&#8659; OR &#8659;</p>
