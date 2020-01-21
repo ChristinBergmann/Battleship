@@ -63,7 +63,13 @@ body {
 
 }
 
-
+/***************_________________________________ MANAGER SITE OF GAMEPLAYER ______________________________******************/
+@media(min-width: 768px) {
+    .field-label-responsive {
+        padding-top: .5rem;
+        text-align: right;
+    }
+}
 
 /***************_________________________________ GAME SITE OF GAMEPLAYER ______________________________******************/
 
