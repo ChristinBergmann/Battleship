@@ -20,7 +20,7 @@ getData()
 
         dataGames.forEach(game => {
             let div = document.createElement("div")
-            div.setAttribute("class", " game-div alert alert-primary", "role", "alert")
+            div.setAttribute("class", "game-div alert alert-primary", "role", "alert")
             let th = document.createElement("th")
             th.innerHTML = "Game No. " + game.Game_Id
 
@@ -58,55 +58,43 @@ getDataRanking()
     .then(dataPlayers => {
         console.log(dataPlayers)
 
-        let tableHead = document.getElementById("rankingTable");
-        let tr = document.getElementById("tr")
+        /////------------------------------- DISPLAYS Player with its Total Scores --------------------/////
+
+        let rankingList = document.getElementById("ranking")
+        rankingList.setAttribute("class", "alert alert-primary")
+        let table = document.createElement("table")
+        table.setAttribute("class", "table table-hover table-dark")
+        let tHead = document.createElement("thead")
+        let trHeader = document.createElement("tr")
+        trHeader.setAttribute("class", "alert-primary")
+
+        let tdName = document.createElement("th")
+        tdName.innerHTML = "NAME"
+        let tdTotal = document.createElement("th")
+        tdTotal.innerHTML = "TOTAL SCORE"
+
+        rankingList.appendChild(table)
+        table.appendChild(tHead)
+        tHead.appendChild(trHeader)
+        trHeader.appendChild(tdName)
+        trHeader.appendChild(tdTotal)
+
+        let tBody = document.createElement("tbody")
 
         dataPlayers.forEach(x => {
-            let name = document.getElementById("name")
-            let win = document.getElementById("won")
-            let lost = document.getElementById("lost")
-            let tie = document.getElementById("tie")
-            let total = document.getElementById("total")
+            let trRanking = document.createElement("tr")
+            let tdRankingName = document.createElement("td")
+            let tdRankingTotal = document.createElement("td")
 
-            if (x.length > 0) {
-                name.innerHTML = x.Player
-                win.innerHTML = x.Scores.Win
-                lost.innerHTML = x.Scores.Lost
-                tie.innerHTML = x.Scores.Tie
-                total.innerHTML = x.Scores.Total
-            } else {
-                name.innerHTML = " / "
-                win.innerHTML = " / "
-                lost.innerHTML = " / "
-                tie.innerHTML = " / "
-                total.innerHTML = " / "
-            }
 
-            tableHead.appendChild(tr)
-            tr.appendChild(name)
-            tr.appendChild(win)
-            tr.appendChild(lost)
-            tr.appendChild(tie)
-            tr.appendChild(total)
+            tdRankingName.innerHTML = x.Player
+            tdRankingTotal.innerHTML = x.Scores.Total
+
+            table.appendChild(tBody)
+            tBody.appendChild(trRanking)
+            trRanking.appendChild(tdRankingName);
+            trRanking.appendChild(tdRankingTotal);
+
         })
-
-        /////------------------------------- GET SUM of Total Scores --------------------/////
-
-        let totalAll = [];
-
-        dataPlayers.forEach(x => {
-            totalAll.push(x.Scores.Total)
-        })
-        let scoreSum = totalAll.reduce(function (a, b) {
-            return a + b;
-        }, 0);
-
-        console.log(scoreSum);
-        // Math.sum(totalAll);
-
-        // let rankingList = document.getElementById("ranking")
-        // rankingList.createElement("p")
-        // rankingList.innerHTML = rankings;
-
     })
     .catch(error => console.log(error));

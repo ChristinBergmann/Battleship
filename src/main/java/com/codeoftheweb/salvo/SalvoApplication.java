@@ -79,11 +79,11 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			GamePlayer gamePlayer4 = new GamePlayer();
 
 			game2.addGamePlayer(gamePlayer3);
-			player1.addGamePlayer(gamePlayer3);
+			player3.addGamePlayer(gamePlayer3);
 			gamePlayer3.setCreationDate(game2.getCreationDate());
 
 			game2.addGamePlayer(gamePlayer4);
-			player2.addGamePlayer(gamePlayer4);
+			player4.addGamePlayer(gamePlayer4);
 			gamePlayer4.setCreationDate(game2.getCreationDate());
 
 

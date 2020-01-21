@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="salvo.css">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="board.css">
     <style>
         a:hover {
             cursor: pointer;
@@ -18,34 +19,23 @@
 
 <body>
     <div class="container-fluid">
+
         <div class="header">
             <h1>GAMES</h1>
         </div>
+
         <div class="buttons">
             <button type="button" class="btn btn-outline-primary" id="logoutButton" onclick="logOut()">Log Out</button>
             <button type="button" class="btn btn-outline-primary" id="newGame" onclick="logOut()">New Game</button>
         </div>
+
     </div>
 
-
-
-    <div class=" games-div container-sm">
+    <div class="games-div container-sm">
         <div id="games"></div>
         <div id="ranking"></div>
+    </div>
 
-        <table>
-            <thead id="rankingTable">
-                <tr id="tr">
-                    <td id="name">Name</td>
-                    <td id="total">Total</td>
-                    <td id="won">Won</td>
-                    <td id="lost">Lost</td>
-                    <td id="tie">Tie</td>
-                </tr>
-            </thead>
-        </table>
-    </div>
-    </div>
 
 
 

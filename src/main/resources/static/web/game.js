@@ -201,7 +201,7 @@ getData()
             if (x.length == 5) {
                 x.forEach(y => {
                     document.getElementById(y).style.backgroundSize = "33px 33px";
-                    document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
+                    document.getElementById(y).style.backgroundImage = "url('Images/navy.png')";
                 })
             }
         })
