@@ -23,14 +23,28 @@
         </div>
         <div class="buttons">
             <button type="button" class="btn btn-outline-primary" id="logoutButton" onclick="logOut()">Log Out</button>
+            <button type="button" class="btn btn-outline-primary" id="newGame" onclick="logOut()">New Game</button>
         </div>
     </div>
 
 
-    <div class="container-fluid">
-        <div class=" games-div container-sm">
-            <div id="games"></div>
-        </div>
+
+    <div class=" games-div container-sm">
+        <div id="games"></div>
+        <div id="ranking"></div>
+
+        <table>
+            <thead id="rankingTable">
+                <tr id="tr">
+                    <td id="name">Name</td>
+                    <td id="total">Total</td>
+                    <td id="won">Won</td>
+                    <td id="lost">Lost</td>
+                    <td id="tie">Tie</td>
+                </tr>
+            </thead>
+        </table>
+    </div>
     </div>
 
 

@@ -28,7 +28,7 @@ $(function () {
 
     function addPlayer() {
 
-        var name = $("#email").val();
+        let name = $("#email").val();
         if (name) {
 
             postPlayer(name);

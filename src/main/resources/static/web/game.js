@@ -130,7 +130,7 @@ for (let i = 1; i < 11; i++) {
     }
 }
 
-///------------------------------ GET DATA OF PLAYER WITH ITS SHIPS ----------------------------///
+///---------------------------------------------- GET DATA OF PLAYER WITH ITS SHIPS ----------------------------///
 
 const urlParams = new URLSearchParams(window.location.search);
 const myParam = urlParams.get('myParam');
@@ -152,7 +152,7 @@ getData()
         let opponentPlayer = {};
 
         dataPlayer.GamePlayers.forEach(gamePlayer => {
-            console.log(gamePlayer.GamePlayer_Id)
+            //console.log(gamePlayer.GamePlayer_Id)
             if (gamePlayer.GamePlayer_Id == myParam) {
                 currentPlayer = gamePlayer;
             } else
@@ -172,7 +172,6 @@ getData()
         let scoreH3 = document.createElement("h3")
         scoreH3.innerHTML = dataPlayer.Scores.Score_current + " : " + dataPlayer.Scores.Score_opponent;
         scoreVersus.appendChild(scoreH3)
-
 
         /////----------------- Displays Ships of the GP in the Ships Board-----------------////// 
         let locationArray = [];
@@ -223,7 +222,7 @@ getData()
 
         /////--------------- Displays HITS by OpponentGP in the Shots Board ---------------////// 
         let hitsArray = [];
-        console.log(dataPlayer.Hits_mine)
+        //console.log(dataPlayer.Hits_mine)
 
         dataPlayer.Hits_mine.forEach(hit => {
             hitsArray.push(hit.Shot_fired);

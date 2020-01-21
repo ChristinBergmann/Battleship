@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo;
 
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
