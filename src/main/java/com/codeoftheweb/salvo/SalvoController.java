@@ -1,16 +1,21 @@
 package com.codeoftheweb.salvo;
 
+import org.apache.catalina.User;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+
 import java.util.*;
 
 
 
 @CrossOrigin(origins = "http://127.0.0.1:5500/")
 @RestController
+
 @RequestMapping("/api")
 public class SalvoController {
 
@@ -105,7 +110,7 @@ public class SalvoController {
         return score_info;
 
     }
-
+/*******______________________________________ GAME VIEW PAGE _____________________________________*******/
 
     @RequestMapping("/game_view/{gamePlayerId}")
     public Object findPlayerGame(@PathVariable Long gamePlayerId) {
@@ -121,7 +126,8 @@ public class SalvoController {
         gameInfo.put("Shots_mine", shotsInfo(gameplayer));
         gameInfo.put("Scores", scoreInfo(gameplayer));
 
-        game.getGamePlayers().stream().forEach(x -> {
+
+        game.getGamePlayers().forEach(x -> {
             if (x != gameplayer) {
                 gameInfo.put("Hits_mine", shotsInfo(x));
             }
@@ -163,6 +169,8 @@ public class SalvoController {
         };
         return score_info;
     }
+
 }
+
 
 

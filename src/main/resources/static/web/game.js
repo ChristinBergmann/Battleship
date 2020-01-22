@@ -1,5 +1,5 @@
 ////--------------------- FIRST BOARD --------------////
-let boardContainer = document.getElementById("boards");
+const boardContainer = document.getElementById("boards");
 
 let divOutside = document.createElement("div");
 boardContainer.appendChild(divOutside);
@@ -52,10 +52,8 @@ for (let i = 1; i < 11; i++) {
 
         fieldsArray.push(field)
 
-
         field.id = (document.getElementsByClassName("outrow")[i]).id + (document.getElementsByClassName("outcol")[j]).id
         field.className = "field";
-
 
         let topPosition = j * 35;
         let leftPosition = (i - 1) * 35;
@@ -159,7 +157,7 @@ getData()
                 opponentPlayer = gamePlayer;
         })
 
-        let versusDiv = document.getElementById("versus")
+        const versusDiv = document.getElementById("versus")
 
         let h3 = document.createElement("h3")
         h3.innerHTML = currentPlayer.Player.Player_Username + " vs. " + opponentPlayer.Player.Player_Username;
@@ -168,12 +166,12 @@ getData()
 
         /////--------------- Displays SCORES of both GPs in the between Boards ---------------////// 
 
-        let scoreVersus = document.getElementById("score")
+        const scoreVersus = document.getElementById("score")
         let scoreH3 = document.createElement("h3")
         scoreH3.innerHTML = dataPlayer.Scores.Score_current + " : " + dataPlayer.Scores.Score_opponent;
         scoreVersus.appendChild(scoreH3)
 
-        /////----------------- Displays Ships of the GP in the Ships Board-----------------////// 
+        /////----------------- Displays SHIPS of the GP in the Ships Board-----------------////// 
         let locationArray = [];
 
         dataPlayer.Ships_mine.forEach(ship => {
@@ -220,7 +218,7 @@ getData()
             })
         })
 
-        /////--------------- Displays HITS by OpponentGP in the Shots Board ---------------////// 
+        /////--------------- Displays HITS by OpponentGP in the Ships Board ---------------////// 
         let hitsArray = [];
         //console.log(dataPlayer.Hits_mine)
 

@@ -1,3 +1,5 @@
+////__________________ Fct to get Input Details ________________/////
+
 function getUserPassw() {
 
     let username;
@@ -7,14 +9,13 @@ function getUserPassw() {
     username = document.getElementById("user").value;
     password = document.getElementById("passw").value;
 
-    console.log(username)
-    console.log(password)
     if (username && password) {
-        feedback = "Well done!"
+        // feedback = "Well done!"
+        // alert(feedback)
     } else {
-        feedback = "Enter all fields!"
+        feedback = "OOOPSIE you missed a field! Please enter all!"
+        alert(feedback)
     }
-    console.log(feedback)
     // postUserPassw(username, password)
 
 }
@@ -24,6 +25,22 @@ function getUserPassw() {
 // }
 
 
+
+
+// fetch("https://api.myjson.com/bins/zyv02")
+//     .then(response => {
+//         return response.json()
+//     }).then(result => {
+//         controller(result)
+//     })
+
+// function controller(data) {
+//     console.log(data)
+//     showData(data.books)
+// }
+
+// function showData(data) {
+//     const bookBox = document.getElementById("bookList")
 
 
 

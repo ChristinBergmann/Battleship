@@ -1,12 +1,25 @@
 package com.codeoftheweb.salvo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.WebAttributes;
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -242,5 +255,60 @@ public class SalvoApplication extends SpringBootServletInitializer {
 }
 
 
+	@Configuration
+	class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
+
+
+		@Autowired
+		private PlayerRepository playerRepo;
+
+		@Override
+		public void init(AuthenticationManagerBuilder auth) throws Exception {
+			auth.userDetailsService(username -> {
+				System.out.println("Username: " + username);
+
+				Player player = playerRepo.findByUserName(username);
+				if (player != null) {
+					System.out.println("pass: " + player.getPassword());
+					return new User(player.getUserName(), player.getPassword(), AuthorityUtils.createAuthorityList("User"));
+
+				} else {
+					throw new UsernameNotFoundException("Unknown User: " + username);
+				}
+			});
+		}
+
+	}
+
+@EnableWebSecurity
+@Configuration
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+
+				.antMatchers(
+
+						"/web/main.css",
+						"/web/board.css",
+						"/web/games.html",
+						"/web/games.js",
+						"/api/games"
+						//"api/login",
+						//"api/logout",
+				).permitAll()
+				.antMatchers("/api/game_view/${myParam}").hasAuthority("User")
+				.antMatchers("/rest/*").denyAll()
+
+				.anyRequest().fullyAuthenticated();
+	}
+
+	private void clearAuthenticationAttributes(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+		}
+	}
+}
 
 
