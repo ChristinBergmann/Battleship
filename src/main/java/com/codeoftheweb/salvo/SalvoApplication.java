@@ -38,14 +38,19 @@ public class SalvoApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(SalvoApplication.class);
 	}
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 		return builder.sources(SalvoApplication.class);
 	}
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
 	@Bean
 	public CommandLineRunner initData(PlayerRepository playerRepo,
 									  GameRepository gameRepo,
@@ -265,13 +270,14 @@ public class SalvoApplication extends SpringBootServletInitializer {
 		};
 
 	}
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-	}
+
 
 	@Configuration
+	static
 	class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
+
+		@Autowired
+		private PlayerRepository playerRepo;
 
 		@Override
 		public void init(AuthenticationManagerBuilder auth) throws Exception {
@@ -289,10 +295,6 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			});
 
 		}
-
-		@Autowired
-		private PlayerRepository playerRepo;
-
 	}
 }
 	@EnableWebSecurity

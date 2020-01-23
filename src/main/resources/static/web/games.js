@@ -98,3 +98,25 @@ getDataRanking()
         })
     })
     .catch(error => console.log(error));
+
+/////______
+function logOut(username, password) {
+    fetch("http://localhost:8080/api/logout?userName=" + username + "&password=" + password, {
+            method: "post",
+        })
+        .then(function (response) {
+            console.log(response);
+            return response.status
+        })
+        .then((status) => {
+
+            if (status == 200) {
+                window.location.href = "manager.html"
+
+            } else {
+                feedback = "Ooh something went wrong..try again!"
+            }
+        })
+        .catch(error => console.log(error));
+
+}

@@ -1,6 +1,6 @@
 ////__________________ Fct to get Input Details ________________/////
 
-function getLogIn() {
+function logIn() {
 
     let username;
     let password;
@@ -35,7 +35,7 @@ function AuthenticationInfo(username, password) {
                 window.location.href = "games.html"
 
             } else {
-                feedback = "Try again!"
+                feedback = "Ooh something went wrong..try again!"
             }
         })
         .catch(function (error) {
