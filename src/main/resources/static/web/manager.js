@@ -1,6 +1,6 @@
 ////__________________ Fct to get Input Details ________________/////
 
-function getUserPassw() {
+function getLogIn() {
 
     let username;
     let password;
@@ -10,65 +10,38 @@ function getUserPassw() {
     password = document.getElementById("passw").value;
 
     if (username && password) {
-        // feedback = "Well done!"
-        // alert(feedback)
+        feedback = "Well done!"
+        alert(feedback)
     } else {
         feedback = "OOOPSIE you missed a field! Please enter all!"
         alert(feedback)
     }
-    // postUserPassw(username, password)
+    // postLogIn(username, password)
 
 }
 
-// function postUserPassw() {
+// function postLogIn() {
 
 // }
 
 
 
+// load and display JSON sent by server for /players
+function postLogIn() {
 
-// fetch("https://api.myjson.com/bins/zyv02")
-//     .then(response => {
-//         return response.json()
-//     }).then(result => {
-//         controller(result)
-//     })
+    fetch.get("/players")
+        .done(function (data) {
+            console.log(data)
+            showOutput(JSON.stringify(data, null, 2));
 
-// function controller(data) {
-//     console.log(data)
-//     showData(data.books)
-// }
+        })
 
-// function showData(data) {
-//     const bookBox = document.getElementById("bookList")
+        .fail(function (jqXHR, textStatus) {
+            showOutput("Failed: " + textStatus);
 
+        });
 
-
-// $(function () {
-
-//     // display text in the output area
-//     function showOutput(text) {
-
-//         $("#output").text(text);
-
-//     }
-
-//     // load and display JSON sent by server for /players
-//     function loadData() {
-
-//         $.get("/players")
-//             .done(function (data) {
-//                 console.log(data)
-//                 showOutput(JSON.stringify(data, null, 2));
-
-//             })
-
-//             .fail(function (jqXHR, textStatus) {
-//                 showOutput("Failed: " + textStatus);
-
-//             });
-
-//     }
+}
 
 //     // handler for when user clicks add person
 

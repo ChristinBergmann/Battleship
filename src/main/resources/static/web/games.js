@@ -16,7 +16,7 @@ getData()
     .then(dataGames => {
         console.log(dataGames);
 
-        let gamesList = document.getElementById("games")
+        const gamesList = document.getElementById("games")
 
         dataGames.forEach(game => {
             let div = document.createElement("div")
@@ -46,7 +46,7 @@ getData()
 
     }).catch(error => console.log(error));
 
-/////------------------------------- GET DATA OF Scores --------------------/////
+/////------------------------------- GET DATA OF Scores ------------------------------/////
 async function getDataRanking() {
 
     let response = await fetch('http://localhost:8080/api/leaderboard');
@@ -58,7 +58,7 @@ getDataRanking()
     .then(dataPlayers => {
         console.log(dataPlayers)
 
-        /////------------------------------- DISPLAYS Player with its Total Scores --------------------/////
+        /////------------------ DISPLAYS Player with its Total Scores -----------------/////
 
         let rankingList = document.getElementById("ranking")
         rankingList.setAttribute("class", "alert alert-primary")
@@ -96,5 +96,23 @@ getDataRanking()
             trRanking.appendChild(tdRankingTotal);
 
         })
+
+
+
+        // score1 = dataPlayers.scores.value;
+        // score2 = dataPlayers.Scores.value;
+
+        //getGameResult();
     })
     .catch(error => console.log(error));
+
+
+/*--- rewrite proper !!!
+// let score1 = dataplayer.Scores.score_current;
+// let score2 = dataplayer.Scores.score_opponent;
+
+// function getGameResult(score1, score2) {
+//     return (score1 > score2) ? 'You win!' :
+//         (score1 < score2) ? 'You lost!' :
+//         'It was a tie!';
+// }

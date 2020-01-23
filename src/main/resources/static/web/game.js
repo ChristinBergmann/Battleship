@@ -142,7 +142,6 @@ async function getData() {
 }
 
 getData()
-
     .then(dataPlayer => {
         console.log(dataPlayer);
         /////-------  Checking which GP is loggedIn  -----////
@@ -232,7 +231,6 @@ getData()
                 document.getElementById(s).style.backgroundImage = "url('Images/explosion.png')";
             })
         })
-
 
     })
     .catch(error => console.log(error));
