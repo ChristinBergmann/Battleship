@@ -38,9 +38,8 @@ function AuthenticationInfo(username, password) {
                 feedback = "Ooh something went wrong..try again!"
             }
         })
-        .catch(function (error) {
-            console.log(error);
-        })
+        .catch(error => console.log(error));
+
 }
 
 //     // handler for when user clicks add person
