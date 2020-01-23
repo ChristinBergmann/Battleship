@@ -16,31 +16,31 @@ function getLogIn() {
         feedback = "OOOPSIE you missed a field! Please enter all!"
         alert(feedback)
     }
-    // postLogIn(username, password)
-
+    AuthenticationInfo(username, password);
 }
 
-// function postLogIn() {
+//----- code to post a new player using AJAX------//
 
-// }
-
-
-
-// load and display JSON sent by server for /players
-function postLogIn() {
-
-    fetch.get("/players")
-        .done(function (data) {
-            console.log(data)
-            showOutput(JSON.stringify(data, null, 2));
-
+function AuthenticationInfo(username, password) {
+    fetch("http://localhost:8080/api/login?userName=" + username + "&password=" + password, {
+            method: "post",
         })
+        .then(function (response) {
+            console.log(response);
+            return response.status
+        })
+        .then((status) => {
 
-        .fail(function (jqXHR, textStatus) {
-            showOutput("Failed: " + textStatus);
+            if (status == 200) {
+                window.location.href = "games.html"
 
-        });
-
+            } else {
+                feedback = "Try again!"
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
 }
 
 //     // handler for when user clicks add person
@@ -55,44 +55,20 @@ function postLogIn() {
 //         }
 
 //     }
-
-//     // code to post a new player using AJAX
-//     // on success, reload and display the updated data from the server
-
-//     function postPlayer(userName) {
-
-//         $.post({
-
-//                 headers: {
-
-//                     'Content-Type': 'application/json'
-
-//                 },
-
-//                 dataType: "text",
-//                 url: "/players",
-//                 data: JSON.stringify({
-//                     "userName": userName,
-//                     "password": ""
-//                 })
-
-//             })
-
-//             .done(function () {
-
-//                 showOutput("Saved – reloading");
-//                 loadData();
-
-//             })
-
-//             .fail(function (jqXHR, textStatus) {
-
-//                 showOutput("Failed: " + textStatus);
-
-//             });
-
-//     }
 //     $("#add_player").on("click", addPlayer);
 //     loadData();
 
 // });
+// load and display JSON sent by server for /players
+
+// fetch.get("/players")
+//     .done(function (data) {
+//         console.log(data)
+//         showOutput(JSON.stringify(data, null, 2));
+
+//     })
+
+//     .fail(function (jqXHR, textStatus) {
+//         showOutput("Failed: " + textStatus);
+
+//     });

@@ -204,7 +204,6 @@ public class SalvoController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/games")
-
     public ResponseEntity<Map<String, java.lang.Object>> createGame(Authentication authentication) {
 
 

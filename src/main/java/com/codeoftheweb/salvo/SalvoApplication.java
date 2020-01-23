@@ -16,6 +16,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.web.context.WebApplicationContext;
@@ -36,6 +38,8 @@ public class SalvoApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(SalvoApplication.class);
 	}
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
@@ -55,10 +59,10 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 
 			// saves a few players
-			Player player1 = new Player("player1", "player1@example.com", "player1");
-			Player player2 = new Player("player2", "player2@example.com", "player2");
-			Player player3 = new Player("player3", "player3@example.com", "player3");
-			Player player4 = new Player("player4", "player4@example.com", "player4");
+			Player player1 = new Player("player1", "player1@example.com", passwordEncoder.encode("player1"));
+			Player player2 = new Player("player2", "player2@example.com", passwordEncoder.encode("player2"));
+			Player player3 = new Player("player3", "player3@example.com", passwordEncoder.encode("player3"));
+			Player player4 = new Player("player4", "player4@example.com", passwordEncoder.encode("player4"));
 
 			playerRepo.save(player1);
 			playerRepo.save(player2);
@@ -259,8 +263,12 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			scoreRepo.save(score6);
 
 		};
-	}
 
+	}
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
 
 	@Configuration
 	class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
@@ -318,10 +326,10 @@ public class SalvoApplication extends SpringBootServletInitializer {
 					.formLogin()
 					.usernameParameter("userName")
 					.passwordParameter("password")
-					.loginPage("/api/logIn")
+					.loginPage("/api/login")
 					.and()
 					.logout()
-					.logoutUrl("/api/logOut");
+					.logoutUrl("/api/logout");
 
 
 			// if user is not authenticated, just send an authentication failure response

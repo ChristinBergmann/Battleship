@@ -35,6 +35,7 @@ public class Player {
         scores.add(score);
     }
 
+    public Player() { }
 
     public Player(String userName, String password) { }
 

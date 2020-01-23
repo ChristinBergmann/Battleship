@@ -96,23 +96,5 @@ getDataRanking()
             trRanking.appendChild(tdRankingTotal);
 
         })
-
-
-
-        // score1 = dataPlayers.scores.value;
-        // score2 = dataPlayers.Scores.value;
-
-        //getGameResult();
     })
     .catch(error => console.log(error));
-
-
-/*--- rewrite proper !!!
-// let score1 = dataplayer.Scores.score_current;
-// let score2 = dataplayer.Scores.score_opponent;
-
-// function getGameResult(score1, score2) {
-//     return (score1 > score2) ? 'You win!' :
-//         (score1 < score2) ? 'You lost!' :
-//         'It was a tie!';
-// }
