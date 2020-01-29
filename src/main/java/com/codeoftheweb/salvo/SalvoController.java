@@ -38,7 +38,7 @@ public class SalvoController {
     private java.lang.Object Object;
 
     @RequestMapping("/games")
-    public List<Object> getAllGames(Authentication auth) {
+    public List<Object> getAllGames(Authentication authentication) {
         List<Object> games = new ArrayList<>();
 
         gameRepo.findAll().forEach(oneGame -> {
@@ -46,6 +46,7 @@ public class SalvoController {
             gameMap.put("Game_created", oneGame.getCreationDate());
             gameMap.put("Game_Id", oneGame.getId());
             gameMap.put("GamePlayers", gamePlayersInfo(oneGame));
+
             games.add(gameMap);
         });
         return games;
@@ -89,25 +90,24 @@ public class SalvoController {
     public List<Object> shotsInfo(GamePlayer gameplayer) {
         List<Object> shots = new ArrayList<>();
 
-        gameplayer.getShots().forEach(x -> {
+        gameplayer.getShots().forEach(sh -> {
             Map<String, Object> shot_info = new HashMap<>();
-            shot_info.put("Shot", x.getId());
-            shot_info.put("Shot_fired", x.getLocations());
-            shot_info.put("Turn", x.getTurn());
+            shot_info.put("Shot", sh.getId());
+            shot_info.put("Shot_fired", sh.getLocations());
+            shot_info.put("Turn", sh.getTurn());
             shots.add(shot_info);
         });
         return shots;
     }
 
     public Object scoreInfo(GamePlayer gameplayer) {
-
         Map<String, Object> score_info = new HashMap<>();
-        gameplayer.getGame().getScores().forEach(score -> {
 
-            if (score.getPlayer().getUserName().equals(gameplayer.getPlayer().getUserName())) {
-                score_info.put("Score_current", score.getScore());
+        gameplayer.getGame().getScores().forEach(sc -> {
+            if (sc.getPlayer().getUserName().equals(gameplayer.getPlayer().getUserName())) {
+                score_info.put("Score_current", sc.getScore());
             } else {
-                score_info.put("Score_opponent", score.getScore());
+                score_info.put("Score_opponent", sc.getScore());
             }
         });
         return score_info;
@@ -118,23 +118,25 @@ public class SalvoController {
 
     @RequestMapping("/game_view/{gamePlayerId}")
     public Object findPlayerGame(@PathVariable Long gamePlayerId, Authentication authentication) {
+
         GamePlayer gameplayer = gamePlayerRepo.findById(gamePlayerId).get();
-        //System.out.println("authenticated name " + authentication.getName());
-        //System.out.println("game player id from param " + gamePlayerId);
-        //System.out.println("player id from game player param " + gameplayer.getPlayer().getId());
+        System.out.println("authenticated name " + authentication.getName());
+        System.out.println("gameplayer id from param " + gamePlayerId);
+        System.out.println("player id from gameplayer param " + gameplayer.getPlayer().getId());
+
         long playerID = gameplayer.getPlayer().getId();
         long userID = playerRepo.findByUserName(authentication.getName()).getId();
-        //System.out.println("logged in user " + userID);
+        System.out.println("logged in user id " + userID);
+        System.out.println("logged in player id " + playerID);
+
         if (playerID == userID) {
             //return new ResponseEntity<>(gamePlayerRepo.findById(gamePlayerId)}
 
             Game game = gameplayer.getGame();
 
             Map<String, Object> gameInfo = new HashMap<>();
-
             gameInfo.put("Game_Id", game.getId());
             gameInfo.put("Game_created", game.getCreationDate());
-            //gameInfo.put("GP_ID", gameplayer.getId());
             //gameInfo.put("GamePlayers", gamePlayersInfo(game));
             gameInfo.put("Ships_mine", shipsInfo(gameplayer));
             gameInfo.put("Shots_mine", shotsInfo(gameplayer));
@@ -144,12 +146,10 @@ public class SalvoController {
                 if (x != gameplayer) {
                     gameInfo.put("Hits_mine", shotsInfo(x));
                 }
-
             });
             return gameInfo;
         }
         return null;
-
     }
 
 
@@ -162,8 +162,7 @@ public class SalvoController {
             pl_list.put("Player", pl.getUserName());
             pl_list.put("Scores", sc_Info(pl));
             rankings.add(pl_list);
-            System.out.println(rankings);
-
+            //System.out.println(rankings);
         });
         return rankings;
     }
@@ -185,7 +184,6 @@ public class SalvoController {
             total += sc.getScore();
             score_info.put("Total", total);
         }
-        ;
         return score_info;
     }
 
@@ -240,7 +238,7 @@ public class SalvoController {
 
         Game currentGame = gameRepo.findById(gameId).get();
         Player currentPlayer = playerRepo.findByUserName(authentication.getName());
-        System.out.println("current player id in join game api " + currentPlayer.getId());
+        //System.out.println("current player id in join game api " + currentPlayer.getId());
 
         if (authentication == null) {
             return new ResponseEntity<>("You are not logged in!", HttpStatus.FORBIDDEN);
@@ -268,14 +266,15 @@ public class SalvoController {
             gameRepo.save(currentGame);
 
 
-            System.out.println(gamePlayerNew.getPlayer().getUserName());
-            System.out.println(gamePlayerNew.getId());
-            System.out.println(gamePlayerNew.getGame().getId());
+            //System.out.println(gamePlayerNew.getPlayer().getUserName());
+            //System.out.println(gamePlayerNew.getId());
+            //System.out.println(gamePlayerNew.getGame().getId());
 
             //currentGame.getGamePlayers().forEach(gamePlayer -> System.out.println(gamePlayer.getPlayer().getUserName()));
 
         return new ResponseEntity<>(addPlayer, HttpStatus.CREATED);
     }
+
 
     /*********______________________________________ New Game Auth _______________________________________*******/
 

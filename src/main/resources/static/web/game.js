@@ -1,13 +1,12 @@
-////--------------------- FIRST BOARD --------------////
+////____________________________________________ CREATES FIRST Board (Ships) _______________________________________////
 const boardContainer = document.getElementById("boards");
 
 let divOutside = document.createElement("div");
 boardContainer.appendChild(divOutside);
-
 divOutside.id = 'numbersletters';
 
+//------Letters Div-----//
 let letters = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
-
 for (let x = 0; x < 11; x++) {
     let lettersRow = document.createElement("div");
     divOutside.appendChild(lettersRow);
@@ -20,11 +19,10 @@ for (let x = 0; x < 11; x++) {
 
     lettersRow.style.top = 0 + 'px';
     lettersRow.style.left = leftPosition + 'px';
-
 }
 
+//------Numbers Div-----//
 let numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-
 for (let y = 0; y < 10; y++) {
     let numbersCol = document.createElement("div");
     divOutside.appendChild(numbersCol);
@@ -38,6 +36,7 @@ for (let y = 0; y < 10; y++) {
     numbersCol.style.top = topPosition + 35 + 'px';
 }
 
+//-------Squares Field-----//
 let divInside = document.createElement("div");
 boardContainer.appendChild(divInside);
 divInside.id = 'boardgame';
@@ -63,14 +62,14 @@ for (let i = 1; i < 11; i++) {
     }
 }
 
-//----- second -----//
+////____________________________________________ CREATES SECOND Board(Shots) _______________________________________////
 
 let divOutside2 = document.createElement("div");
 boardContainer.appendChild(divOutside2);
 divOutside2.id = 'numbersletters2';
 
+//------Letters Div-----//
 let letters2 = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
-
 for (let x = 0; x < 11; x++) {
     let lettersRow2 = document.createElement("div");
     divOutside2.appendChild(lettersRow2);
@@ -83,11 +82,10 @@ for (let x = 0; x < 11; x++) {
 
     lettersRow2.style.top = 0 + 'px';
     lettersRow2.style.left = leftPosition2 + 'px';
-
 }
 
+//------Numbers Div-----//
 let numbers2 = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-
 for (let y = 0; y < 10; y++) {
     let numbersCol2 = document.createElement("div");
     divOutside2.appendChild(numbersCol2);
@@ -101,6 +99,7 @@ for (let y = 0; y < 10; y++) {
     numbersCol2.style.top = topPosition2 + 35 + 'px';
 }
 
+//-------Squares Field-----//
 let divInside2 = document.createElement("div");
 boardContainer.appendChild(divInside2);
 divInside2.id = 'boardgame2';
@@ -128,27 +127,27 @@ for (let i = 1; i < 11; i++) {
     }
 }
 
-///---------------------------------------------- GET DATA OF PLAYER WITH ITS SHIPS ----------------------------///
+///__________________________________________ get DATA of LOGGED IN GAMEPLAYER  ___________________________________///
 
 const urlParams = new URLSearchParams(window.location.search);
-console.log(window.location)
+//console.log(window.location)
 const myParam = window.location.search.split("=")[1]
-//console.log(myParam)
+//console.log("this is my Param", myParam)
 
 getData()
 async function getData() {
-    console.log("my param in game ", myParam)
+    //console.log("my param in game ", myParam)
     let response = await fetch(`http://localhost:8080/api/game_view/${myParam}`);
     console.log(response);
     let dataPlayer = await response.json()
-    renderGamePlayerInfos(dataPlayer)
+    console.log(dataPlayer);
 
+    renderGamePlayerInfos(dataPlayer)
 }
 
 function renderGamePlayerInfos(dataPlayer) {
-    console.log(dataPlayer);
 
-    //////-----------------------------  Checking which GP is loggedIn  ---------------------//////
+    ////-----------------------------  Checking which GP is loggedIn  ---------------------//////
     let currentPlayer = {};
     let opponentPlayer = {};
     // console.log(dataPlayer.GamePlayers)

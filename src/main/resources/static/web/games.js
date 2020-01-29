@@ -4,12 +4,13 @@ async function getData() {
     let response = await fetch('http://localhost:8080/api/games');
     //console.log(response)
     let dataGames = await response.json()
+    console.log(dataGames)
     renderGames(dataGames);
 }
 //------------------------POSTS Available Games-----------------//
 
 function renderGames(dataGames) {
-    //console.log("all games should be here:", dataGames)/*works right*/
+    console.log("all games should be here:", dataGames) /*works right*/
     const gamesList = document.getElementById("games")
     //----just GAMES with 1Player----//
 
@@ -30,7 +31,7 @@ function renderGames(dataGames) {
             gameLink.addEventListener("click", function () {
 
                 postGameViewPage(game.Game_Id)
-                console.log("this is the gameID", game.Game_Id)
+                //console.log("this is the gameID", game.Game_Id)
             })
 
             gamesList.appendChild(divGames);
@@ -50,9 +51,10 @@ function renderGames(dataGames) {
 getDataRanking()
 async function getDataRanking() {
     let response = await fetch('http://localhost:8080/api/leaderboard');
-    //console.log(response);
+    //console.log(response)/*works*/
     let dataPlayers = await response.json()
     renderRankingPlayers(dataPlayers);
+    console.log(dataPlayers)
 
 }
 /////------------------ POSTS RANKING (Player with its Total Scores) -----------------/////
@@ -113,20 +115,23 @@ function postGameViewPage(Game_Id) {
             method: 'POST',
             headers: {
                 Accept: "application/json",
-                "Content-Type": "application/x-www-form-urlencoded"
+                "Content-Type": "application/x-www-form-urlencoded",
+                credentials: "include"
             }
         })
         .then(function (response) {
-            //console.log(response);
-            return response.status
-        })
-        .then((status) => {
-            //console.log(status)
-            if (status == 201) {
-                console.log("game id in games ", Game_Id)
-                window.location.href = "game.html?gp=" + Game_Id
-            } else if (status == 400)
+            console.log(response);
+            if (response.status == 201) {
+                //console.log("game id in games ", Game_Id)/*works*/
+                //window.location.href = "game.html?gp=" + Game_Id
+                return response.json();
+            } else {
                 alert("There was an error of 400");
+            }
+        })
+        .then((data) => {
+            //console.log(status)
+            console.log(data)
         })
         .catch(error => console.log(error));
 }
