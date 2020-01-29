@@ -1,73 +1,80 @@
-////__________________ Fct to get Input Details ________________/////
+////____________________ Fct to get Input Details __________________/////
 
 function logIn() {
 
-    let username;
-    let password;
-    let feedback;
-
-    username = document.getElementById("user").value;
-    password = document.getElementById("passw").value;
+    const username = document.getElementById("user").value;
+    const password = document.getElementById("passw").value;
 
     if (username && password) {
-        feedback = "Well done!"
-        alert(feedback)
+        logInAuthenticationInfo(username, password);
     } else {
-        feedback = "OOOPSIE you missed a field! Please enter all!"
-        alert(feedback)
+        alert("OOOPSIE you missed a field! Please enter all!")
     }
-    AuthenticationInfo(username, password);
+    console.log(username)
 }
 
-//----- code to post a new player using AJAX------//
+////__________________ Fct to get SIGN UP Input Details ________________/////
 
-function AuthenticationInfo(username, password) {
-    fetch("http://localhost:8080/api/login?userName=" + username + "&password=" + password, {
-            method: "post",
+function signUp() {
+
+    const username = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    //let passwordConf = document.getElementById("password-confirm").value;
+
+    signUpAuthenticationInfo(username, email, password);
+}
+
+//---------------------------------- LOGIN Authentication using AJAX -----------------------//
+
+function logInAuthenticationInfo(username, password) {
+    fetch("http://localhost:8080/api/login", {
+            method: 'POST',
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `userName=${username}&password=${password}`
         })
         .then(function (response) {
-            console.log(response);
-            return response.status
+            //console.log(response)/*works*/
+            return response.status;
         })
         .then((status) => {
-
             if (status == 200) {
                 window.location.href = "games.html"
 
             } else {
-                feedback = "Ooh something went wrong..try again!"
+                alert("Ooh something went wrong..try again!")
             }
         })
         .catch(error => console.log(error));
-
 }
 
-//     // handler for when user clicks add person
 
-//     function addPlayer() {
+//--------------------------- REGISTER Authentication using AJAX ----------------------------//
 
-//         let name = $("#email").val();
-//         if (name) {
+function signUpAuthenticationInfo(username, email, password) {
 
-//             postPlayer(name);
+    fetch("http://localhost:8080/api/register", {
+            method: 'POST',
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `userName=${username}&email=${email}&password=${password}`
 
-//         }
-
-//     }
-//     $("#add_player").on("click", addPlayer);
-//     loadData();
-
-// });
-// load and display JSON sent by server for /players
-
-// fetch.get("/players")
-//     .done(function (data) {
-//         console.log(data)
-//         showOutput(JSON.stringify(data, null, 2));
-
-//     })
-
-//     .fail(function (jqXHR, textStatus) {
-//         showOutput("Failed: " + textStatus);
-
-//     });
+        })
+        .then(function (response) {
+            console.log(response)
+            return response.status;
+        })
+        .then((status) => {
+            if (status == 201) {
+                setTimeout(logInAuthenticationInfo(username, password), 1000)
+            } else {
+                alert("Ooh something went wrong..try again!")
+            }
+        })
+        .catch(error => console.log(error));
+}

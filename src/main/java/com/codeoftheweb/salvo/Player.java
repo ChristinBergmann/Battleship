@@ -37,10 +37,10 @@ public class Player {
 
     public Player() { }
 
-    public Player(String userName, String password) { }
+    //public Player(String userName, String password) { }
 
-    public Player(String user,String email,String password) {
-        this.userName = user;
+    public Player(String userName,String email,String password) {
+        this.userName = userName;
         this.password = password;
         this.email = email;
     }

@@ -92,12 +92,12 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 
 			//Game 1
-			GamePlayer gamePlayer1 = new GamePlayer();
+			//GamePlayer gamePlayer1 = new GamePlayer();
 			GamePlayer gamePlayer2 = new GamePlayer();
 
-			game1.addGamePlayer(gamePlayer1);
-			player1.addGamePlayer(gamePlayer1);
-			gamePlayer1.setCreationDate(game1.getCreationDate());
+			//game1.addGamePlayer(gamePlayer1);
+			//player1.addGamePlayer(gamePlayer1);
+			//gamePlayer1.setCreationDate(game1.getCreationDate());
 
 			game1.addGamePlayer(gamePlayer2);
 			player2.addGamePlayer(gamePlayer2);
@@ -143,7 +143,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gamePlayer8.setCreationDate(game4.getCreationDate());
 
 			//saves the game players
-			gamePlayerRepo.save(gamePlayer1);
+			//gamePlayerRepo.save(gamePlayer1);
 			gamePlayerRepo.save(gamePlayer2);
 			gamePlayerRepo.save(gamePlayer3);
 			gamePlayerRepo.save(gamePlayer4);
@@ -156,16 +156,16 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			//////-------------creating + adding ships-----------------//////
 
 			//saves + creates ships for gp1 -game1
-			Ship ship1 = new Ship("CARRIER", Arrays.asList("H3", "H4", "H5", "H6", "H7"), gamePlayer1);
-			Ship ship2 = new Ship("BATTLESHIP", Arrays.asList("E4", "E5", "E6", "E7"), gamePlayer1);
-			Ship ship3 = new Ship("DESTROYER", Arrays.asList("H1", "I1", "J1"), gamePlayer1);
-			Ship ship4 = new Ship("SUBMARINE", Arrays.asList("A1", "A2", "A3"), gamePlayer1);
-			Ship ship5 = new Ship("PATROLBOAT", Arrays.asList("A8", "B8"), gamePlayer1);
-			shipRepo.save(ship1);
-			shipRepo.save(ship2);
-			shipRepo.save(ship3);
-			shipRepo.save(ship4);
-			shipRepo.save(ship5);
+//			Ship ship1 = new Ship("CARRIER", Arrays.asList("H3", "H4", "H5", "H6", "H7"), gamePlayer1);
+//			Ship ship2 = new Ship("BATTLESHIP", Arrays.asList("E4", "E5", "E6", "E7"), gamePlayer1);
+//			Ship ship3 = new Ship("DESTROYER", Arrays.asList("H1", "I1", "J1"), gamePlayer1);
+//			Ship ship4 = new Ship("SUBMARINE", Arrays.asList("A1", "A2", "A3"), gamePlayer1);
+//			Ship ship5 = new Ship("PATROLBOAT", Arrays.asList("A8", "B8"), gamePlayer1);
+//			shipRepo.save(ship1);
+//			shipRepo.save(ship2);
+//			shipRepo.save(ship3);
+//			shipRepo.save(ship4);
+//			shipRepo.save(ship5);
 
 
 			//saves + creates ships for gp2 -game1
@@ -212,16 +212,16 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			//////-------------creating + adding shot rounds-----------------//////
 
 			//saves + creates shots for gp1 -game1
-			Shot shot1 = new Shot(1, Arrays.asList("H2", "H3", "H4"), gamePlayer1);
-			Shot shot2 = new Shot(2, Arrays.asList("E4", "E5", "E6"), gamePlayer1);
-			Shot shot3 = new Shot(3, Arrays.asList("H1", "I1", "J1"), gamePlayer1);
-			Shot shot4 = new Shot(4, Arrays.asList("A1", "E4", "A3"), gamePlayer1);
-			Shot shot5 = new Shot(5, Arrays.asList("A8", "B8", "G8"), gamePlayer1);
-			shotRepo.save(shot1);
-			shotRepo.save(shot2);
-			shotRepo.save(shot3);
-			shotRepo.save(shot4);
-			shotRepo.save(shot5);
+//			Shot shot1 = new Shot(1, Arrays.asList("H2", "H3", "H4"), gamePlayer1);
+//			Shot shot2 = new Shot(2, Arrays.asList("E4", "E5", "E6"), gamePlayer1);
+//			Shot shot3 = new Shot(3, Arrays.asList("H1", "I1", "J1"), gamePlayer1);
+//			Shot shot4 = new Shot(4, Arrays.asList("A1", "E4", "A3"), gamePlayer1);
+//			Shot shot5 = new Shot(5, Arrays.asList("A8", "B8", "G8"), gamePlayer1);
+//			shotRepo.save(shot1);
+//			shotRepo.save(shot2);
+//			shotRepo.save(shot3);
+//			shotRepo.save(shot4);
+//			shotRepo.save(shot5);
 
 			//saves + creates shots for gp2 -game1
 			Shot shot1a = new Shot(1, Arrays.asList("C5", "I3", "H4"), gamePlayer2);
@@ -237,10 +237,10 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 			//////-------------creating + adding scores rounds-----------------//////
 			//1.0-win//0.5-tie//0.0-lost//
-			Score score1 = new Score(new Date(), 1.0);
+			/*Score score1 = new Score(new Date(), 1.0);
 			player1.addScore(score1);
 			game1.addScore((score1));
-			scoreRepo.save(score1);
+			scoreRepo.save(score1);*/
 
 			Score score2 = new Score(new Date(), 0.0);
 			player2.addScore(score2);
@@ -262,10 +262,10 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			game2.addScore((score5));
 			scoreRepo.save(score5);
 
-			Score score6 = new Score(new Date(), 0.5);
-			player1.addScore(score6);
-			game3.addScore((score6));
-			scoreRepo.save(score6);
+//			Score score6 = new Score(new Date(), 0.5);
+//			player1.addScore(score6);
+//			game3.addScore((score6));
+//			scoreRepo.save(score6);
 
 		};
 
@@ -282,16 +282,12 @@ public class SalvoApplication extends SpringBootServletInitializer {
 		@Override
 		public void init(AuthenticationManagerBuilder auth) throws Exception {
 			auth.userDetailsService(username -> {
-				System.out.println("Username: " + username);
 
 				Player player = playerRepo.findByUserName(username);
-				if (player != null) {
-					System.out.println("pass: " + player.getPassword());
-					return new User(player.getUserName(), player.getPassword(), AuthorityUtils.createAuthorityList("USER"));
-
-				} else {
-					throw new UsernameNotFoundException("Unknown User: " + username);
-				}
+				//System.out.println(player.getUserName());
+				User currentUser = new User(player.getUserName(), player.getPassword(), AuthorityUtils.createAuthorityList("USER"));
+				//System.out.println(currentUser);
+				return currentUser;
 			});
 
 		}
@@ -308,21 +304,20 @@ public class SalvoApplication extends SpringBootServletInitializer {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 
-			http
-					.csrf().disable()
+			http.csrf().disable()
 					.authorizeRequests()
 					.antMatchers("/web/main.css").permitAll()
 					.antMatchers("/web/board.css").permitAll()
 					.antMatchers("/web/manager*").permitAll()
-					.antMatchers("/web/game*").permitAll()
-					.antMatchers(	"/web/games*").permitAll()
+					.antMatchers(	"/web/games*").hasAuthority("USER")
+					.antMatchers("/web/game*").hasAuthority("USER")
 					.antMatchers(	"/api/manager*").permitAll()
-					.antMatchers(	"/api/game*").permitAll()
+					.antMatchers("/api/register").permitAll()
+					.antMatchers("/api/players*").permitAll()
 					.antMatchers("/api/games*").permitAll()
 					.antMatchers(	"/api/leaderboard*").permitAll()
-					.antMatchers("/api/game_view*").hasAuthority("USER")
-					.antMatchers("/api/games/players*").permitAll()
-					/*.antMatchers("/rest/*").denyAll()*/
+					.antMatchers(	"/api/game*").permitAll()
+					.antMatchers("/api/game_view*").permitAll()
 					.anyRequest().fullyAuthenticated()
 					.and()
 					.formLogin()

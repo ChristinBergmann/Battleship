@@ -1,14 +1,18 @@
 package com.codeoftheweb.salvo;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import ch.qos.logback.core.net.SyslogOutputStream;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLOutput;
 import java.util.*;
-
-import static org.springframework.core.CollectionFactory.createMap;
 
 
 @CrossOrigin(origins = "http://127.0.0.1:5500/")
@@ -34,7 +38,7 @@ public class SalvoController {
     private java.lang.Object Object;
 
     @RequestMapping("/games")
-    public List<Object> getAllGames() {
+    public List<Object> getAllGames(Authentication auth) {
         List<Object> games = new ArrayList<>();
 
         gameRepo.findAll().forEach(oneGame -> {
@@ -46,7 +50,6 @@ public class SalvoController {
         });
         return games;
     }
-
 
     public List<Object> gamePlayersInfo(Game game) {
         List<Object> gamePlayers = new ArrayList();
@@ -67,6 +70,7 @@ public class SalvoController {
         pl_info.put("Player_Username", gameplayer.getPlayer().getUserName());
         pl_info.put("Score", scoreInfo(gameplayer));
         return pl_info;
+
     }
 
     public List<Object> shipsInfo(GamePlayer gameplayer) {
@@ -113,27 +117,41 @@ public class SalvoController {
     /*******______________________________________ GAME VIEW PAGE _____________________________________*******/
 
     @RequestMapping("/game_view/{gamePlayerId}")
-    public Object findPlayerGame(@PathVariable Long gamePlayerId) {
-
+    public Object findPlayerGame(@PathVariable Long gamePlayerId, Authentication authentication) {
         GamePlayer gameplayer = gamePlayerRepo.findById(gamePlayerId).get();
-        Game game = gameplayer.getGame();
+        //System.out.println("authenticated name " + authentication.getName());
+        //System.out.println("game player id from param " + gamePlayerId);
+        //System.out.println("player id from game player param " + gameplayer.getPlayer().getId());
+        long playerID = gameplayer.getPlayer().getId();
+        long userID = playerRepo.findByUserName(authentication.getName()).getId();
+        //System.out.println("logged in user " + userID);
+        if (playerID == userID) {
+            //return new ResponseEntity<>(gamePlayerRepo.findById(gamePlayerId)}
 
-        Map<String, Object> gameInfo = new HashMap<>();
-        gameInfo.put("Game_Id", game.getId());
-        gameInfo.put("Game_created", game.getCreationDate());
-        gameInfo.put("GamePlayers", gamePlayersInfo(game));
-        gameInfo.put("Ships_mine", shipsInfo(gameplayer));
-        gameInfo.put("Shots_mine", shotsInfo(gameplayer));
-        gameInfo.put("Scores", scoreInfo(gameplayer));
+            Game game = gameplayer.getGame();
 
+            Map<String, Object> gameInfo = new HashMap<>();
 
-        game.getGamePlayers().forEach(x -> {
-            if (x != gameplayer) {
-                gameInfo.put("Hits_mine", shotsInfo(x));
-            }
-        });
-        return gameInfo;
+            gameInfo.put("Game_Id", game.getId());
+            gameInfo.put("Game_created", game.getCreationDate());
+            //gameInfo.put("GP_ID", gameplayer.getId());
+            //gameInfo.put("GamePlayers", gamePlayersInfo(game));
+            gameInfo.put("Ships_mine", shipsInfo(gameplayer));
+            gameInfo.put("Shots_mine", shotsInfo(gameplayer));
+            gameInfo.put("Scores", scoreInfo(gameplayer));
+
+            game.getGamePlayers().forEach(x -> {
+                if (x != gameplayer) {
+                    gameInfo.put("Hits_mine", shotsInfo(x));
+                }
+
+            });
+            return gameInfo;
+        }
+        return null;
+
     }
+
 
     @RequestMapping("/leaderboard")
     public List<Object> getAllScores() {
@@ -171,14 +189,14 @@ public class SalvoController {
         return score_info;
     }
 
-    /*********___________ Players logIn Auth ________*******/
+    /*********______________________________ Players logIn Auth (?)If Guests used __________________________*******/
 
     @RequestMapping("/players")
     public Player getAll(Authentication authentication) {
         if (isGuest(authentication)) return null;
 
         else {
-            return playerRepo.findByUserName(authentication.name());
+            return playerRepo.findByUserName(authentication.getName());
         }
     }
 
@@ -186,31 +204,89 @@ public class SalvoController {
         return authentication == null;
     }
 
-    @RequestMapping(path = "/players", method = RequestMethod.POST)
+
+    /*********____________________________________ Players SignUp Auth ________________________________*******/
+
+    @Bean
+    public PasswordEncoder passwordEncoder2() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @RequestMapping(path = "/register", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
 
-            @RequestParam String userName, @RequestParam String password) {
+            @RequestParam String userName, @RequestParam String email, @RequestParam String password) {
 
-        if (userName.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("Ooopsie Data is missing", HttpStatus.FORBIDDEN);
+        if (userName.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            return new ResponseEntity<>("Ooopsie Data is missing", HttpStatus.BAD_REQUEST);
         }
-
         if (playerRepo.findByUserName(userName) != null) {
-            return new ResponseEntity<>("Userame is already in use", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Username is already in use", HttpStatus.CONFLICT);
         }
-
-        playerRepo.save(new Player(userName, password));
+        if (playerRepo.findByEmail(email) != null) {
+            return new ResponseEntity<>("Email is already in use", HttpStatus.CONFLICT);
+        }
+        playerRepo.save(new Player(userName, email, passwordEncoder2().encode(password)));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    /*********___________________________________ Add a GamePlayer to Game _________________________________*******/
+
+    @RequestMapping(path = "/game/{gameId}/players", method = RequestMethod.POST)
+    public ResponseEntity<Object> addPlayer(
+            @PathVariable Long gameId, Authentication authentication) {
+
+        //System.out.println(gameId);
+
+        Game currentGame = gameRepo.findById(gameId).get();
+        Player currentPlayer = playerRepo.findByUserName(authentication.getName());
+        System.out.println("current player id in join game api " + currentPlayer.getId());
+
+        if (authentication == null) {
+            return new ResponseEntity<>("You are not logged in!", HttpStatus.FORBIDDEN);
+        }
+
+        if (currentGame == null) {
+            return new ResponseEntity<>("Game does not exist!", HttpStatus.FORBIDDEN);
+        }
+
+        if (currentGame.getGamePlayers().size() > 1) {
+            return new ResponseEntity<>("There are already 2 Game Players!", HttpStatus.FORBIDDEN);
+        }
+
+            GamePlayer gamePlayerNew = new GamePlayer(new Date());
+            currentPlayer.addGamePlayer(gamePlayerNew);
+            currentGame.addGamePlayer(gamePlayerNew);
+
+            Map<String, Object> addPlayer = new LinkedHashMap<>();
+
+            addPlayer.put("Game_current", gamePlayerNew.getGame());
+            addPlayer.put("GP_Id_current", gamePlayerNew.getId());
+
+            gamePlayerRepo.save(gamePlayerNew);
+            playerRepo.save(currentPlayer);
+            gameRepo.save(currentGame);
+
+
+            System.out.println(gamePlayerNew.getPlayer().getUserName());
+            System.out.println(gamePlayerNew.getId());
+            System.out.println(gamePlayerNew.getGame().getId());
+
+            //currentGame.getGamePlayers().forEach(gamePlayer -> System.out.println(gamePlayer.getPlayer().getUserName()));
+
+        return new ResponseEntity<>(addPlayer, HttpStatus.CREATED);
+    }
+
+    /*********______________________________________ New Game Auth _______________________________________*******/
 
     @RequestMapping(method = RequestMethod.POST, value = "/games")
     public ResponseEntity<Map<String, java.lang.Object>> createGame(Authentication authentication) {
 
 
         Game game = new Game();
-
+        System.out.println(authentication);
         if (authentication != null) {
-            Player player = playerRepo.findByUserName(authentication.name());
+            Player player = playerRepo.findByUserName(authentication.getName());
 
             Map<String, Object> newGame;
             if (player != null) {
@@ -226,17 +302,18 @@ public class SalvoController {
 
                 newGame.put("Game_id", game.getId());
                 newGame.put("Game_created", game.getCreationDate());
-                newGame.put("Game_GP", game.getGamePlayers());
+                newGame.put("Game_GPs", game.getGamePlayers());
 
                 return new ResponseEntity<>(createMap("game", newGame), HttpStatus.CREATED);
 
-//                return new ResponseEntity (Map<String,Object> createMap(String, Object),
-//                        HttpStatus.CREATED);
-//                }
+            } else {
+                return new ResponseEntity<>(createMap("error", "Log in"), HttpStatus.UNAUTHORIZED);
             }
-        }
-        return null;
+        } else {
+                return new ResponseEntity<>(createMap("error", "Log in"), HttpStatus.UNAUTHORIZED);
+                }
     }
+
     public Map<String, Object> createMap(String key, Object value) {
         Map<String, Object> map = new HashMap<>();
         map.put(key, value);
@@ -244,6 +321,12 @@ public class SalvoController {
         return map;
     }
 }
+
+
+
+
+
+
 
 
 

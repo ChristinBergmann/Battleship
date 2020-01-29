@@ -131,106 +131,113 @@ for (let i = 1; i < 11; i++) {
 ///---------------------------------------------- GET DATA OF PLAYER WITH ITS SHIPS ----------------------------///
 
 const urlParams = new URLSearchParams(window.location.search);
-const myParam = urlParams.get('myParam');
+console.log(window.location)
+const myParam = window.location.search.split("=")[1]
+//console.log(myParam)
 
+getData()
 async function getData() {
-
+    console.log("my param in game ", myParam)
     let response = await fetch(`http://localhost:8080/api/game_view/${myParam}`);
     console.log(response);
     let dataPlayer = await response.json()
-    return dataPlayer;
+    renderGamePlayerInfos(dataPlayer)
+
 }
 
-getData()
-    .then(dataPlayer => {
-        console.log(dataPlayer);
-        /////-------  Checking which GP is loggedIn  -----////
-        let currentPlayer = {};
-        let opponentPlayer = {};
+function renderGamePlayerInfos(dataPlayer) {
+    console.log(dataPlayer);
 
-        dataPlayer.GamePlayers.forEach(gamePlayer => {
-            //console.log(gamePlayer.GamePlayer_Id)
-            if (gamePlayer.GamePlayer_Id == myParam) {
-                currentPlayer = gamePlayer;
-            } else
-                opponentPlayer = gamePlayer;
-        })
+    //////-----------------------------  Checking which GP is loggedIn  ---------------------//////
+    let currentPlayer = {};
+    let opponentPlayer = {};
+    // console.log(dataPlayer.GamePlayers)
+    dataPlayer.GamePlayers.forEach(gamePlayer => {
 
-        const versusDiv = document.getElementById("versus")
+        if (gamePlayer.GamePlayer_Id == myParam) {
+            currentPlayer = gamePlayer;
+            console.log(currentPlayer)
 
-        let h3 = document.createElement("h3")
-        h3.innerHTML = currentPlayer.Player.Player_Username + " vs. " + opponentPlayer.Player.Player_Username;
-
-        versusDiv.appendChild(h3)
-
-        /////--------------- Displays SCORES of both GPs in the between Boards ---------------////// 
-
-        const scoreVersus = document.getElementById("score")
-        let scoreH3 = document.createElement("h3")
-        scoreH3.innerHTML = dataPlayer.Scores.Score_current + " : " + dataPlayer.Scores.Score_opponent;
-        scoreVersus.appendChild(scoreH3)
-
-        /////----------------- Displays SHIPS of the GP in the Ships Board-----------------////// 
-        let locationArray = [];
-
-        dataPlayer.Ships_mine.forEach(ship => {
-            locationArray.push(ship.Location);
-        })
-
-        locationArray.forEach(x => {
-            if (x.length == 2) {
-                x.forEach(y => {
-                    document.getElementById(y).style.backgroundSize = "33px 33px";
-                    document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
-                })
-            } else if (x.length == 3) {
-                x.forEach(y => {
-                    document.getElementById(y).style.backgroundSize = "33px 33px";
-                    document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
-                })
-            }
-            if (x.length == 4) {
-                x.forEach(y => {
-                    document.getElementById(y).style.backgroundSize = "33px 33px";
-                    document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
-                })
-            }
-            if (x.length == 5) {
-                x.forEach(y => {
-                    document.getElementById(y).style.backgroundSize = "33px 33px";
-                    document.getElementById(y).style.backgroundImage = "url('Images/navy.png')";
-                })
-            }
-        })
-
-        /////----------------- Displays SHOTS of the GP in the Shots Board -----------------////// 
-        let shotsArray = [];
-
-        dataPlayer.Shots_mine.forEach(shot => {
-            shotsArray.push(shot.Shot_fired);
-        })
-
-        shotsArray.forEach(y => {
-            y.forEach(s => {
-                document.getElementById("f2" + s).style.backgroundSize = "33px 33px";
-                document.getElementById("f2" + s).style.backgroundImage = "url('Images/bomb.png')";
-            })
-        })
-
-        /////--------------- Displays HITS by OpponentGP in the Ships Board ---------------////// 
-        let hitsArray = [];
-        //console.log(dataPlayer.Hits_mine)
-
-        dataPlayer.Hits_mine.forEach(hit => {
-            hitsArray.push(hit.Shot_fired);
-        })
-
-        hitsArray.forEach(y => {
-            y.forEach(s => {
-                document.getElementById(s).style.backgroundSize = "33px 33px";
-                document.getElementById(s).style.backgroundImage = "url('Images/explosion.png')";
-            })
-        })
-
+        } else
+            opponentPlayer = gamePlayer;
     })
-    .catch(error => console.log(error));
+    console.log(currentPlayer)
+    console.log(opponentPlayer)
+    const versusDiv = document.getElementById("versus")
+
+    let h3 = document.createElement("h3")
+    h3.innerHTML = currentPlayer.Player.Player_Username + " vs. " + opponentPlayer.Player.Player_Username;
+
+    versusDiv.appendChild(h3)
+
+    /////------------------- Displays SCORES of both GPs in the between Boards ---------------////// 
+
+    const scoreVersus = document.getElementById("score")
+    let scoreH3 = document.createElement("h3")
+    scoreH3.innerHTML = dataPlayer.Scores.Score_current + " : " + dataPlayer.Scores.Score_opponent;
+    scoreVersus.appendChild(scoreH3)
+
+    /////--------------------- Displays SHIPS of the GP in the Ships Board -------------------////// 
+    let locationArray = [];
+
+    dataPlayer.Ships_mine.forEach(ship => {
+        locationArray.push(ship.Location);
+    })
+
+    locationArray.forEach(x => {
+        if (x.length == 2) {
+            x.forEach(y => {
+                document.getElementById(y).style.backgroundSize = "33px 33px";
+                document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
+            })
+        } else if (x.length == 3) {
+            x.forEach(y => {
+                document.getElementById(y).style.backgroundSize = "33px 33px";
+                document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
+            })
+        }
+        if (x.length == 4) {
+            x.forEach(y => {
+                document.getElementById(y).style.backgroundSize = "33px 33px";
+                document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
+            })
+        }
+        if (x.length == 5) {
+            x.forEach(y => {
+                document.getElementById(y).style.backgroundSize = "33px 33px";
+                document.getElementById(y).style.backgroundImage = "url('Images/navy.png')";
+            })
+        }
+    })
+
+    /////------------------- Displays SHOTS of the GP in the Shots Board -------------------////// 
+    let shotsArray = [];
+
+    dataPlayer.Shots_mine.forEach(shot => {
+        shotsArray.push(shot.Shot_fired);
+    })
+
+    shotsArray.forEach(y => {
+        y.forEach(s => {
+            document.getElementById("f2" + s).style.backgroundSize = "33px 33px";
+            document.getElementById("f2" + s).style.backgroundImage = "url('Images/bomb.png')";
+        })
+    })
+
+    /////----------------- Displays HITS by OpponentGP in the Ships Board -----------------////// 
+    let hitsArray = [];
+    //console.log(dataPlayer.Hits_mine)
+
+    dataPlayer.Hits_mine.forEach(hit => {
+        hitsArray.push(hit.Shot_fired);
+    })
+
+    hitsArray.forEach(y => {
+        y.forEach(s => {
+            document.getElementById(s).style.backgroundSize = "33px 33px";
+            document.getElementById(s).style.backgroundImage = "url('Images/explosion.png')";
+        })
+    })
+}
+
+// .catch(error => console.log(error));
