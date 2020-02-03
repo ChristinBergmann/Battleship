@@ -56,7 +56,7 @@ function logInAuthenticationInfo(username, password) {
 
 function signUpAuthenticationInfo(username, email, password) {
 
-    fetch("http://localhost:8080/api/register", {
+    fetch("http://localhost:8080/api/players", {
             method: 'POST',
             headers: {
                 Accept: "application/json",

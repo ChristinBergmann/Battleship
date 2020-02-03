@@ -107,4 +107,7 @@ public class GamePlayer {
     public void setGamePlayers(Set<GamePlayer> gamePlayers) {
         this.gamePlayers = gamePlayers;
     }
+
+    public void getGamePlayer_id() {
+    }
 }

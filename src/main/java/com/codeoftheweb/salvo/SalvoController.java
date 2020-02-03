@@ -1,7 +1,6 @@
 package com.codeoftheweb.salvo;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
-
+import net.minidev.json.JSONUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLOutput;
 import java.util.*;
 
 
@@ -46,7 +44,6 @@ public class SalvoController {
             gameMap.put("Game_created", oneGame.getCreationDate());
             gameMap.put("Game_Id", oneGame.getId());
             gameMap.put("GamePlayers", gamePlayersInfo(oneGame));
-
             games.add(gameMap);
         });
         return games;
@@ -117,27 +114,27 @@ public class SalvoController {
     /*******______________________________________ GAME VIEW PAGE _____________________________________*******/
 
     @RequestMapping("/game_view/{gamePlayerId}")
-    public Object findPlayerGame(@PathVariable Long gamePlayerId, Authentication authentication) {
+    private Object findPlayerGame(@PathVariable Long gamePlayerId, Authentication authentication) {
 
-        GamePlayer gameplayer = gamePlayerRepo.findById(gamePlayerId).get();
-        System.out.println("authenticated name " + authentication.getName());
-        System.out.println("gameplayer id from param " + gamePlayerId);
-        System.out.println("player id from gameplayer param " + gameplayer.getPlayer().getId());
+        GamePlayer gameplayer = gamePlayerRepo.getOne(gamePlayerId);
+            System.out.println("authenticated name " + authentication.getName());
+            System.out.println("gameplayer id from param " + gamePlayerId);
+            System.out.println("player id from gameplayer param " + gameplayer.getPlayer().getId());
 
-        long playerID = gameplayer.getPlayer().getId();
-        long userID = playerRepo.findByUserName(authentication.getName()).getId();
-        System.out.println("logged in user id " + userID);
-        System.out.println("logged in player id " + playerID);
-
-        if (playerID == userID) {
-            //return new ResponseEntity<>(gamePlayerRepo.findById(gamePlayerId)}
+        if (authentication.getName() != null) {
+            long playerID = gameplayer.getPlayer().getId();
+            long userID = playerRepo.findByUserName(authentication.getName()).getId();
+                System.out.println("logged in user id " + userID);
+                System.out.println("logged in player id " + playerID);
+            if (playerID == userID)
+                return gamePlayerRepo.findById(gamePlayerId);
 
             Game game = gameplayer.getGame();
 
             Map<String, Object> gameInfo = new HashMap<>();
             gameInfo.put("Game_Id", game.getId());
             gameInfo.put("Game_created", game.getCreationDate());
-            //gameInfo.put("GamePlayers", gamePlayersInfo(game));
+            gameInfo.put("GamePlayers", gamePlayersInfo(game));
             gameInfo.put("Ships_mine", shipsInfo(gameplayer));
             gameInfo.put("Shots_mine", shotsInfo(gameplayer));
             gameInfo.put("Scores", scoreInfo(gameplayer));
@@ -187,30 +184,28 @@ public class SalvoController {
         return score_info;
     }
 
-    /*********______________________________ Players logIn Auth (?)If Guests used __________________________*******/
+    /*********_________________________________ Players logIn Auth  _____________________________________*******/
 
     @RequestMapping("/players")
     public Player getAll(Authentication authentication) {
         if (isGuest(authentication)) return null;
-
         else {
             return playerRepo.findByUserName(authentication.getName());
         }
     }
-
     private boolean isGuest(Authentication authentication) {
         return authentication == null;
     }
 
 
-    /*********____________________________________ Players SignUp Auth ________________________________*******/
+    /*********____________________________________ Players SignUp Auth _________________________________*******/
 
     @Bean
     public PasswordEncoder passwordEncoder2() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @RequestMapping(path = "/register", method = RequestMethod.POST)
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
 
             @RequestParam String userName, @RequestParam String email, @RequestParam String password) {
@@ -228,88 +223,45 @@ public class SalvoController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    /*********___________________________________ Add a GamePlayer to Game _________________________________*******/
 
-    @RequestMapping(path = "/game/{gameId}/players", method = RequestMethod.POST)
-    public ResponseEntity<Object> addPlayer(
-            @PathVariable Long gameId, Authentication authentication) {
+    /*********______________________________________  create New Game _______________________________________*******/
 
-        //System.out.println(gameId);
+    @RequestMapping(path = "/games", method = RequestMethod.POST)
+    //public ResponseEntity<Map<String, java.lang.Object>> createGame(Authentication authentication) {
+    public ResponseEntity<Object> addPlayer(Authentication authentication) {
+        System.out.println(authentication.getName());/*works*/
 
-        Game currentGame = gameRepo.findById(gameId).get();
-        Player currentPlayer = playerRepo.findByUserName(authentication.getName());
-        //System.out.println("current player id in join game api " + currentPlayer.getId());
-
-        if (authentication == null) {
-            return new ResponseEntity<>("You are not logged in!", HttpStatus.FORBIDDEN);
-        }
-
-        if (currentGame == null) {
-            return new ResponseEntity<>("Game does not exist!", HttpStatus.FORBIDDEN);
-        }
-
-        if (currentGame.getGamePlayers().size() > 1) {
-            return new ResponseEntity<>("There are already 2 Game Players!", HttpStatus.FORBIDDEN);
-        }
-
-            GamePlayer gamePlayerNew = new GamePlayer(new Date());
-            currentPlayer.addGamePlayer(gamePlayerNew);
-            currentGame.addGamePlayer(gamePlayerNew);
-
-            Map<String, Object> addPlayer = new LinkedHashMap<>();
-
-            addPlayer.put("Game_current", gamePlayerNew.getGame());
-            addPlayer.put("GP_Id_current", gamePlayerNew.getId());
-
-            gamePlayerRepo.save(gamePlayerNew);
-            playerRepo.save(currentPlayer);
-            gameRepo.save(currentGame);
-
-
-            //System.out.println(gamePlayerNew.getPlayer().getUserName());
-            //System.out.println(gamePlayerNew.getId());
-            //System.out.println(gamePlayerNew.getGame().getId());
-
-            //currentGame.getGamePlayers().forEach(gamePlayer -> System.out.println(gamePlayer.getPlayer().getUserName()));
-
-        return new ResponseEntity<>(addPlayer, HttpStatus.CREATED);
-    }
-
-
-    /*********______________________________________ New Game Auth _______________________________________*******/
-
-    @RequestMapping(method = RequestMethod.POST, value = "/games")
-    public ResponseEntity<Map<String, java.lang.Object>> createGame(Authentication authentication) {
-
-
-        Game game = new Game();
-        System.out.println(authentication);
         if (authentication != null) {
-            Player player = playerRepo.findByUserName(authentication.getName());
+            Player playerNew = playerRepo.findByUserName(authentication.getName());
 
-            Map<String, Object> newGame;
-            if (player != null) {
-                newGame = new LinkedHashMap<>();
+           // Map<String, Object> newGame  = new LinkedHashMap<>();
+            if (playerNew != null) {
 
-                game.setCreationDate(new Date());
-                gameRepo.save(game);
+                Game gameNew = new Game();
+                //System.out.println(authentication);
+                gameNew.setCreationDate(new Date());
+                gameRepo.save(gameNew);
 
-                GamePlayer gamePlayer = new GamePlayer();
-                gamePlayer.setPlayer(player);
-                gamePlayer.setGame(game);
-                gamePlayerRepo.save(gamePlayer);
+                GamePlayer gamePlayerNew = new GamePlayer(new Date());
 
-                newGame.put("Game_id", game.getId());
-                newGame.put("Game_created", game.getCreationDate());
-                newGame.put("Game_GPs", game.getGamePlayers());
+                gamePlayerNew.setPlayer(playerNew);
+                gamePlayerNew.setGame(gameNew);
+                gamePlayerRepo.save(gamePlayerNew);
 
-                return new ResponseEntity<>(createMap("game", newGame), HttpStatus.CREATED);
+                System.out.println(gamePlayerNew.getId());
+
+               // newGame.put("Game_id", gameNew.getId());
+                //newGame.put("Game_created", gameNew.getCreationDate());
+               // newGame.put("Game_GPs", gameNew.getGamePlayers());
+
+                System.out.println(gameNew);
+                return new ResponseEntity<>(createMap("GP_Id", gamePlayerNew.getId()), HttpStatus.CREATED);
 
             } else {
-                return new ResponseEntity<>(createMap("error", "Log in"), HttpStatus.UNAUTHORIZED);
-            }
-        } else {
-                return new ResponseEntity<>(createMap("error", "Log in"), HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(createMap("error", "Log In First"), HttpStatus.UNAUTHORIZED);
+                }
+            } else {
+                return new ResponseEntity<>(createMap("error", "Log In First"), HttpStatus.UNAUTHORIZED);
                 }
     }
 
@@ -319,7 +271,33 @@ public class SalvoController {
 
         return map;
     }
+
+
+    /*********___________________________________ Add a GamePlayer to Game _________________________________*******/
+
+    @RequestMapping(path = "/game/{gameId}/players", method = RequestMethod.POST)
+    public ResponseEntity<Object> addPlayer(@PathVariable Long gameId, Authentication authentication) {
+        System.out.println(authentication.getName());/*works*/
+
+    Optional <Game> optionalGame = gameRepo.findById(gameId);
+
+    Player playerNew = playerRepo.findByUserName(authentication.getName());
+    GamePlayer gamePlayerNew = new GamePlayer(new Date());
+
+        gamePlayerNew.setPlayer(playerNew);
+        gamePlayerNew.setGame(optionalGame.get());
+        gamePlayerRepo.save(gamePlayerNew);
+
+        return new ResponseEntity<>(createMap("GP_Id", gamePlayerNew.getId()), HttpStatus.CREATED);
+    }
+
 }
+
+
+
+
+
+
 
 
 

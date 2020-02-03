@@ -2,7 +2,6 @@ package com.codeoftheweb.salvo;
 
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,13 +47,12 @@ public class Game {
     }
 
 
-    public long getId() {
+    public Object getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
-
 
     public Date getCreationDate() {
         return creationDate;
@@ -73,4 +71,5 @@ public class Game {
     public Set<Score> getScores() {
         return scores;
     }
+
 }

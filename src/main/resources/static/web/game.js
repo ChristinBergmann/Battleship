@@ -127,39 +127,59 @@ for (let i = 1; i < 11; i++) {
     }
 }
 
-///__________________________________________ get DATA of LOGGED IN GAMEPLAYER  ___________________________________///
+///____________________________________________________________ get DATA of LOGGED IN GAMEPLAYER  ____________________________________________________///
 
 const urlParams = new URLSearchParams(window.location.search);
 //console.log(window.location)
 const myParam = window.location.search.split("=")[1]
-//console.log("this is my Param", myParam)
+//const myParam = url.searchParams.get("gp");
+console.log("this is my Param", myParam)
+
 
 getData()
 async function getData() {
-    //console.log("my param in game ", myParam)
+    //this.gamePlayerID = this.getParameterByName("gp");
+    console.log("my param in game ", myParam)
     let response = await fetch(`http://localhost:8080/api/game_view/${myParam}`);
     console.log(response);
     let dataPlayer = await response.json()
     console.log(dataPlayer);
-
     renderGamePlayerInfos(dataPlayer)
 }
+let currentPlayer = {};
+let opponentPlayer = {};
+
+function whoPlays(dataPlayer) {
+
+    if (dataPlayer.gamePlayer.id == myParam && dataPlayer.opponentPlayer !== undefined) {
+        currentPlayer = dataPlayer.gamePlayer.player.userName;
+        myTurn = dataPlayer.gamePlayer.shotsArray.length
+        opponentPlayer = dataPlayer.opponent.player.userName
+
+    } else if (dataPlayer.gamePlayer.id == myParam && dataPlayer.opponentPlayer == undefined) {
+        currentPlayer = dataPlayer.gamePlayer.player.userName;
+        myTurn = dataPlayer.gamePlayer.salvos.length;
+    }
+}
+whoPlays(dataPlayer);
+
 
 function renderGamePlayerInfos(dataPlayer) {
 
+
+
     ////-----------------------------  Checking which GP is loggedIn  ---------------------//////
-    let currentPlayer = {};
-    let opponentPlayer = {};
+
     // console.log(dataPlayer.GamePlayers)
-    dataPlayer.GamePlayers.forEach(gamePlayer => {
+    // dataPlayer.GamePlayers.forEach(gamePlayer => {
 
-        if (gamePlayer.GamePlayer_Id == myParam) {
-            currentPlayer = gamePlayer;
-            console.log(currentPlayer)
+    //     if (gamePlayer.GamePlayer_Id == myParam) {
+    //         currentPlayer = gamePlayer;
+    //         console.log(currentPlayer)
 
-        } else
-            opponentPlayer = gamePlayer;
-    })
+    //     } else
+    //         opponentPlayer = gamePlayer;
+    // })
     console.log(currentPlayer)
     console.log(opponentPlayer)
     const versusDiv = document.getElementById("versus")
@@ -173,7 +193,12 @@ function renderGamePlayerInfos(dataPlayer) {
 
     const scoreVersus = document.getElementById("score")
     let scoreH3 = document.createElement("h3")
-    scoreH3.innerHTML = dataPlayer.Scores.Score_current + " : " + dataPlayer.Scores.Score_opponent;
+
+    if (dataPlayer.Scores.Score_current === undefined || dataPlayer.Scores.Score_opponent === undefined) {
+        scoreH3.innerHTML = " / "
+    } else
+        scoreH3.innerHTML = dataPlayer.Scores.Score_current + " : " + dataPlayer.Scores.Score_opponent;
+
     scoreVersus.appendChild(scoreH3)
 
     /////--------------------- Displays SHIPS of the GP in the Ships Board -------------------////// 
