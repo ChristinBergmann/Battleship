@@ -15,13 +15,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.web.context.WebApplicationContext;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -212,16 +210,18 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			//////-------------creating + adding shot rounds-----------------//////
 
 			//saves + creates shots for gp1 -game1
-//			Shot shot1 = new Shot(1, Arrays.asList("H2", "H3", "H4"), gamePlayer1);
-//			Shot shot2 = new Shot(2, Arrays.asList("E4", "E5", "E6"), gamePlayer1);
-//			Shot shot3 = new Shot(3, Arrays.asList("H1", "I1", "J1"), gamePlayer1);
-//			Shot shot4 = new Shot(4, Arrays.asList("A1", "E4", "A3"), gamePlayer1);
-//			Shot shot5 = new Shot(5, Arrays.asList("A8", "B8", "G8"), gamePlayer1);
-//			shotRepo.save(shot1);
-//			shotRepo.save(shot2);
-//			shotRepo.save(shot3);
-//			shotRepo.save(shot4);
-//			shotRepo.save(shot5);
+/*
+			Shot shot1 = new Shot(1, Arrays.asList("H2", "H3", "H4"), gamePlayer1);
+			Shot shot2 = new Shot(2, Arrays.asList("E4", "E5", "E6"), gamePlayer1);
+			Shot shot3 = new Shot(3, Arrays.asList("H1", "I1", "J1"), gamePlayer1);
+			Shot shot4 = new Shot(4, Arrays.asList("A1", "E4", "A3"), gamePlayer1);
+			Shot shot5 = new Shot(5, Arrays.asList("A8", "B8", "G8"), gamePlayer1);
+			shotRepo.save(shot1);
+			shotRepo.save(shot2);
+			shotRepo.save(shot3);
+			shotRepo.save(shot4);
+			shotRepo.save(shot5);
+*/
 
 			//saves + creates shots for gp2 -game1
 			Shot shot1a = new Shot(1, Arrays.asList("C5", "I3", "H4"), gamePlayer2);
@@ -234,6 +234,31 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			shotRepo.save(shot3a);
 			shotRepo.save(shot4a);
 			shotRepo.save(shot5a);
+
+
+			//saves + creates shots for gp3 -game2
+			Shot shot6 = new Shot(1, Arrays.asList("H2", "H3", "H4"), gamePlayer3);
+			Shot shot7 = new Shot(2, Arrays.asList("E4", "E5", "E6"), gamePlayer3);
+			Shot shot8 = new Shot(3, Arrays.asList("H1", "I1", "J7"), gamePlayer3);
+			Shot shot9 = new Shot(4, Arrays.asList("A1", "E4", "A3"), gamePlayer3);
+			Shot shot10 = new Shot(5, Arrays.asList("A8", "B8", "G8"), gamePlayer3);
+			shotRepo.save(shot6);
+			shotRepo.save(shot7);
+			shotRepo.save(shot8);
+			shotRepo.save(shot9);
+			shotRepo.save(shot10);
+
+			//saves + creates shots for gp4 -game2
+			Shot shot6a = new Shot(1, Arrays.asList("C5", "I3", "H4"), gamePlayer4);
+			Shot shot7a = new Shot(2, Arrays.asList("C7", "E7", "E8"), gamePlayer4);
+			Shot shot8a = new Shot(3, Arrays.asList("H1", "I2", "J1"), gamePlayer4);
+			Shot shot9a = new Shot(4, Arrays.asList("A1", "A2", "A3"), gamePlayer4);
+			Shot shot10a = new Shot(5, Arrays.asList("F1", "B8", "G8"), gamePlayer4);
+			shotRepo.save(shot6a);
+			shotRepo.save(shot7a);
+			shotRepo.save(shot8a);
+			shotRepo.save(shot9a);
+			shotRepo.save(shot10a);
 
 			//////-------------creating + adding scores rounds-----------------//////
 			//1.0-win//0.5-tie//0.0-lost//
@@ -285,9 +310,8 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 				Player player = playerRepo.findByUserName(username);
 				//System.out.println(player.getUserName());
-				User currentUser = new User(player.getUserName(), player.getPassword(), AuthorityUtils.createAuthorityList("USER"));
 				//System.out.println(currentUser);
-				return currentUser;
+				return new User(player.getUserName(), player.getPassword(), AuthorityUtils.createAuthorityList("USER"));
 			});
 
 		}
@@ -310,14 +334,14 @@ public class SalvoApplication extends SpringBootServletInitializer {
 					.antMatchers("/web/board.css").permitAll()
 					.antMatchers("/web/manager*").permitAll()
 					.antMatchers(	"/web/games*").hasAuthority("USER")
-					.antMatchers("/web/game*").hasAuthority("USER")
+					.antMatchers("/web/game*").permitAll()
 					.antMatchers(	"/api/manager*").permitAll()
 					.antMatchers("/api/register").permitAll()
 					.antMatchers("/api/players*").permitAll()
 					.antMatchers("/api/games*").permitAll()
 					.antMatchers(	"/api/leaderboard*").permitAll()
 					.antMatchers(	"/api/game*").permitAll()
-					.antMatchers("/api/game_view*").permitAll()
+					.antMatchers("/api/game_view/*").permitAll()
 					.anyRequest().fullyAuthenticated()
 					.and()
 					.formLogin()

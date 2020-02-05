@@ -12,7 +12,7 @@ public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private long id;
+    public long id;
     private Date creationDate = new Date();
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -47,7 +47,7 @@ public class Game {
     }
 
 
-    public Object getId() {
+    public Long getId() {
         return id;
     }
     public void setId(Long id) {

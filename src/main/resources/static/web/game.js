@@ -130,81 +130,53 @@ for (let i = 1; i < 11; i++) {
 ///____________________________________________________________ get DATA of LOGGED IN GAMEPLAYER  ____________________________________________________///
 
 const urlParams = new URLSearchParams(window.location.search);
-//console.log(window.location)
 const myParam = window.location.search.split("=")[1]
-//const myParam = url.searchParams.get("gp");
-console.log("this is my Param", myParam)
+//console.log("this is my Param", myParam)
 
 
 getData()
 async function getData() {
-    //this.gamePlayerID = this.getParameterByName("gp");
-    console.log("my param in game ", myParam)
+    console.log("I am working")
+    console.log(myParam)
     let response = await fetch(`http://localhost:8080/api/game_view/${myParam}`);
-    console.log(response);
-    let dataPlayer = await response.json()
-    console.log(dataPlayer);
-    renderGamePlayerInfos(dataPlayer)
+    console.log(response); /*works*/
+    let data = await response.json() /*works*/
+    // console.log(data);
+    renderGamePlayerInfos(data)
 }
-let currentPlayer = {};
-let opponentPlayer = {};
 
-function whoPlays(dataPlayer) {
-
-    if (dataPlayer.gamePlayer.id == myParam && dataPlayer.opponentPlayer !== undefined) {
-        currentPlayer = dataPlayer.gamePlayer.player.userName;
-        myTurn = dataPlayer.gamePlayer.shotsArray.length
-        opponentPlayer = dataPlayer.opponent.player.userName
-
-    } else if (dataPlayer.gamePlayer.id == myParam && dataPlayer.opponentPlayer == undefined) {
-        currentPlayer = dataPlayer.gamePlayer.player.userName;
-        myTurn = dataPlayer.gamePlayer.salvos.length;
-    }
-}
-whoPlays(dataPlayer);
+function renderGamePlayerInfos(data) {
+     console.log(data)
 
 
-function renderGamePlayerInfos(dataPlayer) {
-
-
-
-    ////-----------------------------  Checking which GP is loggedIn  ---------------------//////
-
-    // console.log(dataPlayer.GamePlayers)
-    // dataPlayer.GamePlayers.forEach(gamePlayer => {
-
-    //     if (gamePlayer.GamePlayer_Id == myParam) {
-    //         currentPlayer = gamePlayer;
-    //         console.log(currentPlayer)
-
-    //     } else
-    //         opponentPlayer = gamePlayer;
-    // })
-    console.log(currentPlayer)
-    console.log(opponentPlayer)
+    /////--------------------------------- Displays VERSUS Board ------------------------------/////
     const versusDiv = document.getElementById("versus")
-
     let h3 = document.createElement("h3")
-    h3.innerHTML = currentPlayer.Player.Player_Username + " vs. " + opponentPlayer.Player.Player_Username;
+
+    if (data.Opp_name === undefined) {
+        h3.innerHTML = data.Curr_name + " vs. " + " ¿? "
+    } else
+        h3.innerHTML = data.Curr_name + " vs. " + data.Opp_name;
 
     versusDiv.appendChild(h3)
 
-    /////------------------- Displays SCORES of both GPs in the between Boards ---------------////// 
+    /////------------------- Displays SCORES of both GPs in the between Boards ---------------///// 
 
     const scoreVersus = document.getElementById("score")
     let scoreH3 = document.createElement("h3")
 
-    if (dataPlayer.Scores.Score_current === undefined || dataPlayer.Scores.Score_opponent === undefined) {
+    if (data.Curr_score === undefined || data.Opp_score === undefined) {
         scoreH3.innerHTML = " / "
     } else
-        scoreH3.innerHTML = dataPlayer.Scores.Score_current + " : " + dataPlayer.Scores.Score_opponent;
+        scoreH3.innerHTML = data.Curr_score + " : " + data.Opp_score;
 
     scoreVersus.appendChild(scoreH3)
 
-    /////--------------------- Displays SHIPS of the GP in the Ships Board -------------------////// 
+    /////--------------------- Displays SHIPS of the GP in the Ships Board -------------------/////
+
     let locationArray = [];
 
-    dataPlayer.Ships_mine.forEach(ship => {
+    data.Curr_ships.forEach(ship => {
         locationArray.push(ship.Location);
     })
 
@@ -229,39 +201,41 @@ function renderGamePlayerInfos(dataPlayer) {
         if (x.length == 5) {
             x.forEach(y => {
                 document.getElementById(y).style.backgroundSize = "33px 33px";
-                document.getElementById(y).style.backgroundImage = "url('Images/navy.png')";
+                document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
             })
         }
     })
 
-    /////------------------- Displays SHOTS of the GP in the Shots Board -------------------////// 
-    let shotsArray = [];
+    /////------------------- Displays SHOTS of the GP in the Shots Board -------------------/////
 
-    dataPlayer.Shots_mine.forEach(shot => {
-        shotsArray.push(shot.Shot_fired);
+    data.Curr_shots.forEach(s => {
+        document.getElementById("f2" + s).style.backgroundSize = "33px 33px";
+        document.getElementById("f2" + s).style.backgroundImage = "url('Images/bomb.png')";
     })
 
-    shotsArray.forEach(y => {
-        y.forEach(s => {
-            document.getElementById("f2" + s).style.backgroundSize = "33px 33px";
-            document.getElementById("f2" + s).style.backgroundImage = "url('Images/bomb.png')";
-        })
-    })
 
     /////----------------- Displays HITS by OpponentGP in the Ships Board -----------------////// 
-    let hitsArray = [];
+
     //console.log(dataPlayer.Hits_mine)
-
-    dataPlayer.Hits_mine.forEach(hit => {
-        hitsArray.push(hit.Shot_fired);
-    })
-
-    hitsArray.forEach(y => {
+    data.Curr_hits.forEach(y => {
         y.forEach(s => {
             document.getElementById(s).style.backgroundSize = "33px 33px";
             document.getElementById(s).style.backgroundImage = "url('Images/explosion.png')";
         })
     })
-}
 
-// .catch(error => console.log(error));
+    /////--------------- GAME RESULTS ------------------/////
+
+    // function getGameResult(score1, score2) {
+    //   return (score1 > score2) ? 'You win!' 
+    //     : (score1 < score2) ? 'You lost!'
+    //     : 'It was a tie!';
+    // }
+
+
+    function back() {
+
+        window.location.href = "games.html" 
+
+    }
+}
