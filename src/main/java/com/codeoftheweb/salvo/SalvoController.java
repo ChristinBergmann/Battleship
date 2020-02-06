@@ -123,12 +123,12 @@ public class SalvoController {
         List<Object> shotsLocations = new ArrayList<>();
         List<Object> shipsLocations = new ArrayList<>();
 
-        if (gameplayer.getShips().size() != 0 && getOpponent(gameplayer).getShots().size() != 0){
+        if (gameplayer.getShips().size() != 0 && getOpponentGamePlayer(gameplayer).getShots().size() != 0){
             for (Ship sh : gameplayer.getShips()) {
                 shipsLocations.addAll(sh.getLocations());
             }
 
-            for (Shot s : getOpponent(gameplayer).getShots()) {
+            for (Shot s : getOpponentGamePlayer(gameplayer).getShots()) {
                 shotsLocations.addAll(s.getLocations());
             }
 
@@ -142,7 +142,7 @@ public class SalvoController {
         return hitsLocations;
     }
 
-    public GamePlayer getOpponent (GamePlayer gameplayer){
+    public GamePlayer getOpponentGamePlayer (GamePlayer gameplayer){
         GamePlayer otherGP = null;
 
         for(GamePlayer gp: gameplayer.getGame().getGamePlayers()) {
@@ -153,42 +153,62 @@ public class SalvoController {
         return otherGP;
     }
 
+    public GamePlayer getMyGamePlayer_fromGame (Game game, Authentication authentication){
+        GamePlayer myGp = null;
+
+        for(GamePlayer gp : game.getGamePlayers()){
+            if (gp.getPlayer().getUserName()==authentication.getName()){
+                myGp=gp;
+            }
+        }
+
+        return myGp;
+    }
+
+
 
     /********________________________________________ GAME VIEW PAGE _____________________________________********/
 
-    @RequestMapping("/game_view/{gamePlayerId}")
-    public Map<String,Object> findPlayerGame(@PathVariable Long gamePlayerId, Authentication authentication) {
+    @RequestMapping("/game_view/{gm_id}")
+    public Map<String,Object> findPlayerGame(@PathVariable Long gm_id, Authentication authentication) {
 
-        GamePlayer gameplayer = gamePlayerRepo.getOne(gamePlayerId);
+       // GamePlayer gameplayer = gamePlayerRepo.getOne(gamePlayerId);
+        Game game = gameRepo.getOne(gm_id);
+
+
 
         if (authentication.getName() != null) {
 
-            long playerID = gameplayer.getPlayer().getId();
+            GamePlayer myGameplayer = getMyGamePlayer_fromGame(game,authentication);
+
+
+
+            long playerID = myGameplayer.getPlayer().getId();
             long userID = playerRepo.findByUserName(authentication.getName()).getId();
 
             if (playerID == userID) {
 
-                Game game = gameplayer.getGame();
+
 
                 Map<String, Object> gameInfo = new HashMap<>();
                 gameInfo.put("Game_Id", game.getId());
                 gameInfo.put("Game_created", game.getCreationDate());
-                    game.getGamePlayers().forEach(x -> {
-                        if (x != gameplayer) {
-                            gameInfo.put("Opp_name", x.getPlayer().getUserName());
-                            gameInfo.put("Opp_score", scoreInfo(x));
-                            gameInfo.put("Opp_shots", shotsInfo(x));
-                            gameInfo.put("Opp_turns", turnsInfo(x));
 
-                        }else {
-                            gameInfo.put("Curr_name", gameplayer.getPlayer().getUserName());
-                            gameInfo.put("Curr_score", scoreInfo(gameplayer));
-                            gameInfo.put("Curr_ships", shipsInfo(gameplayer));
-                            gameInfo.put("Curr_shots", shotsInfo(gameplayer));
-                            gameInfo.put("Curr_turns", turnsInfo(gameplayer));
-                            gameInfo.put("Curr_hits", hitsInfo(gameplayer));
-                        }
-                    });
+                GamePlayer enemyGamePlayer = getOpponentGamePlayer(myGameplayer);
+                        gameInfo.put("Opp_name", enemyGamePlayer.getPlayer().getUserName());
+                        gameInfo.put("Opp_score", scoreInfo(enemyGamePlayer));
+                        gameInfo.put("Opp_shots", shotsInfo(enemyGamePlayer));
+                        gameInfo.put("Opp_turns", turnsInfo(enemyGamePlayer));
+
+
+                        gameInfo.put("Curr_name", myGameplayer.getPlayer().getUserName());
+                        gameInfo.put("Curr_score", scoreInfo(myGameplayer));
+                        gameInfo.put("Curr_ships", shipsInfo(myGameplayer));
+                        gameInfo.put("Curr_shots", shotsInfo(myGameplayer));
+                        gameInfo.put("Curr_turns", turnsInfo(myGameplayer));
+                        gameInfo.put("Curr_hits", hitsInfo(myGameplayer));
+
+
                 return gameInfo;
             }
         }
@@ -272,7 +292,7 @@ public class SalvoController {
     /*********______________________________________  create New Game _______________________________________*******/
 
     @RequestMapping(path = "/games", method = RequestMethod.POST)
-    public ResponseEntity<Object> addPlayer(Authentication authentication) {
+    public ResponseEntity<Object> createGame(Authentication authentication) {
         System.out.println(authentication.getName());/*works*/
 
         Player currentPlayer = playerRepo.findByUserName(authentication.getName());
@@ -280,18 +300,15 @@ public class SalvoController {
         if (currentPlayer != null) {
 
             Game gameNew = new Game();
-
             gameNew.setCreationDate(new Date());
             gameRepo.save(gameNew);
 
             GamePlayer gamePlayerNew = new GamePlayer(new Date());
-
             gamePlayerNew.setPlayer(currentPlayer);
             gamePlayerNew.setGame(gameNew);
             gamePlayerRepo.save(gamePlayerNew);
 
-
-           return new ResponseEntity<>(createMap("GP_Id", gamePlayerNew.getId()), HttpStatus.CREATED);
+           return new ResponseEntity<>(createMap("gm_id", gameNew.getId()), HttpStatus.CREATED);
 
         } else {
             return new ResponseEntity<>(createMap("error", "Log In First"), HttpStatus.UNAUTHORIZED);
@@ -301,15 +318,14 @@ public class SalvoController {
     public Map<String, Object> createMap(String key, Object value) {
         Map<String, Object> map = new HashMap<>();
         map.put(key, value);
-
         return map;
     }
 
 
-    /*********___________________________________ Add a GamePlayer to Game _________________________________*******/
+    /*********___________________________________ Join a GamePlayer to Game _________________________________*******/
 
     @RequestMapping(path = "/game/{id}/players", method = RequestMethod.POST)
-    public ResponseEntity<Object> addPlayer(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<Object> joinGame(@PathVariable Long id, Authentication authentication) {
         //System.out.println(authentication.getName());/*works*/
 
         Game optionalGame = gameRepo.getOne(id);
@@ -328,7 +344,7 @@ public class SalvoController {
             gamePlayerNew.setGame(optionalGame);
             gamePlayerRepo.save(gamePlayerNew);
 
-            return new ResponseEntity<>(createMap("GP_Id", gamePlayerNew.getId()), HttpStatus.CREATED);
+            return new ResponseEntity<>(createMap("gm_id", id), HttpStatus.CREATED);
         }
         else {
             return new ResponseEntity<>(createMap("error","It is not your Game"), HttpStatus.FORBIDDEN);

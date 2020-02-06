@@ -53,7 +53,6 @@ function renderGames(dataGames) {
         }
 
         //-------------------just GAMES of currentPlayer----------------//
-
         else if (game.GamePlayers[0].Player.Player_Username === game.Curr_PlayerName || game.GamePlayers[1].Player.Player_Username === game.Curr_PlayerName) {
 
             let joinedGP_Id = game.GamePlayers[0].GamePlayer_Id
@@ -70,9 +69,11 @@ function renderGames(dataGames) {
             gameLink.setAttribute("data-GameId", GAME_Id)
             gameLink.innerHTML = "Return"
             gameLink.addEventListener("click", function () {
-                
-                window.location.href = "game.html?gp=" + JOIN_GP_Id
-                
+
+
+
+                window.location.href = "game.html?gm=" + GAME_Id
+
             })
 
             gamesList.appendChild(divGames);
@@ -90,7 +91,8 @@ function renderGames(dataGames) {
 }
 
 /////____________________________________________ POSTS JOIN GAME _____________________________________//////
-let JOIN_GP_Id;
+
+
 function postOptionalGame(GAME_Id) {
     console.log(GAME_Id)
     fetch(`http://localhost:8080/api/game/${GAME_Id}/players`, {
@@ -106,16 +108,17 @@ function postOptionalGame(GAME_Id) {
             return response.json()
         })
         .then((res) => {
-            JOIN_GP_Id = res.GP_Id
-            if (JOIN_GP_Id) {
-                window.location.href = "game.html?gp=" + JOIN_GP_Id
+
+            if (res.gm_id) {
+                window.location.href = "game.html?gm=" + res.gm_id
             }
         })
         .catch(error => console.log(error))
 }
 
 /////____________________________________________________ POST NEW GAME ________________________________________________/////
-let NEW_GP_Id
+
+
 function postNewGame() {
     fetch('http://localhost:8080/api/games', {
             method: 'POST',
@@ -130,10 +133,10 @@ function postNewGame() {
             return response.json()
         })
         .then((res) => {
-            console.log(res)
-            NEW_GP_Id = res.GP_Id
-            if (NEW_GP_Id) {
-                window.location.href = "game.html?gp=" + NEW_GP_Id
+            console.log(res.gm_id)
+
+            if (res.gm_id) {
+                window.location.href = "game.html?gm=" + res.gm_id
             }
         })
         .catch(error => console.log(error));
@@ -212,7 +215,7 @@ function logOut() {
         })
         .then((status) => {
             if (status == 200) {
-                window.location.href = "manager.html"
+                window.location.href = "index.html"
             } else {
                 alert("Ooh something went wrong..try again!")
             }

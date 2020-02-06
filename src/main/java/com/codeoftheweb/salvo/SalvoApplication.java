@@ -307,7 +307,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 		@Override
 		public void init(AuthenticationManagerBuilder auth) throws Exception {
 			auth.userDetailsService(username -> {
-
+				System.out.println(username);
 				Player player = playerRepo.findByUserName(username);
 				//System.out.println(player.getUserName());
 				//System.out.println(currentUser);
@@ -332,10 +332,11 @@ public class SalvoApplication extends SpringBootServletInitializer {
 					.authorizeRequests()
 					.antMatchers("/web/main.css").permitAll()
 					.antMatchers("/web/board.css").permitAll()
+					.antMatchers("/web/index*").permitAll()
 					.antMatchers("/web/manager*").permitAll()
 					.antMatchers(	"/web/games*").hasAuthority("USER")
 					.antMatchers("/web/game*").permitAll()
-					.antMatchers(	"/api/manager*").permitAll()
+					.antMatchers(	"/api/index*").permitAll()
 					.antMatchers("/api/register").permitAll()
 					.antMatchers("/api/players*").permitAll()
 					.antMatchers("/api/games*").permitAll()
