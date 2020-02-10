@@ -60,7 +60,6 @@ body {
 .table table {
 
     margin: 0px;
-
 }
 
 /***************_________________________________ MANAGER SITE OF GAMEPLAYER ______________________________******************/
@@ -104,4 +103,88 @@ button {
 .score {
 
     padding: 10px 0px 10px 0px;
+}
+
+/***************_________________________________ GAME SITE OF GAMEPLAYER ______________________________******************/
+
+.blue {
+
+    background-color: blue;
+}
+
+.green {
+
+    background-color: green;
+
+}
+
+.orange {
+    background-color: orange;
+
+}
+
+.red {
+
+    background-color: red;
+}
+
+#carrier {
+    /* background-image: url('Images/battleship.png'); */
+    background-color: blue;
+    width: 175px;
+    height: 35px;
+    /* margin-bottom: 5px; */
+    transition: all 0.2 linear;
+}
+
+#battleship {
+    /* background-image: url('Images/battleship.png'); */
+    background-color: blue;
+    width: 140px;
+    height: 35px;
+    /* margin-bottom: 5px; */
+}
+
+#submarine {
+    /* background-image: url('Images/battleship.png'); */
+    background-color: blue;
+    width: 105px;
+    height: 35px;
+    /* margin-bottom: 5px; */
+}
+
+#destroyer {
+    /* background-image: url('Images/battleship.png'); */
+    background-color: blue;
+    width: 105px;
+    height: 35px;
+    /* margin-bottom: 5px; */
+}
+
+#patrol {
+    /* background-image: url('Images/battleship.png'); */
+    background-color: blue;
+    width: 70px;
+    height: 35px;
+    /* margin-bottom: 5px; */
+}
+
+.vertical {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+
+.selected {
+    /* background-image: url('Images/Ships_blue.jpg'); */
+    background-color: darkmagenta;
+
+}
+
+.savedshots {
+    /* background-image: url('Images/bomb.png'); */
+    background-color: darkmagenta;
 }

@@ -6,6 +6,8 @@
     position: relative;
     margin: 1em 1em;
     /* margin-top: 100px; */
+    width: auto;
+    height: auto;
 
 }
 
@@ -40,7 +42,6 @@
     padding-top: 0.1em;
     font-size: 2em;
     font-family: 'Roboto sans-serif';
-
 }
 
 #boardgame div {
@@ -55,7 +56,6 @@
     width: 35px;
     height: 35px;
 }
-
 
 /*------second board---- */
 
@@ -107,4 +107,26 @@
     width: 35px;
     height: 35px;
     margin-top: -700px;
+}
+
+/*------ships div---- */
+
+.ships {
+
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
+#ship div {
+
+    z-index: 10;
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    text-align: center;
+    align-items: center;
+    margin-top: 0px;
 }

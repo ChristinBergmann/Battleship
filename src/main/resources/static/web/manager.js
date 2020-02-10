@@ -37,16 +37,16 @@ function logInAuthenticationInfo(username, password) {
             body: `userName=${username}&password=${password}`
         })
         .then(function (response) {
-            //console.log(response)/*works*/
+            console.log(response) /*works*/
             return response.status;
         })
         .then((status) => {
             if (status == 200) {
                 window.location.href = "games.html"
-
             } else {
                 alert("Ooh something went wrong..try again!")
             }
+            console.log("IM LOGGED IN", status)
         })
         .catch(error => console.log(error));
 }
@@ -66,7 +66,7 @@ function signUpAuthenticationInfo(username, email, password) {
 
         })
         .then(function (response) {
-            console.log(response)
+            //console.log(response)
             return response.status;
         })
         .then((status) => {
@@ -75,6 +75,7 @@ function signUpAuthenticationInfo(username, email, password) {
             } else {
                 alert("Ooh something went wrong..try again!")
             }
+            console.log("IM LOGGED OUT", status)
         })
         .catch(error => console.log(error));
 }

@@ -60,7 +60,6 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 		return (args) -> {
 
-
 			// saves a few players
 			Player player1 = new Player("player1", "player1@example.com", passwordEncoder.encode("player1"));
 			Player player2 = new Player("player2", "player2@example.com", passwordEncoder.encode("player2"));
@@ -81,7 +80,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 			game2.plusSeconds(3600);
 			game3.plusSeconds(7200);
-			//game4.plusSeconds(10800);
+			game4.plusSeconds(10800);
 
 			gameRepo.save(game1);
 			gameRepo.save(game2);
@@ -90,12 +89,12 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 
 			//Game 1
-			//GamePlayer gamePlayer1 = new GamePlayer();
+			GamePlayer gamePlayer1 = new GamePlayer();
 			GamePlayer gamePlayer2 = new GamePlayer();
 
-			//game1.addGamePlayer(gamePlayer1);
-			//player1.addGamePlayer(gamePlayer1);
-			//gamePlayer1.setCreationDate(game1.getCreationDate());
+			game1.addGamePlayer(gamePlayer1);
+			player1.addGamePlayer(gamePlayer1);
+			gamePlayer1.setCreationDate(game1.getCreationDate());
 
 			game1.addGamePlayer(gamePlayer2);
 			player2.addGamePlayer(gamePlayer2);
@@ -141,7 +140,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gamePlayer8.setCreationDate(game4.getCreationDate());
 
 			//saves the game players
-			//gamePlayerRepo.save(gamePlayer1);
+			gamePlayerRepo.save(gamePlayer1);
 			gamePlayerRepo.save(gamePlayer2);
 			gamePlayerRepo.save(gamePlayer3);
 			gamePlayerRepo.save(gamePlayer4);
@@ -153,17 +152,26 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 			//////-------------creating + adding ships-----------------//////
 
+
+			// ships
+			final String CARRIER = "CARRIER";
+			final String BATTLESHIP = "BATTLESHIP";
+			final String SUBMARINE = "SUBMARINE";
+			final String DESTROYER = "DESTROYER";
+			final String PATROLBOAT = "PATROLBOAT";
+
+
 			//saves + creates ships for gp1 -game1
-//			Ship ship1 = new Ship("CARRIER", Arrays.asList("H3", "H4", "H5", "H6", "H7"), gamePlayer1);
-//			Ship ship2 = new Ship("BATTLESHIP", Arrays.asList("E4", "E5", "E6", "E7"), gamePlayer1);
-//			Ship ship3 = new Ship("DESTROYER", Arrays.asList("H1", "I1", "J1"), gamePlayer1);
-//			Ship ship4 = new Ship("SUBMARINE", Arrays.asList("A1", "A2", "A3"), gamePlayer1);
-//			Ship ship5 = new Ship("PATROLBOAT", Arrays.asList("A8", "B8"), gamePlayer1);
-//			shipRepo.save(ship1);
-//			shipRepo.save(ship2);
-//			shipRepo.save(ship3);
-//			shipRepo.save(ship4);
-//			shipRepo.save(ship5);
+			Ship ship1 = new Ship("CARRIER", Arrays.asList("H3", "H4", "H5", "H6", "H7"), gamePlayer1);
+			Ship ship2 = new Ship("BATTLESHIP", Arrays.asList("E4", "E5", "E6", "E7"), gamePlayer1);
+			Ship ship3 = new Ship("DESTROYER", Arrays.asList("H1", "I1", "J1"), gamePlayer1);
+			Ship ship4 = new Ship("SUBMARINE", Arrays.asList("A1", "A2", "A3"), gamePlayer1);
+			Ship ship5 = new Ship("PATROLBOAT", Arrays.asList("A8", "B8"), gamePlayer1);
+			shipRepo.save(ship1);
+			shipRepo.save(ship2);
+			shipRepo.save(ship3);
+			shipRepo.save(ship4);
+			shipRepo.save(ship5);
 
 
 			//saves + creates ships for gp2 -game1
@@ -210,7 +218,6 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			//////-------------creating + adding shot rounds-----------------//////
 
 			//saves + creates shots for gp1 -game1
-/*
 			Shot shot1 = new Shot(1, Arrays.asList("H2", "H3", "H4"), gamePlayer1);
 			Shot shot2 = new Shot(2, Arrays.asList("E4", "E5", "E6"), gamePlayer1);
 			Shot shot3 = new Shot(3, Arrays.asList("H1", "I1", "J1"), gamePlayer1);
@@ -221,7 +228,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			shotRepo.save(shot3);
 			shotRepo.save(shot4);
 			shotRepo.save(shot5);
-*/
+
 
 			//saves + creates shots for gp2 -game1
 			Shot shot1a = new Shot(1, Arrays.asList("C5", "I3", "H4"), gamePlayer2);
@@ -262,10 +269,10 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 			//////-------------creating + adding scores rounds-----------------//////
 			//1.0-win//0.5-tie//0.0-lost//
-			/*Score score1 = new Score(new Date(), 1.0);
+			Score score1 = new Score(new Date(), 1.0);
 			player1.addScore(score1);
 			game1.addScore((score1));
-			scoreRepo.save(score1);*/
+			scoreRepo.save(score1);
 
 			Score score2 = new Score(new Date(), 0.0);
 			player2.addScore(score2);
@@ -287,13 +294,11 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			game2.addScore((score5));
 			scoreRepo.save(score5);
 
-//			Score score6 = new Score(new Date(), 0.5);
-//			player1.addScore(score6);
-//			game3.addScore((score6));
-//			scoreRepo.save(score6);
-
+			Score score6 = new Score(new Date(), 0.5);
+			player1.addScore(score6);
+			game3.addScore((score6));
+			scoreRepo.save(score6);
 		};
-
 	}
 
 
@@ -309,11 +314,8 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			auth.userDetailsService(username -> {
 				System.out.println(username);
 				Player player = playerRepo.findByUserName(username);
-				//System.out.println(player.getUserName());
-				//System.out.println(currentUser);
 				return new User(player.getUserName(), player.getPassword(), AuthorityUtils.createAuthorityList("USER"));
 			});
-
 		}
 	}
 }
@@ -365,7 +367,6 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 			// if logout is successful, just send a success response
 			http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
-
 		}
 
 		private void clearAuthenticationAttributes(HttpServletRequest request) {
