@@ -53,7 +53,6 @@ for (let i = 1; i < 11; i++) {
 
         field.id = (document.getElementsByClassName("outrow")[i]).id + (document.getElementsByClassName("outcol")[j]).id
         field.className = "field";
-        //field.onDragOver(ev);
 
         let topPosition = j * 35;
         let leftPosition = (i - 1) * 35;
@@ -115,9 +114,9 @@ for (let i = 1; i < 11; i++) {
 
         fieldsArray2.push(field2)
 
-
         field2.id = 'f2' + (document.getElementsByClassName("outrow2")[i]).id + (document.getElementsByClassName("outcol2")[j]).id
         field2.className = "field2";
+        field2.addEventListener("click", mySalvos)
 
         let topPosition2 = j * 35;
         let leftPosition2 = (i - 1) * 35;
@@ -144,11 +143,11 @@ async function getData() {
     let data = await response.json() /*works*/
     console.log(data);
     renderGamePlayerInfos(data)
+
 }
 
 function renderGamePlayerInfos(data) {
     console.log(data)
-
 
     /////--------------------------------- Displays VERSUS Board ------------------------------/////
     const versusDiv = document.getElementById("versus")
@@ -175,57 +174,34 @@ function renderGamePlayerInfos(data) {
 
     /////--------------------- Displays SHIPS of the GP in the Ships Board -------------------/////
 
-    let myLocationArray = [];
-
+    let locationArray = [];
     data.Curr_ships.forEach(ship => {
-        myLocationArray.push(ship.Location);
-    })
-
-    myLocationArray.forEach(x => {
-        if (x.length == 2) {
-            x.forEach(y => {
-                document.getElementById(y).style.backgroundSize = "33px 33px";
-                document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
-            })
+        if (fieldsArray[i].id == locationArray[j]) {
+            fieldsArray[i].classList.add("blue")
         }
-        if (x.length == 3) {
-            x.forEach(y => {
-                document.getElementById(y).style.backgroundSize = "33px 33px";
-                document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
-            })
-        }
-        if (x.length == 4) {
-            x.forEach(y => {
-                document.getElementById(y).style.backgroundSize = "33px 33px";
-                document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
-            })
-        }
-        if (x.length == 5) {
-            x.forEach(y => {
-                document.getElementById(y).style.backgroundSize = "33px 33px";
-                document.getElementById(y).style.backgroundImage = "url('Images/battleship.png')";
-            })
-        }
+        locationArray.push(ship.Location);
     })
 
     /////------------------- Displays SHOTS of the GP in the Shots Board -------------------/////
 
-    data.Curr_shots.forEach(s => {
-        document.getElementById("f2" + s).style.backgroundSize = "33px 33px";
-        document.getElementById("f2" + s).style.backgroundImage = "url('Images/bomb.png')";
+    let shotsArray = [];
+    data.Curr_shots.forEach(shot => {
+        if (fieldsArray2[i].id == shotsArray[j]) {
+            fieldsArray2[i].classList.add("green")
+        }
+        shotsArray.push(shot.Location);
     })
-
 
     // /////----------------- Displays HITS by OpponentGP in the Ships Board -----------------////// 
 
-    //console.log(dataPlayer.Hits_mine)
-
-    data.Curr_hits.forEach(s => {
-        document.getElementById(s).style.backgroundSize = "33px 33px";
-        document.getElementById(s).style.backgroundImage = "url('Images/explosion.png')";
+    let hitsArray = [];
+    data.Curr_hits.forEach(hit => {
+        if (fieldsArray[i].id == hitsArray[j]) {
+            fieldsArray[i].classList.add("red")
+        }
+        hitsArray.push(hit.Location);
     })
 }
-
 
 /////--------------- GAME RESULTS ------------------/////
 
@@ -242,209 +218,209 @@ function renderGamePlayerInfos(data) {
 
 // }
 
-/////------------------------------- Displays SHIPS (in the Board) DRAG n DROP ---------------------------/////
-
-function allowDrop(ev) {
-    ev.preventDefault();
-};
+/////____________________________________________________________ SHIPS DRAG n DROP __________________________________________________________/////
 
 function drag(ev) {
     ev.dataTransfer.setData("text/plain", ev.target.id);
     console.log("EVENT ID", ev.target.id) /*works*/
-    ev.currentTarget.style.backgroundColor = "lightblue";
-
-    setTimeout(function () {
-        document.getElementsByClassName(".4 horizontal").fadeIn(500);
-    }, 8800);
-    document.getElementsByClassName(".field").fadeIn(0);
+    //ev.currentTarget.style.backgroundColor = "lightblue";
 }
 
-function onDragOver(ev) {
+function allowDrop(ev) {
     ev.preventDefault();
 }
+
+let myShip = null;
+let shipValue = "";
+let myPosition = "";
+let fullPosition = [];
+let placedShips = {};
+let allPlaces = [];
+let myShips = [];
+let allPosition = [];
+let lastShip = [];
 
 function drop(ev) {
-    alert("dosomethingondrop");
-
-    //take my ships array compare if the drag item has the same location in it already so you cant place it
-    //to place a ship loop through length and check if it can be placed
-    //else : place ship to fieldsArray
-    Object.values(mylocationArray).flat();
-    ev.preventDefault();
+    Object.values(placedShips).flat();
+    ev.dataTransfer.clearData();
+    //console.log(Object.values(placedShips))
 
     let data = ev.dataTransfer.getData("text");
-    console.log("Data: " + data);
-    console.log("Element ", document.getElementById(data));
+    let draggableElement = document.getElementById(data);
+    // draggableElement.classList.add("blue");
+    let target = ev.target;
+    //console.log(draggableElement)
+    //console.log(target)
 
-    let targetsDragID = ev.target.id;
+    //*-----get the positions in board------*//
+    if (draggableElement.classList.contains("horizontal")) {
+        let myNumber = target.id.slice(1)
+        let myLetter = target.id.slice(0, 1)
+
+        shipValue = parseInt(draggableElement.className);
+        myPosition = letters.indexOf(myLetter);
+
+        for (let i = 0; i < shipValue + 1; i++) {
+            myShips = (letters.slice(myPosition, (myPosition + i)))
+            myShips = myShips.map(pos => pos + myNumber)
+        }
+    } else if (draggableElement.classList.contains("vertical")) {
+        let myLetter = target.id.slice(0, 1)
+        let myNumber = target.id.slice(1)
+        shipValue = parseInt(draggableElement.className);
+
+        let myPosition = numbers.indexOf(myNumber);
+        for (let i = 0; i < shipValue + 1; i++) {
+            myShips = (numbers.slice(myPosition, (myPosition + i)))
+            myShips = myShips.map(pos => myLetter + pos)
+        }
+
+    }
+    //*-----post ships in board------*//
+    console.log(myShips)
+    if (myShips.some(pos => allPosition.includes(pos))) {
+        // if (target.classList.contains("blue") || target.id == myShips || myShips.some(pos => allPosition.includes(pos))) {
+
+        alert("NO SPACE, take another ship please!")
+
+    } else {
+        myShips.forEach(x => document.getElementById(x).classList.add("blue"))
+
+        target.appendChild(draggableElement);
+        myShip = draggableElement.id
+        console.log("My ship: " + myShip);
+
+        if (draggableElement.classList.contains("horizontal")) {
+            let myNumber = target.id.slice(1)
+            let myLetter = target.id.slice(0, 1)
+
+            shipValue = parseInt(draggableElement.className);
+            myPosition = letters.indexOf(myLetter);
+
+            for (let i = 0; i < shipValue + 1; i++) {
+                myShips = (letters.slice(myPosition, (myPosition + i)))
+                myShips = myShips.map(pos => pos + myNumber)
+            }
+            if (11 - myPosition < shipValue) {
+                fullPosition = letters.slice(-shipValue)
+                    .map(pos => pos + myNumber);
+            } else {
+                fullPosition = letters.slice(myPosition, (myPosition + shipValue))
+                    .map(pos => pos + myNumber);
+            }
+        } else if (draggableElement.classList.contains("vertical")) {
+            let myLetter = target.id.slice(0, 1)
+            let myNumber = target.id.slice(1)
+            console.log(myLetter)
+            console.log(myNumber)
+
+            shipValue = parseInt(draggableElement.className);
+            console.log(shipValue)
+
+            let myPosition = numbers.indexOf(myNumber);
+            console.log(myPosition)
+
+            for (let i = 0; i < shipValue + 1; i++) {
+                myShips = (numbers.slice(myPosition, (myPosition + i)))
+                myShips = myShips.map(pos => myLetter + pos)
+            }
+            if (11 - myPosition < shipValue) {
+                fullPosition = numbers.slice(-shipValue)
+                    .map(pos => myLetter + pos);
+            } else {
+                fullPosition = numbers.slice(myPosition, (myPosition + shipValue))
+                    .map(pos => myLetter + pos);
+            }
+        }
+        placedShips[myShip] = fullPosition;
+        console.log(placedShips[myShip])
+        console.log(fullPosition)
+        fullPosition.forEach(x => allPosition.push(x))
+
+        console.log(allPosition)
+        lastShip.push(myShip)
+        lastShip = [new Set(lastShip)];
+        console.log(lastShip);
+        console.log(allPosition);
+    }
+}
+
+divInside.ondragover = function () {
+    allowDrop(event);
+};
+divInside.ondrop = function () {
+    drop(event);
+};
+
+function vertical(el) {
+
+    if (el.classList.contains("horizontal")) {
+        el.classList.remove("horizontal");
+        el.classList.add("vertical");
+    } else if (el.classList.contains("vertical")) {
+        el.classList.remove("vertical")
+        el.classList.add("horizontal")
+    }
+    console.log(el.classList)
+}
+
+function saveShips() {
+    if (allPosition.length == 17) {
+        // if (lastShip.length == 5) {
+
+        // Object.keys(placedShips).forEach(function (myShip) {
+        //     saveShips(myShip, placedShips[myShip])
+        // });
+        document.getElementById('PATROLBOAT').setAttribute('draggable', false)
+        document.getElementById('BATTLESHIP').setAttribute('draggable', false)
+        document.getElementById('SUBMARINE').setAttribute('draggable', false)
+        document.getElementById('CARRIER').setAttribute('draggable', false)
+        document.getElementById('DESTROYER').setAttribute('draggable', false)
+
+    } else {
+        alert("Not all ships have been placed!")
+    }
+    saveShips();
 
 }
 
-//  $(document).ready(function () {
-//      $(".vhstwo").one("load", function (e) {
-//          var el = $(this);
-//          $(function () {
-//              el.fadeIn(500);
-//          });
-//      }).each(function () {
-//          if (this.complete) $(this).load();
-//      });
-//      //Custom Ghost Image 
-//      document.getElementById("tape").addEventListener("dragstart", function (e) {
-//          e.dataTransfer.setDragImage(img, 0, 200);
-//      }, false);
-//      var img = document.createElement("img");
-//      img.src = "https://i.imgur.com/FLqpRMq.png";
+let myShots = [];
 
-//  });
+function mySalvos() {
+    if (myShots.length < 5) {
 
+        if (this.classList.contains("selected")) {
+            this.classList.remove("selected")
+            // this.classList.add("green")
+            myShots = myShots.filter(el => el != this.id)
 
+        } else if (this.classList.contains("green")) {
+            alert("already fired this location!")
 
+        } else if (this.classList.contains("red")) {
+            alert("already fired this location!")
 
-// function allowDrop(ev) {
-//     ev.preventDefault();
-// }
+        } else {
+            this.classList.add("selected")
+            myShots.push(this.id)
+        }
+    } else if (myShots.length >= 5) {
 
-// function drag(ev) {
-//     ev.dataTransfer.setData("text", ev.target.id);
-//     console.log("EVENT ID", ev.target.id)
-// }
+        if (this.classList.contains("selected")) {
+            this.classList.remove("selected")
+            myShots = myShots.filter(el => el != this.id)
+        }
+    } else {
+        alert("already 5 shots for this round!")
+    }
+}
+console.log(myShots);
 
-// let myShip = null;
-// let shipValue = "";
-// let myPosition = "";
-// let fullPosition = [];
-// let myPlacedShips = {};
-// let allPlaces = [];
-// let myShips = [];
-// let allPosition = [];
-// let lastShip = [];
+let mySavedShots = [];
 
-// function drop(ev) {
-
-//     Object.values(myPlacedShips).flat();
-//     ev.preventDefault();
-
-//     let data = ev.dataTransfer.getData("text");
-//     console.log("Data: " + data);
-//     console.log("Element ", document.getElementById(data));
-
-//     let targets = ev.target.id;
-
-//     if (document.getElementById(data).classList.contains("horizontal")) {
-//         let myNumber = targets.slice(1)
-//         let myLetter = targets.slice(0, 1)
-
-//         shipValue = parseInt((document.getElementById(data)).className);
-//         myPosition = letter.indexOf(myLetter);
-
-//         for (let i = 0; i < shipvalue + 1; i++) {
-//             myShips = (letter.slice(myPosition, (myPosition + i)))
-//             myShips = myShips.map(pos => pos + myNumber)
-//         }
-//     } else if (document.getElementById(data).classList.contains("vertical")) {
-//         let myLetter = targets.slice(0, 1)
-//         let myNumber = targets.slice(1)
-//         console.log(myNumber)
-
-//         shipValue = parseInt((document.getElementById(data)).className);
-
-//         let myPosition = numbers.indexOf(myNumber);
-//         console.log(myPosition)
-
-//         for (let i = 0; i < shipvalue + 1; i++) {
-//             myShips = (numbers.slice(myPosition, (myPosition + i)))
-//             myShips = myShips.map(pos => myLetter + pos)
-//         }
-//     }
-//     console.log(myShips, "my ship positions")
-//     myShips.forEach(sq => console.log(document.getElementById(sq)))
-//     // if (ev.target.classList.contains('Images/battleship.png') || ev.target.id == myShip || myShips.some(pos => allPosition.includes(pos))) {
-//     if (ev.target.classList.contains("blue") || ev.target.id == myShip || myShips.some(pos => allPosition.includes(pos))) {
-
-//         alert("Can't place here, other ship!")
-//     } else {
-//         ev.target.appendChild(document.getElementById(data));
-//         myShip = document.getElementById(data).id;
-//         console.log("My ship: " + myShip);
-
-//         //-------Removes classes of last positions if the ship was already placed-----//
-//         if (Object.keys(myPlacedShips).includes(myShip)) {
-//             // myPlacedShips[myShip].forEach(sq => document.getElementById(sq).classList.remove('Images/battleship.png'))
-//             myPlacedShips[myShip].forEach(sq => document.getElementById(sq).classList.remove("blue"))
-//             allPosition = allPosition.filter(f => !myPlacedShips[myShip].includes(f))
-//             console.log(myPlacedShips[myShip])
-
-//         }
-//         if (document.getElementById(data).classList.contains("horizontal")) {
-
-//             let myNumber = targets.slice(1)
-//             console.log(myNumber)
-//             let myLetter = targets.slice(0, 1)
-
-//             shipValue = parseInt((document.getElementById(data)).className);
-//             myPosition = letter.indexOf(myLetter);
-
-//             for (let i = 0; i < shipvalue + 1; i++) {
-//                 myShips = (letter.slice(myPosition, (myPosition + i)))
-//                 myShips = myShips.map(pos => pos + myNumber)
-//             }
-
-//             if (11 - myPosition < shipValue) {
-//                 fullPosition = letter.slice(-shipValue)
-//                     .map(pos => pos + myNumber);
-//             } else {
-//                 fullPosition = letter.slice(myPosition, (myPosition + shipValue))
-//                     .map(pos => pos + myNumber);
-//             }
-
-//         } else if (document.getElementById(data).classList.contains("vertical")) {
-//             let myLetter = targets.slice(0, 1)
-//             console.log(myLetter)
-//             let myNumber = targets.slice(1)
-//             console.log(myNumber)
-
-//             shipValue = parseInt((document.getElementById(data)).className);
-
-//             let myPosition = numbers.indexOf(myNumber);
-//             console.log(myPosition)
-
-//             for (let i = 0; i < shipvalue + 1; i++) {
-//                 myShips = (numbers.slice(myPosition, (myPosition + i)))
-//                 myShips = myShips.map(pos => myLetter + pos)
-//             }
-//             if (11 - myPosition < shipValue) {
-//                 fullPosition = numbers.slice(-shipValue)
-//                     .map(pos => myLetter + pos);
-//             } else {
-//                 fullPosition = numbers.slice(myPosition, (myPosition + shipValue))
-//                     .map(pos => myLetter + pos);
-//             }
-//         }
-//         myPlacedShips[myShip] = fullPosition;
-//         allPosition.push(...fullPosition)
-//         lastShip.push(myShip)
-//         lastShip = [...new Set(lastShip)];
-//         console.log(lastShip);
-//         console.log(allPosition);
-//     }
-// }
-
-// divInside.ondragover = function () {
-//     allowDrop(event)
-// };
-// divInside.ondrop = function () {
-//     drop(event)
-// };
-
-// function vertical(el) {
-
-//     if (el.classList.contains("horizontal")) {
-//         el.classList.remove("horizontal");
-//         el.classList.add("vertical");
-//     } else if (el.classList.contains("vertical")) {
-//         el.classList.remove("vertical")
-//         el.classList.add("horizontal")
-//     }
-//     console.log(el.classList)
-// }
+function saveShots() {
+    if (myShots.length > 0) {
+        myShots.forEach(shot => mySavedShots.push(shot))
+    }
+}
+console.log(mySavedShots)

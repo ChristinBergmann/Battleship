@@ -170,12 +170,11 @@ public class SalvoController {
     public Map<String, Object> findPlayerGame(@PathVariable Long gm_id, Authentication authentication) {
 
         Game game = gameRepo.getOne(gm_id);
+        GamePlayer myGameplayer = getMyGamePlayer_fromGame(game, authentication);
 
         if (authentication.getName() == null) {
             return null;
         }
-
-        GamePlayer myGameplayer = getMyGamePlayer_fromGame(game, authentication);
 
         long playerID = myGameplayer.getPlayer().getId();
         long userID = playerRepo.findByUserName(authentication.getName()).getId();
@@ -321,9 +320,7 @@ public class SalvoController {
         Player currentPlayer = playerRepo.findByUserName(authentication.getName());
         String opponentPlayerGame = optionalGame.getGamePlayers().stream().findFirst().get().getPlayer().getUserName();
 
-        if (gameRepo.findById(id) == null) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        gameRepo.findById(id);
         if (!currentPlayer.getUserName().equals(opponentPlayerGame) && optionalGame.getGamePlayers().size() <= 1) {
 
             GamePlayer gamePlayerNew = new GamePlayer(new Date());

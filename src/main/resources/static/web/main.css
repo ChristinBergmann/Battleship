@@ -102,20 +102,21 @@ button {
 
 .score {
 
+    justify-content: center;
     padding: 10px 0px 10px 0px;
 }
 
 /***************_________________________________ GAME SITE OF GAMEPLAYER ______________________________******************/
 
 .blue {
+    background-image: url('Images/battleship.png');
+    background-size: 33px 33px;
 
-    background-color: blue;
 }
 
 .green {
-
-    background-color: green;
-
+    background-image: url('Images/bomb.png');
+    background-size: 33px 33px;
 }
 
 .orange {
@@ -124,21 +125,22 @@ button {
 }
 
 .red {
+    background-image: url('Images/explosion.png');
+    background-size: 33px 33px;
 
-    background-color: red;
 }
 
 #carrier {
-    /* background-image: url('Images/battleship.png'); */
+    background-image: url('Images/battleship.png');
     background-color: blue;
     width: 175px;
     height: 35px;
     /* margin-bottom: 5px; */
-    transition: all 0.2 linear;
+    /* transition: all 0.2 linear; */
 }
 
 #battleship {
-    /* background-image: url('Images/battleship.png'); */
+    background-image: url('Images/battleship.png');
     background-color: blue;
     width: 140px;
     height: 35px;
@@ -146,7 +148,7 @@ button {
 }
 
 #submarine {
-    /* background-image: url('Images/battleship.png'); */
+    background-image: url('Images/battleship.png');
     background-color: blue;
     width: 105px;
     height: 35px;
@@ -154,7 +156,7 @@ button {
 }
 
 #destroyer {
-    /* background-image: url('Images/battleship.png'); */
+    background-image: url('Images/battleship.png');
     background-color: blue;
     width: 105px;
     height: 35px;
@@ -162,7 +164,7 @@ button {
 }
 
 #patrol {
-    /* background-image: url('Images/battleship.png'); */
+    background-image: url('Images/battleship.png');
     background-color: blue;
     width: 70px;
     height: 35px;
@@ -179,12 +181,13 @@ button {
 
 
 .selected {
-    /* background-image: url('Images/Ships_blue.jpg'); */
-    background-color: darkmagenta;
-
+    /* background-color: darkmagenta; */
+    background-image: url('Images/bomb.png');
+    background-size: 33px 33px;
 }
 
 .savedshots {
-    /* background-image: url('Images/bomb.png'); */
     background-color: darkmagenta;
+    /* background-image: url('Images/bomb.png'); */
+    background-size: 33px 33px;
 }

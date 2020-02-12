@@ -24,12 +24,12 @@
         <div class="buttons">
             <!-- onclick="back()" -->
             <a href="games.html"><button type="button" class="btn btn-outline-primary" id="backButton">Back</button></a>
-            <button type="button" class="btn btn-outline-primary" onclick="saveallShips()">Save Ships</button>
-            <button type="button" class="btn btn-outline-primary" onclick="postSalvos()">Save Shots</button>
+            <button type="button" class="btn btn-outline-primary" onclick="saveShips()">Save Ships</button>
+            <button type="button" class="btn btn-outline-primary" onclick="saveShots()">Save Shots</button>
         </div>
 
 
-        <div class="container-sm">
+        <div class="container">
             <div id="gameInfo">
             </div>
             <div class="mine-yours">
@@ -39,24 +39,25 @@
             </div>
         </div>
 
-        <div id="boards">
-            <div class="ships">
-                <div id="ship">
+
+        <div class="container">
+            <div id="boards" class="ships-board">
+                <div id="ship" class="ship">
                     <div>
-                        <img src="Images/battleship.png" id="CARRIER" draggable="true" ondragstart="drag(event)"
-                            class="4 horizontal" ondblclick="vertical(this)">CARRIER</div>
+                        <img src="Images/battleship.png" height="33" width="33" id="PATROLBOAT" draggable="true"
+                            ondragstart="drag(event)" class="2 horizontal" ondblclick="vertical(this)">PATROLBOAT</div>
                     <div>
-                        <img src="Images/battleship.png" id="BATTLESHIP" draggable="true" ondragstart="drag(event)"
-                            value="3" class="horizontal" ondblclick="vertical(this)">BATTLESHIP</div>
+                        <img src="Images/battleship.png" height="33" width="33" id="BATTLESHIP" draggable="true"
+                            ondragstart="drag(event)" class="3 horizontal" ondblclick="vertical(this)">BATTLESHIP</div>
                     <div>
-                        <img src="Images/battleship.png" id="DESTROYER" draggable="true" ondragstart="drag(event)"
-                            class="5 horizontal" ondblclick="vertical(this)">DESTROYER</div>
+                        <img src="Images/battleship.png" height="33" width="33" id="SUBMARINE" draggable="true"
+                            ondragstart="drag(event)" class="3 horizontal" ondblclick="vertical(this)">SUBMARINE</div>
                     <div>
-                        <img src="Images/battleship.png" id="SUBMARINE" draggable="true" ondragstart="drag(event)"
-                            class="3 horizontal" ondblclick="vertical(this)">SUBMARINE</div>
+                        <img src="Images/battleship.png" height="33" width="33" id="CARRIER" draggable="true"
+                            ondragstart="drag(event)" class="4 horizontal" ondblclick="vertical(this)">CARRIER</div>
                     <div>
-                        <img src="Images/battleship.png" id="PATROLBOAT" draggable="true" ondragstart="drag(event)"
-                            class="2 horizontal" ondblclick="vertical(this)">PATROLBOAT</div>
+                        <img src="Images/battleship.png" height="33" width="33" id="DESTROYER" draggable="true"
+                            ondragstart="drag(event)" class="5 horizontal" ondblclick="vertical(this)">DESTROYER</div>
                 </div>
             </div>
         </div>

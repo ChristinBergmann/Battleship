@@ -152,14 +152,12 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 			//////-------------creating + adding ships-----------------//////
 
-
 			// ships
-			final String CARRIER = "CARRIER";
+			final String PATROLBOAT = "PATROLBOAT";
 			final String BATTLESHIP = "BATTLESHIP";
 			final String SUBMARINE = "SUBMARINE";
+			final String CARRIER = "CARRIER";
 			final String DESTROYER = "DESTROYER";
-			final String PATROLBOAT = "PATROLBOAT";
-
 
 			//saves + creates ships for gp1 -game1
 			Ship ship1 = new Ship("CARRIER", Arrays.asList("H3", "H4", "H5", "H6", "H7"), gamePlayer1);
