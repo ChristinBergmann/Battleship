@@ -2,13 +2,10 @@
 getData()
 async function getData() {
     let response = await fetch('http://localhost:8080/api/games');
-    //console.log(response)
     let dataGames = await response.json()
-    console.log(dataGames)
     renderGames(dataGames);
-
-
 }
+
 ////______________________________________________ POSTS Games _________________________________________////
 
 function renderGames(dataGames) {
@@ -38,7 +35,6 @@ function renderGames(dataGames) {
             gameLink.addEventListener("click", function () {
 
                 postOptionalGame(GAME_Id)
-                //console.log("this is the gameID", game.Game_Id)/*works*/
             })
 
             gamesList.appendChild(divGames);
@@ -147,10 +143,8 @@ function postNewGame() {
 getDataRanking()
 async function getDataRanking() {
     let response = await fetch('http://localhost:8080/api/leaderboard');
-    //console.log(response) /*works*/
     let dataPlayers = await response.json()
     renderRankingPlayers(dataPlayers);
-    //console.log(dataPlayers) /*works*/
 
 }
 /////------------------ POSTS RANKING (Player with its Total Scores) -----------------/////

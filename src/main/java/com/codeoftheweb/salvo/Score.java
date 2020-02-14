@@ -11,7 +11,7 @@ public class Score {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "player_id")
@@ -33,7 +33,7 @@ public class Score {
 
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
     public void setId(long id) {

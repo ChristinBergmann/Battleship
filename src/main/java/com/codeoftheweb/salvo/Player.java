@@ -12,7 +12,7 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private long id;
+    private Long id;
     private String userName;
     private String password;
     private String email;
@@ -46,7 +46,7 @@ public class Player {
     }
 
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
     public void setId(long id) {

@@ -126,24 +126,26 @@ for (let i = 1; i < 11; i++) {
 
     }
 }
+divInside.ondragover = function () {
+    allowDrop(event);
+};
+divInside.ondrop = function () {
+    drop(event);
+};
 
-///____________________________________________________________ get DATA of LOGGED IN GAMEPLAYER  ____________________________________________________///
+
+///___________________________________________________________ get DATA of LOGGED IN GAMEPLAYER  __________________________________________________///
 
 const urlParams = new URLSearchParams(window.location.search);
 const myParam = window.location.search.split("=")[1]
-//console.log("this is my Param", myParam)
-
 
 getData()
 async function getData() {
-    console.log("I am working")
-    console.log(myParam)
+    console.log("I am working", myParam)
     let response = await fetch(`http://localhost:8080/api/game_view/${myParam}`);
-    console.log(response); /*works*/
-    let data = await response.json() /*works*/
-    console.log(data);
+    console.log(response);
+    let data = await response.json()
     renderGamePlayerInfos(data)
-
 }
 
 function renderGamePlayerInfos(data) {
@@ -161,7 +163,6 @@ function renderGamePlayerInfos(data) {
     versusDiv.appendChild(h3)
 
     /////------------------- Displays SCORES of both GPs in the between Boards ---------------///// 
-
     const scoreVersus = document.getElementById("score")
     let scoreH3 = document.createElement("h3")
 
@@ -173,34 +174,43 @@ function renderGamePlayerInfos(data) {
     scoreVersus.appendChild(scoreH3)
 
     /////--------------------- Displays SHIPS of the GP in the Ships Board -------------------/////
-
     let locationArray = [];
     data.Curr_ships.forEach(ship => {
-        if (fieldsArray[i].id == locationArray[j]) {
-            fieldsArray[i].classList.add("blue")
-        }
         locationArray.push(ship.Location);
     })
+    for (let i = 1; i < 11; i++) {
+        for (let j = 0; j < 10; j++) {
+            if (fieldsArray[i].id == locationArray[j]) {
+                fieldsArray[i].classList.add("blue")
+            }
+        }
+    }
 
     /////------------------- Displays SHOTS of the GP in the Shots Board -------------------/////
-
     let shotsArray = [];
     data.Curr_shots.forEach(shot => {
-        if (fieldsArray2[i].id == shotsArray[j]) {
-            fieldsArray2[i].classList.add("green")
-        }
         shotsArray.push(shot.Location);
     })
+    for (let i = 1; i < 11; i++) {
+        for (let j = 0; j < 10; j++) {
+            if (fieldsArray[i].id == locationArray[j]) {
+                fieldsArray[i].classList.add("green")
+            }
+        }
+    }
 
     // /////----------------- Displays HITS by OpponentGP in the Ships Board -----------------////// 
-
     let hitsArray = [];
     data.Curr_hits.forEach(hit => {
-        if (fieldsArray[i].id == hitsArray[j]) {
-            fieldsArray[i].classList.add("red")
-        }
         hitsArray.push(hit.Location);
     })
+    for (let i = 1; i < 11; i++) {
+        for (let j = 0; j < 10; j++) {
+            if (fieldsArray[i].id == locationArray[j]) {
+                fieldsArray[i].classList.add("red")
+            }
+        }
+    }
 }
 
 /////--------------- GAME RESULTS ------------------/////
@@ -218,7 +228,7 @@ function renderGamePlayerInfos(data) {
 
 // }
 
-/////____________________________________________________________ SHIPS DRAG n DROP __________________________________________________________/////
+/////________________________________________________________ SHIPS DRAG n DROP __________________________________________________________/////
 
 function drag(ev) {
     ev.dataTransfer.setData("text/plain", ev.target.id);
@@ -243,16 +253,14 @@ let lastShip = [];
 function drop(ev) {
     Object.values(placedShips).flat();
     ev.dataTransfer.clearData();
-    //console.log(Object.values(placedShips))
 
     let data = ev.dataTransfer.getData("text");
     let draggableElement = document.getElementById(data);
-    // draggableElement.classList.add("blue");
     let target = ev.target;
     //console.log(draggableElement)
     //console.log(target)
 
-    //*-----get the positions in board------*//
+    //*------get the positions in board------*//
     if (draggableElement.classList.contains("horizontal")) {
         let myNumber = target.id.slice(1)
         let myLetter = target.id.slice(0, 1)
@@ -274,22 +282,18 @@ function drop(ev) {
             myShips = (numbers.slice(myPosition, (myPosition + i)))
             myShips = myShips.map(pos => myLetter + pos)
         }
-
     }
-    //*-----post ships in board------*//
+    //*------post ships in board------*//
     console.log(myShips)
     if (myShips.some(pos => allPosition.includes(pos))) {
-        // if (target.classList.contains("blue") || target.id == myShips || myShips.some(pos => allPosition.includes(pos))) {
 
         alert("NO SPACE, take another ship please!")
-
     } else {
         myShips.forEach(x => document.getElementById(x).classList.add("blue"))
 
         target.appendChild(draggableElement);
-        myShip = draggableElement.id
-        console.log("My ship: " + myShip);
 
+        myShip = draggableElement.id
         if (draggableElement.classList.contains("horizontal")) {
             let myNumber = target.id.slice(1)
             let myLetter = target.id.slice(0, 1)
@@ -301,6 +305,7 @@ function drop(ev) {
                 myShips = (letters.slice(myPosition, (myPosition + i)))
                 myShips = myShips.map(pos => pos + myNumber)
             }
+            //*--checks if ships fit in the board--*//
             if (11 - myPosition < shipValue) {
                 fullPosition = letters.slice(-shipValue)
                     .map(pos => pos + myNumber);
@@ -311,19 +316,14 @@ function drop(ev) {
         } else if (draggableElement.classList.contains("vertical")) {
             let myLetter = target.id.slice(0, 1)
             let myNumber = target.id.slice(1)
-            console.log(myLetter)
-            console.log(myNumber)
 
             shipValue = parseInt(draggableElement.className);
-            console.log(shipValue)
-
             let myPosition = numbers.indexOf(myNumber);
-            console.log(myPosition)
-
             for (let i = 0; i < shipValue + 1; i++) {
                 myShips = (numbers.slice(myPosition, (myPosition + i)))
                 myShips = myShips.map(pos => myLetter + pos)
             }
+            //*--checks if ships fit in the board--*//
             if (11 - myPosition < shipValue) {
                 fullPosition = numbers.slice(-shipValue)
                     .map(pos => myLetter + pos);
@@ -333,24 +333,13 @@ function drop(ev) {
             }
         }
         placedShips[myShip] = fullPosition;
-        console.log(placedShips[myShip])
-        console.log(fullPosition)
-        fullPosition.forEach(x => allPosition.push(x))
-
-        console.log(allPosition)
+        fullPosition.forEach(x => allPosition.push(x));
         lastShip.push(myShip)
-        lastShip = [new Set(lastShip)];
-        console.log(lastShip);
-        console.log(allPosition);
+        // lastShip = [new Set(lastShip)];
+        // console.log(lastShip);
+        // console.log(allPosition);
     }
 }
-
-divInside.ondragover = function () {
-    allowDrop(event);
-};
-divInside.ondrop = function () {
-    drop(event);
-};
 
 function vertical(el) {
 
@@ -361,15 +350,67 @@ function vertical(el) {
         el.classList.remove("vertical")
         el.classList.add("horizontal")
     }
-    console.log(el.classList)
 }
 
+//////---------------it worked down till alert of save Ships CHECK IT-----------//////////////
+function postShips(type, location) {
+    try {
+        const urlParam = window.location.href;
+        console.log(urlParam)
+        const url = new URL(urlParam);
+        const id = url.searchParams.get("gm");
+        console.log(id);
+
+
+        let response = fetch(`http://localhost:8080/api/players/${id}/ships`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                "Content-Type": "application/json",
+                credentials: 'include',
+            },
+            body: JSON.stringify([{
+                type,
+                location
+            }])
+        });
+        if (response.status === 201) {
+            console.log("works")
+        } else if (response.status === 403) {} else {}
+    } catch (error) {
+        console.log("Error: ", error)
+    }
+}
+
+// {
+//     patrolboat: ["", ""]
+// }
+
+
+// [
+//     {
+//         name: "patrolboat",
+//         location: ["", ""]
+//     },
+//     {
+//         name: "patrolboat",
+//         location: ["", ""]
+//     }
+// ]
+
+
 function saveShips() {
-    if (allPosition.length == 17) {
-        // if (lastShip.length == 5) {
+    console.log(lastShip);
+    console.log(allPosition);
+
+    if (lastShip.length == 5 && allPosition.length == 17) {
+        console.log("placedships", placedShips)
+        postShips(placedShips)
 
         // Object.keys(placedShips).forEach(function (myShip) {
-        //     saveShips(myShip, placedShips[myShip])
+        //     console.log(myShip)
+        //     console.log(placedShips)
+        //     postShips(myShip, placedShips[myShip])
         // });
         document.getElementById('PATROLBOAT').setAttribute('draggable', false)
         document.getElementById('BATTLESHIP').setAttribute('draggable', false)
@@ -380,10 +421,8 @@ function saveShips() {
     } else {
         alert("Not all ships have been placed!")
     }
-    saveShips();
-
 }
-
+/////_____________________________ Save SHIPS ___________________________/////
 let myShots = [];
 
 function mySalvos() {
@@ -394,18 +433,17 @@ function mySalvos() {
             // this.classList.add("green")
             myShots = myShots.filter(el => el != this.id)
 
-        } else if (this.classList.contains("green")) {
+        } else if (this.classList.contains("green" || this.classList.contains("red"))) {
             alert("already fired this location!")
-
-        } else if (this.classList.contains("red")) {
-            alert("already fired this location!")
-
-        } else {
+        }
+        // else if (this.classList.contains("red")) {
+        //     alert("already fired this location!")
+        // }
+        else {
             this.classList.add("selected")
             myShots.push(this.id)
         }
     } else if (myShots.length >= 5) {
-
         if (this.classList.contains("selected")) {
             this.classList.remove("selected")
             myShots = myShots.filter(el => el != this.id)
@@ -416,11 +454,43 @@ function mySalvos() {
 }
 console.log(myShots);
 
+/////_____________________________ Save SHOTS ___________________________/////
 let mySavedShots = [];
 
 function saveShots() {
     if (myShots.length > 0) {
         myShots.forEach(shot => mySavedShots.push(shot))
+    }
+    try {
+        // const urlParams = window.location.href;
+        // console.log(urlParams)
+        // const url = new URL(urlParams);
+        // const myToken = url.searchParams.get("gamePlayerId");
+        // console.log(myToken);
+        // const gamePlayerId = myToken;
+
+        let response = fetch(`http://localhost:8080/api/games/players/${gm_id}/ships`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                "Content-Type": "application/x-www-form-urlencoded",
+                credentials: 'include',
+            },
+            body: JSON.stringify({
+                turn: myTurn + 1,
+                location: myShots
+            })
+        });
+        if (response.status === 201) {
+            console.log("post good")
+        } else if (response.status === 403) {} else {
+            alert("Salvo saved!")
+            myShots = [];
+            location.reload();
+        }
+    } catch (error) {
+        console.log("Error: ", error)
+        alert("You need to choose a location to fire a salvo!")
     }
 }
 console.log(mySavedShots)
