@@ -181,8 +181,8 @@ button {
 
 
 .selected {
-    /* background-color: darkmagenta; */
-    background-image: url('Images/bomb.png');
+    background-color: darkmagenta;
+    /* background-image: url('Images/bomb.png'); */
     background-size: 33px 33px;
 }
 

@@ -105,7 +105,6 @@ boardContainer.appendChild(divInside2);
 divInside2.id = 'boardgame2';
 
 let fieldsArray2 = [];
-
 for (let i = 1; i < 11; i++) {
     for (let j = 0; j < 10; j++) {
 
@@ -123,7 +122,6 @@ for (let i = 1; i < 11; i++) {
 
         field2.style.top = topPosition2 + 735 + 'px';
         field2.style.left = leftPosition2 + 735 + 'px';
-
     }
 }
 divInside.ondragover = function () {
@@ -132,7 +130,6 @@ divInside.ondragover = function () {
 divInside.ondrop = function () {
     drop(event);
 };
-
 
 ///___________________________________________________________ get DATA of LOGGED IN GAMEPLAYER  __________________________________________________///
 
@@ -147,10 +144,11 @@ async function getData() {
     let data = await response.json()
     renderGamePlayerInfos(data)
 }
+let myTurn;
 
 function renderGamePlayerInfos(data) {
     console.log(data)
-
+    myTurn = data.Curr_turns
     /////--------------------------------- Displays VERSUS Board ------------------------------/////
     const versusDiv = document.getElementById("versus")
     let h3 = document.createElement("h3")
@@ -257,8 +255,6 @@ function drop(ev) {
     let data = ev.dataTransfer.getData("text");
     let draggableElement = document.getElementById(data);
     let target = ev.target;
-    //console.log(draggableElement)
-    //console.log(target)
 
     //*------get the positions in board------*//
     if (draggableElement.classList.contains("horizontal")) {
@@ -335,8 +331,7 @@ function drop(ev) {
         placedShips[myShip] = fullPosition;
         fullPosition.forEach(x => allPosition.push(x));
         lastShip.push(myShip)
-        // lastShip = [new Set(lastShip)];
-        // console.log(lastShip);
+        console.log(lastShip);
         // console.log(allPosition);
     }
 }
@@ -353,14 +348,13 @@ function vertical(el) {
 }
 
 //////---------------it worked down till alert of save Ships CHECK IT-----------//////////////
-function postShips(type, location) {
+function postShips(type, locations) {
     try {
         const urlParam = window.location.href;
         console.log(urlParam)
         const url = new URL(urlParam);
         const id = url.searchParams.get("gm");
         console.log(id);
-
 
         let response = fetch(`http://localhost:8080/api/players/${id}/ships`, {
             method: 'POST',
@@ -371,7 +365,7 @@ function postShips(type, location) {
             },
             body: JSON.stringify([{
                 type,
-                location
+                locations,
             }])
         });
         if (response.status === 201) {
@@ -382,36 +376,14 @@ function postShips(type, location) {
     }
 }
 
-// {
-//     patrolboat: ["", ""]
-// }
-
-
-// [
-//     {
-//         name: "patrolboat",
-//         location: ["", ""]
-//     },
-//     {
-//         name: "patrolboat",
-//         location: ["", ""]
-//     }
-// ]
-
-
 function saveShips() {
-    console.log(lastShip);
-    console.log(allPosition);
 
     if (lastShip.length == 5 && allPosition.length == 17) {
-        console.log("placedships", placedShips)
-        postShips(placedShips)
-
-        // Object.keys(placedShips).forEach(function (myShip) {
-        //     console.log(myShip)
-        //     console.log(placedShips)
-        //     postShips(myShip, placedShips[myShip])
-        // });
+        Object.keys(placedShips).forEach(function (myShip) {
+            console.log(myShip)
+            console.log(placedShips)
+            postShips(myShip, placedShips[myShip])
+        });
         document.getElementById('PATROLBOAT').setAttribute('draggable', false)
         document.getElementById('BATTLESHIP').setAttribute('draggable', false)
         document.getElementById('SUBMARINE').setAttribute('draggable', false)
@@ -422,7 +394,7 @@ function saveShips() {
         alert("Not all ships have been placed!")
     }
 }
-/////_____________________________ Save SHIPS ___________________________/////
+/////_____________________________ Save SHOTS ___________________________/////
 let myShots = [];
 
 function mySalvos() {
@@ -430,22 +402,19 @@ function mySalvos() {
 
         if (this.classList.contains("selected")) {
             this.classList.remove("selected")
-            // this.classList.add("green")
             myShots = myShots.filter(el => el != this.id)
 
         } else if (this.classList.contains("green" || this.classList.contains("red"))) {
             alert("already fired this location!")
-        }
-        // else if (this.classList.contains("red")) {
-        //     alert("already fired this location!")
-        // }
-        else {
+        } else {
             this.classList.add("selected")
             myShots.push(this.id)
         }
     } else if (myShots.length >= 5) {
         if (this.classList.contains("selected")) {
             this.classList.remove("selected")
+            this.classList.add("green")
+
             myShots = myShots.filter(el => el != this.id)
         }
     } else {
@@ -462,14 +431,13 @@ function saveShots() {
         myShots.forEach(shot => mySavedShots.push(shot))
     }
     try {
-        // const urlParams = window.location.href;
-        // console.log(urlParams)
-        // const url = new URL(urlParams);
-        // const myToken = url.searchParams.get("gamePlayerId");
-        // console.log(myToken);
-        // const gamePlayerId = myToken;
+        const urlParam = window.location.href;
+        console.log(urlParam)
+        const url = new URL(urlParam);
+        const id = url.searchParams.get("gm");
+        console.log(id);
 
-        let response = fetch(`http://localhost:8080/api/games/players/${gm_id}/ships`, {
+        let response = fetch(`http://localhost:8080/api/games/players/${id}/ships`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -478,7 +446,7 @@ function saveShots() {
             },
             body: JSON.stringify({
                 turn: myTurn + 1,
-                location: myShots
+                locations: mySavedShots
             })
         });
         if (response.status === 201) {

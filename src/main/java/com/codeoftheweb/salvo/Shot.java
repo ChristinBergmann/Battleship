@@ -30,10 +30,9 @@ public class Shot {
 
     public Shot() { }
 
-    public Shot(Integer turn, List<String> locations, GamePlayer gamePlayer) {
+    public Shot(Integer turn, List<String> locations) {
         this.turn = turn;
         this.locations = locations;
-        this.gamePlayer = gamePlayer;
     }
 
 

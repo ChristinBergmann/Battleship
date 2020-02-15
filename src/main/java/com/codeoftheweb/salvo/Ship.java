@@ -32,10 +32,9 @@ public class Ship {
 
     public Ship() {}
 
-    public Ship (String type, List<String> locations, GamePlayer gamePlayer) {
+    public Ship (String type, List<String> locations) {
         this.type = type;
         this.locations = locations;
-        this.gamePlayer = gamePlayer;
     }
 
 
