@@ -277,7 +277,7 @@ public class SalvoController {
             @RequestParam String userName, @RequestParam String email, @RequestParam String password) {
 
         if (userName.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("Ooopsie you missed a field!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Ooopsie missing data!", HttpStatus.BAD_REQUEST);
         }
         if (playerRepo.findByUserName(userName) != null) {
             return new ResponseEntity<>("Username is already taken!", HttpStatus.CONFLICT);
@@ -383,11 +383,16 @@ public class SalvoController {
     @PostMapping(path = "/players/{id}/shots")
     public ResponseEntity<Object> addShots(@PathVariable Long id,
                                            @RequestBody List<Shot> shots, Authentication authentication) {
+        System.out.println("HAAAAALLLLOOOOOOOOOO");
+        System.out.println("shots coming in" + shots);
 
         Game game = gameRepo.getOne(id);
         Player currentPlayer = playerRepo.findByUserName(authentication.getName());
+        System.out.println(currentPlayer.getUserName());
         GamePlayer myGameplayer = getMyGamePlayer_fromGame(game, authentication);
+        System.out.println(myGameplayer.getId());
         GamePlayer opponentGameplayer = getOpponentGamePlayer(myGameplayer);
+        System.out.println(opponentGameplayer.getPlayer());
 
     gameRepo.findById(id);
     if (getMyGamePlayer_fromGame(game, authentication) == null){
@@ -408,10 +413,10 @@ public class SalvoController {
    */         if (opponentGameplayer.getShips().size() < 5) {
                 return new ResponseEntity<>(createMap("error", "You have to wait!"), HttpStatus.CONFLICT);
             }
-            if (myGameplayer.getShips().size() >= 5) {
+            if (myGameplayer.getShips().size() > 5) {
                 return new ResponseEntity<>(createMap("error", "Already placed ships!"), HttpStatus.FORBIDDEN);
             }
-            if (myGameplayer.getShots().size() >= 5) {
+            if (myGameplayer.getShots().size() > 5) {
                 return new ResponseEntity<>(createMap("error", "Already placed shots!"), HttpStatus.FORBIDDEN);
             }
             boolean methodCall = false;
@@ -419,12 +424,13 @@ public class SalvoController {
                 return new ResponseEntity<>(createMap("error", "The game is finished!"), HttpStatus.METHOD_NOT_ALLOWED);
             }
         }
+
         for (Shot shot : shots) {
                 myGameplayer.addShot(shot);
-                gamePlayerRepo.save(myGameplayer);
                 shotRepo.save(shot);
+            System.out.println(shots);
             }
-            //System.out.println("Your shots are placed!");
+            System.out.println("Your shots are placed!");
             return new ResponseEntity<>(createMap("success", "Your shots are placed!"), HttpStatus.CREATED);
         }
 
