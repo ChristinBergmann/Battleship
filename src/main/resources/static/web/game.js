@@ -113,9 +113,9 @@ for (let i = 1; i < 11; i++) {
 
         fieldsArray2.push(field2)
 
-        field2.id = 'f2' + (document.getElementsByClassName("outrow2")[i]).id + (document.getElementsByClassName("outcol2")[j]).id
+        field2.id = (document.getElementsByClassName("outrow2")[i]).id + (document.getElementsByClassName("outcol2")[j]).id
         field2.className = "field2";
-        field2.addEventListener("click", mySalvos)
+        field2.addEventListener("click", myPlacedShots)
 
         let topPosition2 = j * 35;
         let leftPosition2 = (i - 1) * 35;
@@ -142,17 +142,22 @@ async function getData() {
     let response = await fetch(`http://localhost:8080/api/game_view/${myParam}`);
     console.log(response);
     let data = await response.json()
+    console.log(data)
     renderGamePlayerInfos(data)
+
 }
 let myTurn;
+console.log(myTurn)
 
 function renderGamePlayerInfos(data) {
     console.log(data)
     myTurn = data.Curr_turns
+    console.log(myTurn)
+    console.log(data.Curr_shots)
     /////--------------------------------- Displays VERSUS Board ------------------------------/////
     const versusDiv = document.getElementById("versus")
     let h3 = document.createElement("h3")
-
+    console.log(data.Curr_name)
     if (data.Opp_name === undefined) {
         h3.innerHTML = data.Curr_name + " vs. " + " ¿? "
     } else
@@ -174,49 +179,46 @@ function renderGamePlayerInfos(data) {
     /////--------------------- Displays SHIPS of the GP in the Ships Board -------------------/////
     let locationArray = [];
     data.Curr_ships.forEach(ship => {
-        locationArray.push(ship.Location);
-    })
-    for (let i = 1; i < 11; i++) {
-        for (let j = 0; j < 10; j++) {
-            if (fieldsArray[i].id == locationArray[j]) {
-                fieldsArray[i].classList.add("blue")
-            }
-        }
-    }
+        locationArray.push(ship.Location)
+    });
+    locationArray.forEach(x => {
+        console.log(x)
+        x.forEach(sh => {
+            document.getElementById(sh).classList.add("boat")
+        })
 
-    /////------------------- Displays SHOTS of the GP in the Shots Board -------------------/////
-    let shotsArray = [];
-    data.Curr_shots.forEach(shot => {
-        shotsArray.push(shot.Location);
     })
-    for (let i = 1; i < 11; i++) {
-        for (let j = 0; j < 10; j++) {
-            if (fieldsArray[i].id == locationArray[j]) {
-                fieldsArray[i].classList.add("green")
-            }
-        }
-    }
+    /////------------------- Displays SHOTS of the GP in the Shots Board -------------------/////
+    data.Curr_shots.forEach(y => {
+        console.log(y)
+        document.getElementById(y).classList.add("bomb")
+    })
+
 
     // /////----------------- Displays HITS by OpponentGP in the Ships Board -----------------////// 
-    let hitsArray = [];
-    data.Curr_hits.forEach(hit => {
-        hitsArray.push(hit.Location);
+    // let hitsArray = [];
+    // data.Curr_hits.forEach(hit => {
+    //     hitsArray.push(hit.Location)
+    // });
+    //hitsArray.forEach(z => {
+    //console.log(z)
+    data.Curr_hits.forEach(h => {
+        console.log(h)
+        document.getElementById(h).classList.add("fire")
     })
-    for (let i = 1; i < 11; i++) {
-        for (let j = 0; j < 10; j++) {
-            if (fieldsArray[i].id == locationArray[j]) {
-                fieldsArray[i].classList.add("red")
-            }
-        }
-    }
+
 }
 
 /////--------------- GAME RESULTS ------------------/////
 
-// function getGameResult(score1, score2) {
-//   return (score1 > score2) ? 'You win!' 
-//     : (score1 < score2) ? 'You lost!'
-//     : 'It was a tie!';
+// function getGameResult(data) {
+
+//     let score1 = data.Curr_hits;
+//     let score2 = data.Opp_hits;
+
+//     return (score1 > score2) ? 'You win!' :
+//         (score1 < score2) ? 'You lost!' :
+//         'It was a tie!';
 // }
 
 
@@ -226,7 +228,7 @@ function renderGamePlayerInfos(data) {
 
 // }
 
-/////________________________________________________________ SHIPS DRAG n DROP __________________________________________________________/////
+/////________________________________________________________ PLACE SHIPS DRAG n DROP __________________________________________________________/////
 
 function drag(ev) {
     ev.dataTransfer.setData("text/plain", ev.target.id);
@@ -279,13 +281,12 @@ function drop(ev) {
             myShips = myShips.map(pos => myLetter + pos)
         }
     }
-    //*------post ships in board------*//
+    //*------get positions/locations of ships in board------*//
     console.log(myShips)
     if (myShips.some(pos => allPosition.includes(pos))) {
-
         alert("NO SPACE, take another ship please!")
     } else {
-        myShips.forEach(x => document.getElementById(x).classList.add("blue"))
+        myShips.forEach(x => document.getElementById(x).classList.add("boat"))
 
         target.appendChild(draggableElement);
 
@@ -347,7 +348,31 @@ function vertical(el) {
     }
 }
 
-//////---------------it worked down till alert of save Ships CHECK IT-----------//////////////
+/////____________________________________ SAVE SHIPS _________________________________/////
+
+function saveShips() {
+
+    if (lastShip.length == 5 && allPosition.length == 17) {
+        Object.keys(placedShips).forEach(function (myShip) {
+            console.log(myShip)
+            console.log(placedShips)
+            postShips(myShip, placedShips[myShip])
+        });
+        alert("Yay, your ships are saved!")
+
+        document.getElementById('PATROLBOAT').setAttribute('draggable', false)
+        document.getElementById('BATTLESHIP').setAttribute('draggable', false)
+        document.getElementById('SUBMARINE').setAttribute('draggable', false)
+        document.getElementById('CARRIER').setAttribute('draggable', false)
+        document.getElementById('DESTROYER').setAttribute('draggable', false)
+
+    } else {
+        alert("Not all ships have been placed!")
+    }
+}
+
+//////________________________________________________ POST SHIPS ________________________________//////////////
+
 function postShips(type, locations) {
     try {
         const urlParam = window.location.href;
@@ -376,60 +401,63 @@ function postShips(type, locations) {
     }
 }
 
-function saveShips() {
 
-    if (lastShip.length == 5 && allPosition.length == 17) {
-        Object.keys(placedShips).forEach(function (myShip) {
-            console.log(myShip)
-            console.log(placedShips)
-            postShips(myShip, placedShips[myShip])
-        });
-        document.getElementById('PATROLBOAT').setAttribute('draggable', false)
-        document.getElementById('BATTLESHIP').setAttribute('draggable', false)
-        document.getElementById('SUBMARINE').setAttribute('draggable', false)
-        document.getElementById('CARRIER').setAttribute('draggable', false)
-        document.getElementById('DESTROYER').setAttribute('draggable', false)
+/////____________________________________ PLACE SHOTS _________________________________/////
 
-    } else {
-        alert("Not all ships have been placed!")
-    }
-}
-/////_____________________________ Save SHOTS ___________________________/////
 let myShots = [];
 
-function mySalvos() {
-    if (myShots.length < 5) {
+function myPlacedShots() {
+    // Object.values().flat();
+
+    if (myShots.length < 3) {
+        console.log(myShots)
 
         if (this.classList.contains("selected")) {
             this.classList.remove("selected")
+            //this.classList.add("bomb")
             myShots = myShots.filter(el => el != this.id)
-
-        } else if (this.classList.contains("green" || this.classList.contains("red"))) {
+            console.log(myShots)
+        } else if (this.classList.contains("bomb") || this.classList.contains("fire")) {
             alert("already fired this location!")
         } else {
-            this.classList.add("selected")
+            this.classList.add("bomb")
             myShots.push(this.id)
         }
-    } else if (myShots.length >= 5) {
+    } else if (myShots.length > 3) {
         if (this.classList.contains("selected")) {
             this.classList.remove("selected")
-            this.classList.add("green")
 
             myShots = myShots.filter(el => el != this.id)
+            //this.classList.add("bomb")
+
         }
     } else {
-        alert("already 5 shots for this round!")
+        alert("already 3 shots for this round!")
     }
 }
 console.log(myShots);
 
-/////_____________________________ Save SHOTS ___________________________/////
+/////____________________________________ SAVE SHOTS _________________________________/////
+
 let mySavedShots = [];
 
 function saveShots() {
-    if (myShots.length > 0) {
-        myShots.forEach(shot => mySavedShots.push(shot))
+    myShots.forEach(shot => mySavedShots.push(shot));
+    if (myShots.length == 3) {
+        Object.keys(mySavedShots).forEach(function (myShots) {
+            console.log(myShots)
+            console.log(mySavedShots[myShots]) /*works till here*/
+            postShots(myShots, mySavedShots[myShots])
+        });
+        alert("Yay, your shots are saved!")
+    } else {
+        alert("Not all shots have been placed!")
     }
+}
+
+/////_________________________________________________ POST SHOTS _______________________________________________/////
+
+function postShots() {
     try {
         const urlParam = window.location.href;
         console.log(urlParam)
@@ -437,28 +465,28 @@ function saveShots() {
         const id = url.searchParams.get("gm");
         console.log(id);
 
-        let response = fetch(`http://localhost:8080/api/games/players/${id}/ships`, {
+        let response = fetch(`http://localhost:8080/api/players/${id}/shots`, {
             method: 'POST',
             headers: {
-                Accept: 'application/json',
-                "Content-Type": "application/x-www-form-urlencoded",
-                credentials: 'include',
+                'Accept': 'application/json;charset=UTF-8',
+                'Content-type': 'application/json;charset=UTF-8',
+                credentials: 'include'
             },
-            body: JSON.stringify({
-                turn: myTurn + 1,
+            body: JSON.stringify([{
+                turn: this.myTurn + 1,
+                //turn,
+                //locations
                 locations: mySavedShots
-            })
+            }])
         });
         if (response.status === 201) {
-            console.log("post good")
+            console.log(response)
+            console.log("works")
         } else if (response.status === 403) {} else {
-            alert("Salvo saved!")
             myShots = [];
             location.reload();
         }
     } catch (error) {
         console.log("Error: ", error)
-        alert("You need to choose a location to fire a salvo!")
     }
 }
-console.log(mySavedShots)

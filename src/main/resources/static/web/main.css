@@ -108,13 +108,13 @@ button {
 
 /***************_________________________________ GAME SITE OF GAMEPLAYER ______________________________******************/
 
-.blue {
+.boat {
     background-image: url('Images/battleship.png');
     background-size: 33px 33px;
 
 }
 
-.green {
+.bomb {
     background-image: url('Images/bomb.png');
     background-size: 33px 33px;
 }
@@ -124,7 +124,7 @@ button {
 
 }
 
-.red {
+.fire {
     background-image: url('Images/explosion.png');
     background-size: 33px 33px;
 
