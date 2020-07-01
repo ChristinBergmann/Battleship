@@ -8,6 +8,8 @@ import java.util.Optional;
 
 @RepositoryRestResource
 public interface GameRepository extends JpaRepository<Game, Long> {
-    Optional<Game> findById(Long id);
+    default Optional<Game> findById(Long id) {
+        return null;
+    }
 }
 

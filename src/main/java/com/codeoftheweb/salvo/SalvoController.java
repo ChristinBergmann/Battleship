@@ -8,13 +8,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
 
-
-@CrossOrigin(origins = "http://127.0.0.1:5500/")
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 
 @RequestMapping("/api")
@@ -37,9 +35,7 @@ public class SalvoController {
 
     @Autowired
     private ShotRepository shotRepo;
-
     private Object Object;
-
     private boolean methodCall = false;
 
 
@@ -114,10 +110,9 @@ public class SalvoController {
         return shots;
     }
 
-
     public List<Object> turnsInfo(GamePlayer gameplayer) {
         List<Object> turns = new ArrayList<>();
-        Integer turn = 0;
+        int turn = 0;
         for (Shot sh : gameplayer.getShots()) {
             //if (!gameplayer.getShots().isEmpty())
             for (int a = 0; a < sh.getTurn(); a++)
@@ -132,7 +127,6 @@ public class SalvoController {
        // }
         return turns;
     }
-
 
     public List<Object> hitsInfo(GamePlayer gameplayer) {
 
@@ -395,14 +389,11 @@ public class SalvoController {
         GamePlayer myGameplayer = getMyGamePlayer_fromGame(game, authentication);
         GamePlayer opponentGameplayer = getOpponentGamePlayer(myGameplayer);
 
-//        System.out.println("3 ME Player" + currentPlayer.getUserName());
-//        System.out.println("4 ME GP ID" + myGameplayer.getId());
+        System.out.println("3 ME Player" + currentPlayer.getUserName());
+        System.out.println("4 ME GP ID" + myGameplayer.getId());
 
     gameRepo.findById(id);
         System.out.println("HHHHEEEELLLOOOOOOOOOOO");
-        if (myGameplayer == null){
-            return new ResponseEntity<>(createMap("error", "GamePlayer does not exist!"), HttpStatus.UNAUTHORIZED);
-        }
         if (!myGameplayer.getPlayer().getId().equals(currentPlayer.getId())) {
             return new ResponseEntity<>(createMap("error", "This is not your Game!"), HttpStatus.UNAUTHORIZED);
         }
@@ -410,12 +401,6 @@ public class SalvoController {
             return new ResponseEntity<>(createMap("error", "You have no opponent Player"), HttpStatus.SERVICE_UNAVAILABLE);
         }
         else {
-
-
-//            if (checkIfShotsHasBeenAlreadyFired(myGameplayer, shots)) {
-//                return new ResponseEntity<>(createMap("error", "The salvos have already been added"), HttpStatus.FORBIDDEN);
-//            }
-
 
             if (opponentGameplayer.getShips().size() < 5) {
                 return new ResponseEntity<>(createMap("error", "You have to wait!"), HttpStatus.CONFLICT);
@@ -435,34 +420,27 @@ public class SalvoController {
 
         }
             for (Shot shot : shots) {
-                    myGameplayer.addShot(shot);
-                    shotRepo.save(shot);
+                    myGameplayer.addShot((Shot) shots);
+                    shotRepo.save((Shot) shots);
                 System.out.println("5 HERE are MY shots" + shots);
             }
-
-//            myGameplayer.addShot(shots);
-//            shotRepo.save(shots);
+            myGameplayer.addShot((Shot) shots);
+            shotRepo.save((Shot) shots);
 
             System.out.println("6 Your shots are placed!");
         return new ResponseEntity<>(createMap("success", "Your shots are placed!"), HttpStatus.CREATED);
         }
 
-
-
-
-//    private boolean checkIfShotsHasBeenAlreadyFired(GamePlayer myGameplayer, Shot shots) {
-//        List<Integer> gamePlayerTurn = myGameplayer.getShots().stream().map(Shot::getTurn).collect(toList());
-//        return gamePlayerTurn.contains(shots.getTurn());
-//    }
-
-
+        private boolean checkIfShotsHasBeenAlreadyFired(GamePlayer myGameplayer, Shot shots) {
+        List<Integer> gamePlayerTurn = myGameplayer.getShots().stream().map(Shot::getTurn).collect(Collectors.toList());
+        return gamePlayerTurn.contains(shots.getTurn());
+    }
 
     public Map<String, Object> createMap(String key, Object value) {
         Map<String, Object> map = new HashMap<>();
         map.put(key, value);
         return map;
     }
-
 }
 
 

@@ -159,7 +159,7 @@ function renderGamePlayerInfos(data) {
     let h3 = document.createElement("h3")
     console.log(data.Curr_name)
     if (data.Opp_name === undefined) {
-        h3.innerHTML = data.Curr_name + " vs. " + " ¿? "
+        h3.innerHTML = data.Curr_name + " vs. " + "  ¿?  ..waiting for a player to join"
     } else
         h3.innerHTML = data.Curr_name + " vs. " + data.Opp_name;
 
@@ -170,7 +170,7 @@ function renderGamePlayerInfos(data) {
     let scoreH3 = document.createElement("h3")
 
     if (data.Curr_score === undefined || data.Opp_score === undefined) {
-        scoreH3.innerHTML = " / "
+        scoreH3.innerHTML = " / " + " : " + " / ";
     } else
         scoreH3.innerHTML = data.Curr_score + " : " + data.Opp_score;
 
@@ -460,7 +460,7 @@ function saveShots() {
 function postShots() {
     try {
         const urlParam = window.location.href;
-        console.log(urlParam)
+        console.log(urlParam);
         const url = new URL(urlParam);
         const id = url.searchParams.get("gm");
         console.log(id);
@@ -480,13 +480,15 @@ function postShots() {
             }])
         });
         if (response.status === 201) {
-            console.log(response)
-            console.log("works")
-        } else if (response.status === 403) {} else {
+            console.log(response);
+            console.log("works");
+        } else if (response.status === 403) {
+            console.log("401", response);
+        } else {
             myShots = [];
             location.reload();
         }
     } catch (error) {
-        console.log("Error: ", error)
+        console.log("Error: ", error);
     }
 }

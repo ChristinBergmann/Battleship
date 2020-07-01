@@ -46,7 +46,7 @@ function logInAuthenticationInfo(username, password) {
             } else {
                 alert("Ooh something went wrong..try again!")
             }
-            console.log("IM LOGGED IN", status)
+            console.log("I`M LOGGED IN", status)
         })
         .catch(error => console.log(error));
 }
@@ -66,16 +66,16 @@ function signUpAuthenticationInfo(username, email, password) {
 
         })
         .then(function (response) {
-            //console.log(response)
+            //console.log(response);
             return response.status;
         })
         .then((status) => {
             if (status == 201) {
-                setTimeout(logInAuthenticationInfo(username, password), 1000)
+                setTimeout(logInAuthenticationInfo(username, password), 1000);
             } else {
-                alert("Ooh something went wrong..try again!")
+                alert("Ooh something went wrong..try again!");
             }
-            console.log("IM LOGGED OUT", status)
+            console.log("IM LOGGED OUT", status);
         })
         .catch(error => console.log(error));
 }

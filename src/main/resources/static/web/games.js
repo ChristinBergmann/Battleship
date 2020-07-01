@@ -2,7 +2,7 @@
 getData()
 async function getData() {
     let response = await fetch('http://localhost:8080/api/games');
-    let dataGames = await response.json()
+    let dataGames = await response.json();
     renderGames(dataGames);
 }
 
@@ -100,16 +100,16 @@ function postOptionalGame(GAME_Id) {
             }
         })
         .then(response => {
-            console.log(response)
-            return response.json()
+            console.log(response);
+            return response.json();
         })
         .then((res) => {
 
             if (res.gm_id) {
-                window.location.href = "game.html?gm=" + res.gm_id
+                window.location.href = "game.html?gm=" + res.gm_id;
             }
         })
-        .catch(error => console.log(error))
+        .catch(error => console.log(error));
 }
 
 /////____________________________________________________ POST NEW GAME ________________________________________________/////
@@ -132,7 +132,7 @@ function postNewGame() {
             console.log(res.gm_id)
 
             if (res.gm_id) {
-                window.location.href = "game.html?gm=" + res.gm_id
+                window.location.href = "game.html?gm=" + res.gm_id;
             }
         })
         .catch(error => console.log(error));
@@ -143,10 +143,10 @@ function postNewGame() {
 getDataRanking()
 async function getDataRanking() {
     let response = await fetch('http://localhost:8080/api/leaderboard');
-    let dataPlayers = await response.json()
+    let dataPlayers = await response.json();
     renderRankingPlayers(dataPlayers);
-
 }
+
 /////------------------ POSTS RANKING (Player with its Total Scores) -----------------/////
 
 function renderRankingPlayers(dataPlayers) {
@@ -205,13 +205,13 @@ function logOut() {
         })
         .then(function (response) {
             console.log("logged out", response);
-            return response.status
+            return response.status;
         })
         .then((status) => {
             if (status == 200) {
-                window.location.href = "index.html"
+                window.location.href = "index.html";
             } else {
-                alert("Ooh something went wrong..try again!")
+                alert("Ooh something went wrong..try again!");
             }
         })
         .catch(error => console.log(error));

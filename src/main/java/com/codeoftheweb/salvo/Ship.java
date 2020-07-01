@@ -1,11 +1,9 @@
 package com.codeoftheweb.salvo;
 
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Entity
 
@@ -15,19 +13,15 @@ public class Ship {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-
+    private String type;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "gamePlayer_id")
     private GamePlayer gamePlayer;
 
-    private String type;
-
-
     @ElementCollection
     @Column(name = "locations")
     private List<String> locations = new ArrayList<>();
-
 
 
     public Ship() {}
@@ -37,36 +31,19 @@ public class Ship {
         this.locations = locations;
     }
 
-
-    public void setType(String type) {
-        this.type = type;
-    }
     public String getType() {
         return type;
-    }
-
-
-    public void setLocations(List<String> locations) {
-        this.locations = locations;
     }
     public List<String> getLocations() {
         return this.locations;
     }
-
-
     public void setId(Long id) {
         this.id = id;
     }
     public Long getId() {
         return id;
     }
-
-
     public void setGamePlayer(GamePlayer gamePlayer) {
-        System.out.println(gamePlayer);
         this.gamePlayer = gamePlayer;
-    }
-    public GamePlayer getGamePlayer() {
-        return this.gamePlayer;
     }
 }
