@@ -142,7 +142,6 @@ getData();
 async function getData() {
   console.log("I am working", myParam);
   let response = await fetch(`http://localhost:8080/api/game_view/${myParam}`);
-  console.log(response);
   let data = await response.json();
   console.log(data);
   renderGamePlayerInfos(data);
@@ -224,7 +223,7 @@ function renderGamePlayerInfos(data) {
 function drag(ev) {
   ev.dataTransfer.setData("text/plain", ev.target.id);
   console.log("EVENT ID", ev.target.id); /*works*/
-  //ev.currentTarget.style.backgroundColor = "lightblue";
+  //   ev.currentTarget.style.backgroundColor = "lightblue";
 }
 
 function allowDrop(ev) {
@@ -256,6 +255,8 @@ function drop(ev) {
 
     shipValue = parseInt(draggableElement.className);
     myPosition = letters.indexOf(myLetter);
+    console.log(shipValue);
+    console.log(myPosition);
 
     for (let i = 0; i < shipValue + 1; i++) {
       myShips = letters.slice(myPosition, myPosition + i);
@@ -273,7 +274,7 @@ function drop(ev) {
     }
   }
   //*------get positions/locations of ships in board------*//
-  console.log(myShips);
+  console.log(myShips); //*works*
   if (myShips.some((pos) => allPosition.includes(pos))) {
     alert("NO SPACE, take another ship please!");
   } else {
@@ -323,7 +324,7 @@ function drop(ev) {
     placedShips[myShip] = fullPosition;
     fullPosition.forEach((x) => allPosition.push(x));
     lastShip.push(myShip);
-    console.log(lastShip);
+    console.log(lastShip); //last placed ship
     // console.log(allPosition);
   }
 }
