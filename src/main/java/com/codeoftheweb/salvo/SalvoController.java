@@ -420,7 +420,7 @@ public class SalvoController {
 
         }
             for (Shot shot : shots) {
-                    myGameplayer.addShot((Shot) shots);
+                     myGameplayer.addShot((Shot) shots);
                     shotRepo.save((Shot) shots);
                 System.out.println("5 HERE are MY shots" + shots);
             }

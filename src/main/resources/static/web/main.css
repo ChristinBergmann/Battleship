@@ -1,193 +1,182 @@
 body {
-    font-family: 'Roboto', 'sans-serif';
-    background-color: rgb(1, 3, 15);
+  font-family: "Roboto", "sans-serif";
+  background-color: rgb(1, 3, 15);
 }
 
 .header {
-
-    position: relative;
-    display: flex;
-    justify-content: center;
-    margin-top: 5%;
-    margin-bottom: 2%;
-
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 5%;
+  margin-bottom: 2%;
 }
 
 .header h1 {
-
-    margin: 0px;
-    position: relative;
-    font-family: sans-serif;
-    text-transform: uppercase;
-    font-size: 2.5em;
-    letter-spacing: 4px;
-    overflow: hidden;
-    background: linear-gradient(90deg, #000, #fff, #000);
-    background-repeat: no-repeat;
-    background-size: 80%;
-    animation: animate 4s linear infinite;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: rgba(21, 103, 197, 0.53);
+  margin: 0px;
+  position: relative;
+  font-family: sans-serif;
+  text-transform: uppercase;
+  font-size: 2.5em;
+  letter-spacing: 4px;
+  overflow: hidden;
+  background: linear-gradient(90deg, #000, #fff, #000);
+  background-repeat: no-repeat;
+  background-size: 80%;
+  animation: animate 4s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: rgba(21, 103, 197, 0.53);
 }
 
 @keyframes animate {
-    0% {
-        background-position: -500%;
-    }
+  0% {
+    background-position: -500%;
+  }
 
-    100% {
-        background-position: 500%;
-    }
+  100% {
+    background-position: 500%;
+  }
 }
 
 /***************_________________________________ OVERVIEW SITE OF GAMES ______________________________******************/
 
 #games {
-
-    position: relative;
-    display: flex;
-    justify-content: space-around;
-    margin: 35px 5px 35px 5px;
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  margin: 35px 5px 35px 5px;
 }
 
 .games-div {
-
-    display: flex;
-    flex-direction: column;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
 .table table {
-
-    margin: 0px;
+  margin: 0px;
 }
 
 /***************_________________________________ MANAGER SITE OF GAMEPLAYER ______________________________******************/
-@media(min-width: 768px) {
-    .field-label-responsive {
-        padding-top: .5rem;
-        text-align: right;
-    }
+@media (min-width: 768px) {
+  .field-label-responsive {
+    padding-top: 0.5rem;
+    text-align: right;
+  }
 }
 
 /***************_________________________________ GAME SITE OF GAMEPLAYER ______________________________******************/
 
 #versus {
-
-    position: relative;
-    display: flex;
-    justify-content: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .buttons {
-
-    position: relative;
-    display: flex;
-    justify-content: center;
-    padding: 10px 0px 10px 0px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0px 10px 0px;
 }
 
 button {
-
-    justify-content: space-around;
-    margin: 5px 5px 5px 5px;
+  justify-content: space-around;
+  margin: 5px 5px 5px 5px;
 }
 
 .mine-yours {
-
-    display: flex;
-    justify-content: space-around;
-    margin-top: 30px;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 30px;
 }
 
 .score {
+  justify-content: center;
+  padding: 10px 0px 10px 0px;
+}
 
-    justify-content: center;
-    padding: 10px 0px 10px 0px;
+.info {
+  text-align: center;
 }
 
 /***************_________________________________ GAME SITE OF GAMEPLAYER ______________________________******************/
 
 .boat {
-    background-image: url('Images/battleship.png');
-    background-size: 33px 33px;
-
+  background-image: url("Images/battleship.png");
+  background-size: 33px 33px;
 }
 
 .bomb {
-    background-image: url('Images/bomb.png');
-    background-size: 33px 33px;
+  background-image: url("Images/bomb.png");
+  background-size: 33px 33px;
 }
 
 .orange {
-    background-color: orange;
-
+  background-color: orange;
 }
 
 .fire {
-    background-image: url('Images/explosion.png');
-    background-size: 33px 33px;
-
+  background-image: url("Images/explosion.png");
+  background-size: 33px 33px;
 }
 
 #carrier {
-    background-image: url('Images/battleship.png');
-    background-color: blue;
-    width: 175px;
-    height: 35px;
-    /* margin-bottom: 5px; */
-    /* transition: all 0.2 linear; */
+  background-image: url("Images/battleship.png");
+  background-color: blue;
+  width: 175px;
+  height: 35px;
+  /* margin-bottom: 5px; */
+  /* transition: all 0.2 linear; */
 }
 
 #battleship {
-    background-image: url('Images/battleship.png');
-    background-color: blue;
-    width: 140px;
-    height: 35px;
-    /* margin-bottom: 5px; */
+  background-image: url("Images/battleship.png");
+  background-color: blue;
+  width: 140px;
+  height: 35px;
+  /* margin-bottom: 5px; */
 }
 
 #submarine {
-    background-image: url('Images/battleship.png');
-    background-color: blue;
-    width: 105px;
-    height: 35px;
-    /* margin-bottom: 5px; */
+  background-image: url("Images/battleship.png");
+  background-color: blue;
+  width: 105px;
+  height: 35px;
+  /* margin-bottom: 5px; */
 }
 
 #destroyer {
-    background-image: url('Images/battleship.png');
-    background-color: blue;
-    width: 105px;
-    height: 35px;
-    /* margin-bottom: 5px; */
+  background-image: url("Images/battleship.png");
+  background-color: blue;
+  width: 105px;
+  height: 35px;
+  /* margin-bottom: 5px; */
 }
 
 #patrol {
-    background-image: url('Images/battleship.png');
-    background-color: blue;
-    width: 70px;
-    height: 35px;
-    /* margin-bottom: 5px; */
+  background-image: url("Images/battleship.png");
+  background-color: blue;
+  width: 70px;
+  height: 35px;
+  /* margin-bottom: 5px; */
 }
 
 .vertical {
-    -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
-
 .selected {
-    background-color: darkmagenta;
-    /* background-image: url('Images/bomb.png'); */
-    background-size: 33px 33px;
+  background-color: darkmagenta;
+  /* background-image: url('Images/bomb.png'); */
+  background-size: 33px 33px;
 }
 
 .savedshots {
-    background-color: darkmagenta;
-    /* background-image: url('Images/bomb.png'); */
-    background-size: 33px 33px;
+  background-color: darkmagenta;
+  /* background-image: url('Images/bomb.png'); */
+  background-size: 33px 33px;
 }
