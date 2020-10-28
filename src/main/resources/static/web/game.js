@@ -143,7 +143,7 @@ async function getData() {
   console.log("I am working", myParam);
   let response = await fetch(`http://localhost:8080/api/game_view/${myParam}`);
   let data = await response.json();
-  console.log(data);
+  console.log(data, "fetchedDataLoggedInPlayer");
   renderGamePlayerInfos(data);
 }
 
@@ -151,8 +151,8 @@ function renderGamePlayerInfos(data) {
   /////--------------------------------- Displays VERSUS Board ------------------------------/////
   const versusDiv = document.getElementById("versus");
   let h3 = document.createElement("h3");
-  console.log(data.Curr_name);
-  console.log(data.Curr_turns);
+  console.log(data.Curr_name,"currName");
+  console.log(data.Curr_turns,"currTurns");
   if (data.Opp_name === undefined) {
     h3.innerHTML =
       data.Curr_name + " vs. " + "  ¿?  ..waiting for a player to join";
@@ -368,7 +368,7 @@ function postShips(type, locations) {
     console.log(urlParam);
     const url = new URL(urlParam);
     const id = url.searchParams.get("gm");
-    console.log(id);
+    console.log(id,"gameId");
 
     let response = fetch(`http://localhost:8080/api/players/${id}/ships`, {
       method: "POST",
@@ -429,7 +429,7 @@ function myPlacedShots() {
     alert("already 3 shots for this round!");
   }
 }
-console.log(myShots);
+console.log(myShots, "myShots");
 
 /////____________________________________ SAVE SHOTS _________________________________/////
 
@@ -452,7 +452,7 @@ function saveShots() {
 /////_________________________________________________ POST SHOTS _______________________________________________/////
 
 let myTurns = [];
-console.log(myTurns);
+console.log(myTurns,"myTurns");
 
 function postShots() {
   try {
