@@ -344,8 +344,8 @@ function vertical(el) {
 function saveShips() {
   if (lastShip.length == 5 && allPosition.length == 17) {
     Object.keys(placedShips).forEach(function (myShip) {
-      console.log(myShip);
-      console.log(placedShips);
+      // console.log(myShip);
+      // console.log(placedShips);
       postShips(myShip, placedShips[myShip]);
     });
     alert("Yay, your ships are saved!");

@@ -19,7 +19,7 @@ function renderGames(dataGames) {
         let GAME_Id = game.Game_Id;
         let opponent = game.GamePlayers
         let current = game.Curr_PlayerName
-        console.log(opponent)
+        // console.log(opponent)
         if (game.GamePlayers.length === 1 && opponent.Player_Username !== current && game.GamePlayers[0].Player.Player_Username !== current) {
 
             let divGames = document.createElement("div")
